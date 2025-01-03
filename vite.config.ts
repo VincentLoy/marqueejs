@@ -18,6 +18,15 @@ export default defineConfig(({ command, mode }) => {
     }
   }
 
+  if (command === 'preview') {
+    return {
+      preview: {
+        port: 4173,
+        open: true
+      }
+    }
+  }
+
   const config = {
     build: {
       lib: {
