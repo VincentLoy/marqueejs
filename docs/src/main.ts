@@ -6,8 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let test = marqueejs('.marquee-demo', {
     speed: 100,
     direction: 'left',
-    cloneCount: 10,
-    gap: 20
+    cloneCount: 4500,
+    gap: 45,
+    separator: '/'
   });
 
   window.setTimeout(() => {

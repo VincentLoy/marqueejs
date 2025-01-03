@@ -19,7 +19,7 @@ export class Marquee {
     pauseOnHover: true,
     gap: 20,
     cloneCount: 1,
-    separator: ' - '
+    separator: ''
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {
@@ -90,6 +90,9 @@ export class Marquee {
     this.element.parentNode?.insertBefore(this.container, this.element);
     this.container.appendChild(this.wrapper);
     this.wrapper.appendChild(this.element);
+
+    // Add separator to original element
+    this.addSeparatorStyle(this.element);
   }
 
   private cloneElements(): void {
@@ -103,6 +106,8 @@ export class Marquee {
       } else {
         clone.style.marginBottom = `${this.options.gap}px`;
       }
+      // Add separator (except for last clone)
+      this.addSeparatorStyle(clone, i === this.options.cloneCount - 1);
       this.clones.push(clone);
       this.wrapper?.appendChild(clone);
     }
@@ -137,16 +142,30 @@ export class Marquee {
       this.wrapper.parentNode.insertBefore(this.element, this.wrapper);
       this.container?.remove();
     }
+    // Remove separator styles
+    document.querySelectorAll('style').forEach(style => {
+      if (style.textContent?.includes('marquee-item-')) {
+        style.remove();
+      }
+    });
   }
 
   public updateContent(content: string): void {
+    // Remove old separator styles
+    document.querySelectorAll('style').forEach(style => {
+      if (style.textContent?.includes('marquee-item-')) {
+        style.remove();
+      }
+    });
+    
     // Update original element
-    this.element.textContent = content;
+    this.element.innerHTML = content;
 
     // Update all clones
     this.clones.forEach(clone => {
-      clone.textContent = content;
+      clone.innerHTML = content;
     });
+    
 
     // Recalculate wrapper dimensions and positions
     if (this.wrapper && this.animationManager) {
@@ -165,5 +184,33 @@ export class Marquee {
       // Reset animation with new dimensions
       this.animationManager.recalculatePositions();
     }
+
+    // Reapply separators
+    this.addSeparatorStyle(this.element);
+    this.clones.forEach((clone, index) => {
+      this.addSeparatorStyle(clone, index === this.clones.length - 1);
+    });
+  }
+
+  private addSeparatorStyle(element: HTMLElement, isLast: boolean = false): void {
+    if (this.options.gap === 0 || !this.options.separator || isLast) return;
+
+    const isHorizontal = ['left', 'right'].includes(this.options.direction);
+    const style = document.createElement('style');
+    const className = `marquee-item-${Math.random().toString(36).substr(2, 9)}`;
+    
+    element.classList.add(className);
+    
+    style.textContent = `
+      .${className}::after {
+        content: '${this.options.separator}';
+        position: absolute;
+        ${isHorizontal ? 'right' : 'bottom'}: -${this.options.gap / 2}px;
+        ${isHorizontal ? 'transform: translateX(50%)' : 'transform: translateY(50%)'};
+        white-space: pre;
+      }
+    `;
+    
+    document.head.appendChild(style);
   }
 }

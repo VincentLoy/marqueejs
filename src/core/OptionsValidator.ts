@@ -42,10 +42,4 @@ export class OptionsValidator {
       throw new Error('MarqueeJS: Gap must be a non-negative number')
     }
   }
-
-  private static validateCloneCount(count: number | undefined): void {
-    if (count !== undefined && (!Number.isInteger(count) || count < 1)) {
-      throw new Error('MarqueeJS: Clone count must be a positive integer')
-    }
-  }
 }
