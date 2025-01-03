@@ -12,13 +12,14 @@ export class Marquee {
   private isPlaying: boolean = false;
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
+  private separatorClasses: WeakMap<HTMLElement, string> = new WeakMap();
 
   private defaultOptions: Required<MarqueeOptions> = {
     speed: 100,
     direction: 'left',
     pauseOnHover: true,
     gap: 20,
-    cloneCount: 1,
+    cloneCount: 4,
     separator: ''
   };
 
@@ -148,65 +149,73 @@ export class Marquee {
         style.remove();
       }
     });
+    // Clean up separator styles using tracked classes
+    this.clones.forEach(clone => {
+      const className = this.separatorClasses.get(clone);
+      if (className) {
+        document.querySelector(`style[data-for="${className}"]`)?.remove();
+      }
+    });
+    // Clean up all separator styles
+    [this.element, ...this.clones].forEach(el => this.cleanupSeparatorStyle(el));
   }
 
   public updateContent(content: string): void {
-    // Remove old separator styles
-    document.querySelectorAll('style').forEach(style => {
-      if (style.textContent?.includes('marquee-item-')) {
-        style.remove();
-      }
-    });
-    
-    // Update original element
+    // Update content first
     this.element.innerHTML = content;
-
-    // Update all clones
     this.clones.forEach(clone => {
       clone.innerHTML = content;
     });
-    
 
-    // Recalculate wrapper dimensions and positions
+    // Then handle layout updates
     if (this.wrapper && this.animationManager) {
-      const isHorizontal = ['left', 'right'].includes(this.options.direction);
-      const newSize = isHorizontal ? this.element.offsetWidth : this.element.offsetHeight;
-
-      // Update margins for all elements including original
-      [this.element, ...this.clones].forEach(el => {
-        if (isHorizontal) {
-          el.style.marginRight = `${this.options.gap}px`;
-        } else {
-          el.style.marginBottom = `${this.options.gap}px`;
-        }
-      });
-
-      // Reset animation with new dimensions
+      // ...existing margin updates...
       this.animationManager.recalculatePositions();
     }
 
-    // Reapply separators
+    // Finally update separators
     this.addSeparatorStyle(this.element);
     this.clones.forEach((clone, index) => {
       this.addSeparatorStyle(clone, index === this.clones.length - 1);
     });
   }
 
-  private addSeparatorStyle(element: HTMLElement, isLast: boolean = false): void {
-    if (this.options.gap === 0 || !this.options.separator || isLast) return;
+  private cleanupSeparatorStyle(element: HTMLElement): void {
+    // Clean up any existing separator classes
+    Array.from(element.classList)
+      .filter(className => className.startsWith('marquee-item-'))
+      .forEach(className => {
+        element.classList.remove(className);
+        document.querySelector(`style[data-for="${className}"]`)?.remove();
+      });
+  }
 
-    const isHorizontal = ['left', 'right'].includes(this.options.direction);
-    const style = document.createElement('style');
+  private addSeparatorStyle(element: HTMLElement, isLast: boolean = false): void {
+    if (
+      this.options.gap === 0 || 
+      !this.options.separator || 
+      isLast || 
+      ['up', 'down'].includes(this.options.direction)
+    ) {
+      this.cleanupSeparatorStyle(element);
+      return;
+    }
+
+    // Clean up before adding new style
+    this.cleanupSeparatorStyle(element);
+
     const className = `marquee-item-${Math.random().toString(36).substr(2, 9)}`;
+    const style = document.createElement('style');
     
+    element.classList.add('marquee-item');
     element.classList.add(className);
-    
+    style.setAttribute('data-for', className);
     style.textContent = `
       .${className}::after {
         content: '${this.options.separator}';
         position: absolute;
-        ${isHorizontal ? 'right' : 'bottom'}: -${this.options.gap / 2}px;
-        ${isHorizontal ? 'transform: translateX(50%)' : 'transform: translateY(50%)'};
+        right: -${this.options.gap / 2}px;
+        transform: translateX(50%);
         white-space: pre;
       }
     `;
