@@ -5,6 +5,6 @@ import { marqueejs } from '../../src/index'
 document.addEventListener('DOMContentLoaded', () => {
   marqueejs('.marquee-demo', {
     speed: 100,
-    direction: 'left'
-  })
-})
+    direction: 'left',
+  });
+});

@@ -3,8 +3,9 @@ export interface MarqueeOptions {
   direction?: 'left' | 'right' | 'up' | 'down';
   pauseOnHover?: boolean;
   gap?: number;
-  easing?: string;
+  easing?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out';
   cloneCount?: number;
+  separator?: string;
 }
 
 export interface MarqueeInstance {
