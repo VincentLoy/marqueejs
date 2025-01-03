@@ -9,7 +9,8 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     stop() { instance.pause() },
     pause() { instance.pause() },
     resume() { instance.play() },
-    destroy() { instance.destroy() }
+    destroy() { instance.destroy() },
+    updateContent(content: string) { instance.updateContent(content) }
   }
 }
 

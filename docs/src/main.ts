@@ -9,4 +9,8 @@ document.addEventListener('DOMContentLoaded', () => {
     cloneCount: 10,
     gap: 20
   });
+
+  window.setTimeout(() => {
+    test.updateContent('Updated content - This is a new message !!');
+  }, 2000);
 });

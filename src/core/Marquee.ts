@@ -138,4 +138,32 @@ export class Marquee {
       this.container?.remove();
     }
   }
+
+  public updateContent(content: string): void {
+    // Update original element
+    this.element.textContent = content;
+
+    // Update all clones
+    this.clones.forEach(clone => {
+      clone.textContent = content;
+    });
+
+    // Recalculate wrapper dimensions and positions
+    if (this.wrapper && this.animationManager) {
+      const isHorizontal = ['left', 'right'].includes(this.options.direction);
+      const newSize = isHorizontal ? this.element.offsetWidth : this.element.offsetHeight;
+
+      // Update margins for all elements including original
+      [this.element, ...this.clones].forEach(el => {
+        if (isHorizontal) {
+          el.style.marginRight = `${this.options.gap}px`;
+        } else {
+          el.style.marginBottom = `${this.options.gap}px`;
+        }
+      });
+
+      // Reset animation with new dimensions
+      this.animationManager.recalculatePositions();
+    }
+  }
 }

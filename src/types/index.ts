@@ -13,4 +13,5 @@ export interface MarqueeInstance {
   pause(): void;
   resume(): void;
   destroy(): void;
+  updateContent(content: string): void;
 }

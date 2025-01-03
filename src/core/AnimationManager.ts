@@ -155,4 +155,15 @@ export class AnimationManager {
     }
     this.lastTime = 0
   }
+
+  public recalculatePositions(): void {
+    // Stop current animation
+    this.stopAnimation()
+    
+    // Reset and reinitialize positions
+    this.setupElements()
+    
+    // Restart animation if it was running
+    this.startAnimation()
+  }
 }
