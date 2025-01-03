@@ -1,7 +1,6 @@
 import type { MarqueeOptions } from '../types'
 
 export class EventManager {
-  private element: HTMLElement
   private wrapper: HTMLElement
   private options: Required<MarqueeOptions>
   private handlers: {
@@ -10,12 +9,11 @@ export class EventManager {
   }
 
   constructor(
-    element: HTMLElement, 
+    _element: HTMLElement, 
     wrapper: HTMLElement, 
     options: Required<MarqueeOptions>,
     handlers: { pause: () => void; resume: () => void }
   ) {
-    this.element = element
     this.wrapper = wrapper
     this.options = options
     this.handlers = handlers
