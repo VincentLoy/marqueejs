@@ -3,7 +3,6 @@ export interface MarqueeOptions {
   direction?: 'left' | 'right' | 'up' | 'down';
   pauseOnHover?: boolean;
   gap?: number;
-  easing?: 'linear' | 'ease' | 'ease-in' | 'ease-out' | 'ease-in-out';
   cloneCount?: number;
   separator?: string;
 }

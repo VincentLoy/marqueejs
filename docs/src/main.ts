@@ -3,10 +3,10 @@ import { marqueejs } from '../../src/index'
 
 // Initialize demos
 document.addEventListener('DOMContentLoaded', () => {
-  marqueejs('.marquee-demo', {
-    speed: 150,
+  let test = marqueejs('.marquee-demo', {
+    speed: 100,
     direction: 'left',
-    cloneCount: 5,
+    cloneCount: 10,
     gap: 20
   });
 });

@@ -18,7 +18,6 @@ export class Marquee {
     direction: 'left',
     pauseOnHover: true,
     gap: 20,
-    easing: 'linear',
     cloneCount: 1,
     separator: ' - '
   };
@@ -32,9 +31,9 @@ export class Marquee {
       throw new Error('Invalid element selector');
     }
 
-    OptionsValidator.validate(options);
+    const validatedOptions = OptionsValidator.validate(options);
     this.element = element as HTMLElement;
-    this.options = { ...this.defaultOptions, ...options };
+    this.options = { ...this.defaultOptions, ...validatedOptions };
     this.init();
   }
 
