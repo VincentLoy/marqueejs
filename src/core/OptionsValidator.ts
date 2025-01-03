@@ -21,6 +21,12 @@ export class OptionsValidator {
       }
     }
 
+    // Remove separator for vertical directions
+    if (['up', 'down'].includes(options.direction || '') && options.separator) {
+      console.warn('MarqueeJS: Separator is not supported for vertical directions. Separator will be ignored.')
+      options.separator = ''
+    }
+
     return options
   }
 
