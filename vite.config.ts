@@ -1,0 +1,49 @@
+import { defineConfig } from 'vite'
+import { resolve } from 'path'
+
+export default defineConfig(({ command, mode }) => {
+  if (command === 'serve') {
+    return {
+      server: {
+        open: true
+      },
+      css: {
+        postcss: {
+          plugins: [
+            require('tailwindcss'),
+            require('autoprefixer'),
+          ],
+        },
+      }
+    }
+  }
+
+  const config = {
+    build: {
+      lib: {
+        entry: resolve(__dirname, 'src/index.ts'),
+        name: 'MarqueeJS',
+        fileName: 'marqueejs',
+        formats: ['es', 'umd']
+      },
+      sourcemap: true,
+      rollupOptions: {
+        output: {
+          exports: 'named'
+        }
+      }
+    }
+  }
+
+  if (mode === 'docs') {
+    return {
+      root: 'docs/src',
+      build: {
+        outDir: '../dist',
+        emptyOutDir: true
+      }
+    }
+  }
+
+  return config
+})
