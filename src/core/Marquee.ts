@@ -17,7 +17,7 @@ export class Marquee {
   private defaultOptions: Required<MarqueeOptions> = {
     speed: 100,
     direction: 'left',
-    pauseOnHover: true,
+    pauseOnHover: false,
     gap: 20,
     cloneCount: 4,
     separator: ''
@@ -192,10 +192,8 @@ export class Marquee {
 
   private addSeparatorStyle(element: HTMLElement, isLast: boolean = false): void {
     if (
-      this.options.gap === 0 || 
-      !this.options.separator || 
-      isLast || 
-      ['up', 'down'].includes(this.options.direction)
+      this.options.gap === 0 || this.options.cloneCount === 0 ||
+      !this.options.separator || ['up', 'down'].includes(this.options.direction)
     ) {
       this.cleanupSeparatorStyle(element);
       return;
@@ -211,11 +209,11 @@ export class Marquee {
     element.classList.add(className);
     style.setAttribute('data-for', className);
     style.textContent = `
-      .${className}::after {
+      .${className}::before {
         content: '${this.options.separator}';
         position: absolute;
-        right: -${this.options.gap / 2}px;
-        transform: translateX(50%);
+        left: -${this.options.gap / 2}px;
+        transform: translateX(-50%);
         white-space: pre;
       }
     `;

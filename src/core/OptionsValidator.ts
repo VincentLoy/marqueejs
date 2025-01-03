@@ -1,7 +1,7 @@
 import type { MarqueeOptions } from '../types'
 
 export class OptionsValidator {
-  static readonly MAX_CLONES = 50;
+  static readonly MAX_CLONES = 15;
   static readonly MIN_CLONES = 0;
 
   static validate(options: MarqueeOptions): MarqueeOptions {
