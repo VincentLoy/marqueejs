@@ -4,6 +4,11 @@
 
 @layer components {
   .demo-box {
-    @apply p-4 border rounded-lg bg-gray-50 my-4;
+    @apply p-4 border rounded-lg bg-gray-50 dark:bg-gray-800 my-4;
+    min-height: 60px;
+  }
+
+  .marquee-vertical {
+    height: 100%;
   }
 }

@@ -1,12 +1,12 @@
 {
   "name": "marqueejs",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "module": "src/index.ts",
   "type": "module",
   "scripts": {
     "dev": "vite docs/src --open",
     "build": "vite build",
-    "build:docs": "vite build docs/src --outDir ../dist",
+    "build:docs": "vite build docs/src --outDir ../dist --emptyOutDir",
     "preview": "bun run build:docs && vite docs/dist --open",
     "test": "bun test"
   },

@@ -19,11 +19,69 @@
         <section class="mb-12">
             <h2 class="text-2xl font-bold mb-4 dark:text-white">Basic Example</h2>
             <div class="demo-box">
-                <div class="marquee-demo">
+                <div class="marquee-basic">
                     <span>This is a basic marquee example</span>
                 </div>
             </div>
-            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-demo');</code></pre>
+            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-basic');</code></pre>
+        </section>
+
+        <!-- Reverse Direction -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Left to right</h2>
+            <div class="demo-box">
+                <div class="marquee-rtl">
+                    <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded">URGENT</span>
+                    <span>This text moves from left to right</span>
+                </div>
+            </div>
+            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-rtl', {
+                direction: 'right',
+                speed: 150
+            });</code></pre>
+        </section>
+        
+        <!-- With Separator -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">With Separator</h2>
+            <div class="demo-box">
+                <div class="marquee-separator">
+                    <span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-blue-100 text-blue-800 rounded">INFO</span>
+                    <span>Separated content</span>
+                </div>
+            </div>
+            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-separator', {
+  separator: '•',
+  gap: 40
+});</code></pre>
+        </section>
+
+        <!-- Vertical -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Vertical Animation</h2>
+            <div class="demo-box" style="height: 200px">
+                <div class="marquee-vertical">
+                    <span>Vertical scrolling text</span>
+                </div>
+            </div>
+            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-vertical', {
+  direction: 'up',
+  speed: 80
+});</code></pre>
+        </section>
+
+        <!-- Fast with Pause -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Fast with Pause on Hover</h2>
+            <div class="demo-box">
+                <div class="marquee-fast">
+                    <span>This moves fast but pauses on hover</span>
+                </div>
+            </div>
+            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-fast', {
+  speed: 200,
+  pauseOnHover: true
+});</code></pre>
         </section>
 
         <!-- Installation -->
