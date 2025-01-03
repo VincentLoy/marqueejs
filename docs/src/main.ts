@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Basic example
   marqueejs('.marquee-basic', {
     speed: 100,
-    cloneCount: 3
+    cloneCount: 4
   });
 
   // Right to left
@@ -21,13 +21,20 @@ document.addEventListener('DOMContentLoaded', () => {
     separator: '•',
     gap: 40,
     cloneCount: 8
-  });
+  }).stop();
 
   // Vertical
   marqueejs('.marquee-vertical', {
-    direction: 'up',
+    direction: 'left',
     speed: 80,
-    cloneCount: 4
+    gap: 30,
+    cloneCount: 2,
+    separator: '•',
+    contentList: [
+      'First item',
+      'Second item with largest content size here',
+      'Third item'
+    ]
   });
 
   // Fast with pause

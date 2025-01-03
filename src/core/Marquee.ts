@@ -2,6 +2,7 @@ import type { MarqueeOptions } from '../types';
 import { OptionsValidator } from './OptionsValidator';
 import { AnimationManager } from './AnimationManager';
 import { EventManager } from './EventManager';
+import type { ElementMetrics } from '../types';
 
 export class Marquee {
   private element: HTMLElement;
@@ -13,6 +14,7 @@ export class Marquee {
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
   private separatorClasses: WeakMap<HTMLElement, string> = new WeakMap();
+  private contentElements: HTMLElement[] = [];
 
   private defaultOptions: Required<MarqueeOptions> = {
     speed: 100,
@@ -20,7 +22,8 @@ export class Marquee {
     pauseOnHover: false,
     gap: 20,
     cloneCount: 4,
-    separator: ''
+    separator: '',
+    contentList: []  // Default to empty array
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {
@@ -40,9 +43,19 @@ export class Marquee {
 
   private init(): void {
     this.setupWrapper();
-    this.cloneElements();
+    
+    if (this.options.contentList?.length) {
+      this.createContentElements();
+    } else {
+      this.cloneElements();
+    }
+
     if (this.wrapper) {
-      this.animationManager = new AnimationManager(this.element, this.wrapper, this.options);
+      this.animationManager = new AnimationManager(
+        this.options.contentList?.length ? this.contentElements[0] : this.element,
+        this.wrapper,
+        this.options
+      );
       this.eventManager = new EventManager(
         this.element,
         this.wrapper,
@@ -58,7 +71,10 @@ export class Marquee {
   }
 
   private setupWrapper(): void {
-    const originalHeight = this.element.offsetHeight
+    // Calculate max height from content if using contentList
+    const originalHeight = this.options.contentList?.length 
+      ? this.getMaxContentHeight()
+      : this.element.offsetHeight;
 
     // Create outer container
     this.container = document.createElement('div');
@@ -68,11 +84,12 @@ export class Marquee {
     this.container.style.position = 'relative';
     this.container.classList.add('marquee-container');
     
-    // Create inner wrapper
+    // Update wrapper styles for better content handling
     this.wrapper = document.createElement('div');
-    this.wrapper.style.position = 'relative'; // Changed from absolute
+    this.wrapper.style.position = 'relative';
     this.wrapper.style.width = '100%';
     this.wrapper.style.height = '100%';
+    this.wrapper.style.overflow = 'visible';
     this.wrapper.classList.add('marquee-wrapper');
     
     // Setup element styles
@@ -90,25 +107,139 @@ export class Marquee {
     // Insert into DOM
     this.element.parentNode?.insertBefore(this.container, this.element);
     this.container.appendChild(this.wrapper);
-    this.wrapper.appendChild(this.element);
+
+    // Don't append original element if using contentList
+    if (!this.options.contentList?.length) {
+      this.wrapper?.appendChild(this.element);
+    }
 
     // Add separator to original element
     this.addSeparatorStyle(this.element);
   }
 
+  private getMaxContentHeight(): number {
+    if (!this.options.contentList?.length) return this.element.offsetHeight;
+
+    // Create temporary container to measure heights
+    const temp = document.createElement('div');
+    temp.style.position = 'absolute';
+    temp.style.visibility = 'hidden';
+    temp.style.left = '-9999px';
+    document.body.appendChild(temp);
+
+    const heights = this.options.contentList.map(content => {
+      temp.innerHTML = content;
+      return temp.offsetHeight;
+    });
+
+    document.body.removeChild(temp);
+    return Math.max(...heights);
+  }
+
+  private calculateMetrics(): ElementMetrics[] {
+    const isHorizontal = ['left', 'right'].includes(this.options.direction);
+    const metrics: ElementMetrics[] = [];
+    let currentPosition = 0;
+
+    const elements = this.options.contentList?.length 
+      ? this.contentElements 
+      : [this.element, ...this.clones];
+
+    elements.forEach((el, index) => {
+      const rect = el.getBoundingClientRect();
+      const size = isHorizontal ? rect.width : rect.height;
+      const separatorOffset = this.options.separator && index < elements.length - 1 
+        ? this.options.gap / 2 
+        : 0;
+
+      metrics.push({
+        size,
+        spacing: this.options.gap,
+        position: currentPosition,
+        separatorOffset
+      });
+
+      currentPosition += size + this.options.gap;
+    });
+
+    return metrics;
+  }
+
+  private createContentElements(): void {
+    if (!this.options.contentList?.length || !this.wrapper) return;
+
+    // Clear existing elements
+    this.contentElements.forEach(el => el.remove());
+    this.clones.forEach(el => el.remove());
+    this.contentElements = [];
+    this.clones = [];
+
+    // Create content elements
+    this.options.contentList.forEach((content, index) => {
+      const element = document.createElement('div');
+      element.className = 'marquee-content-item';
+      element.style.position = 'absolute';
+      element.style.whiteSpace = 'nowrap';
+      element.innerHTML = content;
+
+      // Add separator style if not last element
+      // if (index < this.options.contentList!.length - 1) {
+        this.addSeparatorStyle(element);
+      // }
+
+      this.contentElements.push(element);
+      this.wrapper?.appendChild(element);
+    });
+
+    // Position elements and create clones
+    const metrics = this.calculateMetrics();
+    const totalWidth = metrics.reduce((sum, m) => sum + m.size + m.spacing, 0);
+
+    // Position original elements
+    this.contentElements.forEach((el, i) => {
+      const { position } = metrics[i];
+      el.style.transform = `translateX(${position}px)`;
+    });
+
+    // Create and position clones
+    if (this.options.cloneCount > 0) {
+      for (let i = 0; i < this.options.cloneCount; i++) {
+        const offset = totalWidth * (i + 1);
+        
+        this.contentElements.forEach((original, index) => {
+          const clone = original.cloneNode(true) as HTMLElement;
+          clone.setAttribute('aria-hidden', 'true');
+          clone.style.transform = `translateX(${metrics[index].position + offset}px)`;
+          
+          // Add separator style to clone if not last element
+          if (index < this.contentElements.length - 1) {
+            this.addSeparatorStyle(clone);
+          }
+          
+          this.clones.push(clone);
+          this.wrapper?.appendChild(clone);
+        });
+      }
+    }
+  }
+
   private cloneElements(): void {
     if (this.options.cloneCount === 0) return;
+
+    const metrics = this.calculateMetrics();
+    const totalWidth = metrics[0].size + metrics[0].spacing;
+
     for (let i = 0; i < this.options.cloneCount; i++) {
       const clone = this.element.cloneNode(true) as HTMLElement;
       clone.setAttribute('aria-hidden', 'true');
-      clone.style.flexShrink = '0';
-      if (['left', 'right'].includes(this.options.direction)) {
-        clone.style.marginRight = `${this.options.gap}px`;
-      } else {
-        clone.style.marginBottom = `${this.options.gap}px`;
+      clone.style.position = 'absolute';
+      clone.style.transform = `translateX(${totalWidth * (i + 1)}px)`;
+      
+      // Add separator style if not last clone
+      if (i < this.options.cloneCount - 1) {
+        this.addSeparatorStyle(clone);
       }
-      // Add separator (except for last clone)
-      this.addSeparatorStyle(clone, i === this.options.cloneCount - 1);
+
       this.clones.push(clone);
       this.wrapper?.appendChild(clone);
     }
@@ -158,6 +289,8 @@ export class Marquee {
     });
     // Clean up all separator styles
     [this.element, ...this.clones].forEach(el => this.cleanupSeparatorStyle(el));
+    this.contentElements.forEach(el => el.remove());
+    this.contentElements = [];
   }
 
   public updateContent(content: string): void {
@@ -190,24 +323,17 @@ export class Marquee {
       });
   }
 
-  private addSeparatorStyle(element: HTMLElement, isLast: boolean = false): void {
-    if (
-      this.options.gap === 0 || this.options.cloneCount === 0 ||
-      !this.options.separator || ['up', 'down'].includes(this.options.direction)
-    ) {
-      this.cleanupSeparatorStyle(element);
+  private addSeparatorStyle(element: HTMLElement): void {
+    if (!this.options.separator || ['up', 'down'].includes(this.options.direction)) {
       return;
     }
-
-    // Clean up before adding new style
-    this.cleanupSeparatorStyle(element);
 
     const className = `marquee-item-${Math.random().toString(36).substr(2, 9)}`;
     const style = document.createElement('style');
     
-    element.classList.add('marquee-item');
     element.classList.add(className);
     style.setAttribute('data-for', className);
+
     style.textContent = `
       .${className}::before {
         content: '${this.options.separator}';
@@ -219,5 +345,21 @@ export class Marquee {
     `;
     
     document.head.appendChild(style);
+    this.separatorClasses.set(element, className);
   }
+
+  // Add new methods for content list management
+  public addContent(content: string): void {
+    // Implementation will come in next step
+  }
+
+  public replaceContentList(newContentList: string[]): void {
+    // Implementation will come in next step
+  }
+}
+
+interface ElementMetrics {
+  size: number;
+  spacing: number;
+  separatorSpace: number;
 }

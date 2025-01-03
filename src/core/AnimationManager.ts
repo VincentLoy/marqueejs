@@ -16,43 +16,35 @@ export class AnimationManager {
   }
 
   private setupElements(): void {
-    const containerWidth = this.wrapper.parentElement?.offsetWidth || 0
-    const containerHeight = this.wrapper.parentElement?.offsetHeight || 0
-    const elementWidth = this.element.offsetWidth + this.options.gap
-    const elementHeight = this.element.offsetHeight + this.options.gap
+    const groups = Array.from(this.wrapper.children) as HTMLElement[];
+    const isHorizontal = ['left', 'right'].includes(this.options.direction);
+    let currentPosition = 0;
 
-    // Convert wrapper children to array including original element
-    this.elements = Array.from(this.wrapper.children).map((el, index) => {
-      const element = el as HTMLElement
-      let position = 0
+    this.elements = groups.map(group => {
+      // Calculate size including gap
+      const size = isHorizontal 
+        ? group.offsetWidth + this.options.gap
+        : group.offsetHeight + this.options.gap;
 
-      // Calculate initial position based on direction and index
-      switch (this.options.direction) {
-        case 'left':
-          position = index * elementWidth
-          break
-        case 'right':
-          position = containerWidth - ((index + 1) * elementWidth)
-          break
-        case 'up':
-          position = index * elementHeight
-          break
-        case 'down':
-          position = containerHeight - ((index + 1) * elementHeight)
-          break
-      }
-
-      // Set initial styles
-      element.style.position = 'absolute'
-      element.style.top = '0'
-      element.style.left = '0'
-      element.style.transform = ['left', 'right'].includes(this.options.direction)
+      // Store current position for this element
+      const position = currentPosition;
+      
+      // Position element
+      group.style.position = 'absolute';
+      group.style.top = '0';
+      group.style.left = '0';
+      group.style.transform = isHorizontal 
         ? `translateX(${position}px)`
-        : `translateY(${position}px)`
-      element.style.transition = 'transform linear'
+        : `translateY(${position}px)`;
 
-      return { el: element, position }
-    })
+      // Update position for next element
+      currentPosition += size;
+
+      return {
+        el: group,
+        position
+      };
+    });
   }
 
   public startAnimation(): void {
