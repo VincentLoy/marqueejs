@@ -10,7 +10,9 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     pause() { instance.pause() },
     resume() { instance.play() },
     destroy() { instance.destroy() },
-    updateContent(content: string) { instance.updateContent(content) }
+    addContent(content: string | string[], addToStart: boolean = false) { instance.addContent(content, addToStart) },
+    replaceContentList(newContentList: string[]) { instance.replaceContentList(newContentList) },
+    getContentList() { return instance.getContentList() }
   }
 }
 

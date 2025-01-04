@@ -52,11 +52,24 @@ export interface MarqueeInstance {
   resume(): void;
   destroy(): void;
   
-  /** 
-   * Update the content of all marquee items
-   * @param content - New HTML content to display
+  /**
+   * Add new content to the content list
+   * @param content - New HTML content or array of contents to add
+   * @param addToStart - Whether to add the new content at the start of the list
    */
-  updateContent(content: string): void;
+  addContent(content: string | string[], addToStart?: boolean): void;
+
+  /**
+   * Replace the entire content list with a new one
+   * @param newContentList - Array of new HTML contents to replace the existing list
+   */
+  replaceContentList(newContentList: string[]): void;
+
+  /**
+   * Get the current content list
+   * @returns The current content list
+   */
+  getContentList(): string[];
 }
 
 /**

@@ -368,12 +368,43 @@ export class Marquee {
   }
 
   // Add new methods for content list management
-  public addContent(content: string): void {
-    // Implementation will come in next step
+  public addContent(content: string | string[], addToStart: boolean = false): void {
+    if (!content) return;
+
+    // Convert content to array if it's a string
+    const newContent = Array.isArray(content) ? content : [content];
+
+    // Add new content to the contentList
+    if (addToStart) {
+      this.options.contentList = [...newContent, ...this.options.contentList];
+    } else {
+      this.options.contentList = [...this.options.contentList, ...newContent];
+    }
+
+    // Recreate content elements
+    this.createContentElements();
+
+    // Recalculate positions and restart animation
+    this.animationManager?.recalculatePositions();
+    this.play();
   }
 
   public replaceContentList(newContentList: string[]): void {
-    // Implementation will come in next step
+    if (!Array.isArray(newContentList)) return;
+
+    // Replace the contentList with the new one
+    this.options.contentList = newContentList;
+
+    // Recreate content elements
+    this.createContentElements();
+
+    // Recalculate positions and restart animation
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public getContentList(): string[] {
+    return this.options.contentList;
   }
 }
 

@@ -24,12 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Vertical
-  marqueejs('.marquee-vertical', {
+  let vertical = marqueejs('.marquee-vertical', {
     direction: 'up',
-    speed: 30,
-    gap: 10,
-    cloneCount: 2,
-    containerHeight: 100,
+    speed: 100,
+    gap: 20,
+    cloneCount: 3,
+    containerHeight: 450,
     keepOriginalContent: true,
     separator: '•',
     contentList: [
@@ -40,6 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
       'This one should pop out of the container scope and be displayed after'
     ]
   });
+
+  window.setTimeout(() => {
+    vertical.addContent([
+      'New item added dynamically',
+      'Another new item added dynamically'
+    ], true);
+  }, 2000);
+
+  window.setTimeout(() => {
+    vertical.replaceContentList([
+      'New item replacing old ones',
+      'Another new item added dynamically to replace the old fake content!!!'
+    ]);
+  }, 6000);
 
   // Fast with pause
   marqueejs('.marquee-fast', {
