@@ -6,14 +6,13 @@ export class OptionsValidator {
   static readonly DEFAULT_MAX_LENGTH = 8500;
 
   private static readonly FORBIDDEN_TAGS = [
-    'script', 'style', 'iframe', 'object', 'embed', 'form',
+    'script', 'style', 'iframe', 'object', 'embed', 'form', 'svg',
     'input', 'button', 'meta', 'link', 'head', 'html', 'body'
   ];
 
   private static readonly FORBIDDEN_ATTRIBUTES = [
     'onclick', 'onmouseover', 'onmouseout', 'onload', 'onerror',
-    'onsubmit', 'formaction', 'xlink:href', 'src',
-    'data', 'action', 'javascript'
+    'onsubmit', 'formaction', 'xlink:href', 'action', 'javascript'
   ];
 
   private static readonly DEFAULT_VALIDATION_OPTIONS = {
