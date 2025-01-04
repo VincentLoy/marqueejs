@@ -24,8 +24,15 @@ MarqueeJS is a modern, lightweight JavaScript library for creating scrolling tex
    - [resume](#resume)  
    - [destroy](#destroy)  
    - [addContent](#addcontent)  
-   - [replaceContentList](#replacecontentlist)  
+   - [replaceContent](#replaceContent)  
    - [getContentList](#getcontentlist)  
+   - [updateSpeed](#updatespeed)  
+   - [updateGap](#updategap)  
+   - [updateDirection](#updatedirection)  
+   - [updateSeparator](#updateseparator)  
+   - [updateCloneCount](#updateclonecount)  
+   - [updateContainerHeight](#updatecontainerheight)  
+   - [updatePauseOnHover](#updatepauseonhover)  
 6. [Advanced Usage](#advanced-usage)  
 7. [Examples](#examples)  
 8. [Development](#development)  
@@ -94,9 +101,9 @@ Below is a summary of the main configuration options:
 | cloneCount              | number                                | 4             | Number of times each item is cloned (for continuous flow). Maximum 15.                                    |
 | separator               | string                                | ''            | Character or string to show between items for horizontal directions. Ignored for vertical scrolling.      |
 | contentList             | string[]                              | []            | Array of HTML strings to be displayed by the marquee.                                                     |
-| keepOriginalContent     | boolean                               | false         | Whether to preserve the original HTML content inside the marquee element when using contentList.                                 |
+| keepOriginalContent     | boolean                               | false         | Whether to preserve the original HTML content inside the marquee element when using contentList.          |
 | containerHeight         | number                                | (auto)        | Fixed height for container (required for vertical directions to ensure a consistent layout).              |
-| contentValidation   | (object)                              | Varies        | Additional content validation options (like forbidden tags, maxLength, etc.).                             |
+| contentValidation       | object                                | Varies        | Additional content validation options (like forbidden tags, maxLength, etc.).                             |
 
 ---
 
@@ -145,14 +152,14 @@ Adds new content (HTML string or array of strings) to the marquee. An optional `
 
 ```typescript
 instance.addContent('New item') // added at the end
-instance.addContent(['Item 1', 'Item 2'], true) // merged at the end
+instance.addContent(['Item 1', 'Item 2'], true) // added at the start
 ```
 
-### replaceContentList
+### replaceContent
 Replaces the entire content list at once, discarding the old list entirely.
 
 ```typescript
-instance.replaceContentList([
+instance.replaceContent([
   '<span class="badge">FLASH NEWS</span> Completely new content',
   'Another new item'
 ])
@@ -164,6 +171,60 @@ Retrieves the current content list being used by the marquee.
 ```typescript
 const currentItems = instance.getContentList()
 console.log(currentItems)
+```
+
+### updateSpeed
+Updates the scrolling speed.
+
+```typescript
+instance.updateSpeed(150)
+```
+
+### updateGap
+Updates the gap between elements.
+
+```typescript
+instance.updateGap(30)
+```
+
+### updateDirection
+Updates the scrolling direction for the component. 
+
+>The direction can only be changed between opposite axes:
+>- From `right` to `left` (or vice-versa) - ✅ Allowed
+>- From `up` to `down` (or vice-versa) - ✅ Allowed
+>- From `right` to `up` (or other non-opposite) - ❌ Not allowed
+
+```typescript
+instance.updateDirection('right')
+```
+
+### updateSeparator
+Updates the separator between elements.
+
+```typescript
+instance.updateSeparator(' • ')
+```
+
+### updateCloneCount
+Updates the number of clones.
+
+```typescript
+instance.updateCloneCount(5)
+```
+
+### updateContainerHeight
+Updates the container height.
+
+```typescript
+instance.updateContainerHeight(300)
+```
+
+### updatePauseOnHover
+Updates the pause on hover option.
+
+```typescript
+instance.updatePauseOnHover(true)
 ```
 
 ---
@@ -200,7 +261,7 @@ MarqueeJS supports advanced configuration for complex layouts and interactions:
 
    // Replace the entire content list after 5 seconds
    setTimeout(() => {
-     vertical.replaceContentList(['Entirely new content'])
+     vertical.replaceContent(['Entirely new content'])
    }, 5000)
    ```
 
