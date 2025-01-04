@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Basic example
   marqueejs('.marquee-basic', {
     speed: 100,
-    cloneCount: 4
+    cloneCount: 10,
   });
 
   // Right to left
@@ -21,19 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
     separator: '•',
     gap: 40,
     cloneCount: 8
-  }).stop();
+  });
 
   // Vertical
   marqueejs('.marquee-vertical', {
-    direction: 'left',
-    speed: 80,
-    gap: 30,
+    direction: 'up',
+    speed: 30,
+    gap: 10,
     cloneCount: 2,
+    containerHeight: 100,
+    keepOriginalContent: true,
     separator: '•',
     contentList: [
       'First item',
       'Second item with largest content size here',
-      'Third item'
+      'Third item with <i>italic tag</i> and <em>emphasis tag</em>',
+      'Another item here with <b>a bold tag</b> and <a class="text-blue-500 font-bold" href="#">link</a>',
+      'This one should pop out of the container scope and be displayed after'
     ]
   });
 

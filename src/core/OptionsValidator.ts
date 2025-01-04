@@ -3,7 +3,7 @@ import type { MarqueeOptions, ContentValidationResult, ContentValidationErrorTyp
 export class OptionsValidator {
   static readonly MAX_CLONES = 15;
   static readonly MIN_CLONES = 0;
-  static readonly DEFAULT_MAX_LENGTH = 1000;
+  static readonly DEFAULT_MAX_LENGTH = 8500;
 
   private static readonly FORBIDDEN_TAGS = [
     'script', 'style', 'iframe', 'object', 'embed', 'form',
@@ -12,7 +12,7 @@ export class OptionsValidator {
 
   private static readonly FORBIDDEN_ATTRIBUTES = [
     'onclick', 'onmouseover', 'onmouseout', 'onload', 'onerror',
-    'onsubmit', 'formaction', 'href', 'xlink:href', 'src',
+    'onsubmit', 'formaction', 'xlink:href', 'src',
     'data', 'action', 'javascript'
   ];
 
@@ -73,6 +73,9 @@ export class OptionsValidator {
       console.warn('MarqueeJS: Separator is not supported for vertical directions. Separator will be ignored.')
       options.separator = ''
     }
+
+    this.validateContainerHeight(options.containerHeight, options.direction);
+    this.validateKeepOriginalContent(options.keepOriginalContent);
 
     return options
   }
@@ -190,6 +193,23 @@ export class OptionsValidator {
   private static validateGap(gap: number | undefined): void {
     if (gap !== undefined && (typeof gap !== 'number' || gap < 0)) {
       throw new Error('MarqueeJS: Gap must be a non-negative number')
+    }
+  }
+
+  private static validateContainerHeight(containerHeight: number | undefined, direction: string | undefined): void {
+    if (containerHeight !== undefined) {
+      if (typeof containerHeight !== 'number' || containerHeight <= 0) {
+        throw new Error('MarqueeJS: Container height must be a positive number');
+      }
+      if (!['up', 'down'].includes(direction || '')) {
+        console.warn('MarqueeJS: Container height is only applicable for "up" and "down" directions. Ignoring containerHeight.');
+      }
+    }
+  }
+
+  private static validateKeepOriginalContent(keepOriginalContent: boolean | undefined): void {
+    if (keepOriginalContent !== undefined && typeof keepOriginalContent !== 'boolean') {
+      throw new Error('MarqueeJS: keepOriginalContent must be a boolean');
     }
   }
 }

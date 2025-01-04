@@ -45,6 +45,7 @@ export class Marquee {
     this.setupWrapper();
     
     if (this.options.contentList?.length) {
+      this.handleOriginalContent();
       this.createContentElements();
     } else {
       this.cloneElements();
@@ -70,6 +71,16 @@ export class Marquee {
     }
   }
 
+  private handleOriginalContent(): void {
+    if (this.options.keepOriginalContent) {
+      const originalContent = this.element.innerHTML.trim();
+      if (originalContent) {
+        this.options.contentList = [originalContent, ...this.options.contentList];
+      }
+    }
+    this.element.innerHTML = '';
+  }
+
   private setupWrapper(): void {
     // Calculate max height from content if using contentList
     const originalHeight = this.options.contentList?.length 
@@ -79,7 +90,14 @@ export class Marquee {
     // Create outer container
     this.container = document.createElement('div');
     this.container.style.width = '100%';
-    this.container.style.height = `${originalHeight}px`;
+
+    // Apply forced height for 'up' and 'down' directions
+    if (['up', 'down'].includes(this.options.direction) && this.options.containerHeight) {
+      this.container.style.height = `${this.options.containerHeight}px`;
+    } else {
+      this.container.style.height = `${originalHeight}px`;
+    }
+
     this.container.style.overflow = 'hidden';
     this.container.style.position = 'relative';
     this.container.classList.add('marquee-container');
@@ -102,6 +120,7 @@ export class Marquee {
       this.element.style.marginRight = `${this.options.gap}px`;
     } else {
       this.element.style.marginBottom = `${this.options.gap}px`;
+      this.element.style.whiteSpace = 'normal'; // Allow line breaks for vertical directions
     }
     
     // Insert into DOM
@@ -179,13 +198,11 @@ export class Marquee {
       const element = document.createElement('div');
       element.className = 'marquee-content-item';
       element.style.position = 'absolute';
-      element.style.whiteSpace = 'nowrap';
+      element.style.whiteSpace = ['up', 'down'].includes(this.options.direction) ? 'normal' : 'nowrap'; // Allow line breaks for vertical directions
       element.innerHTML = content;
 
       // Add separator style if not last element
-      // if (index < this.options.contentList!.length - 1) {
-        this.addSeparatorStyle(element);
-      // }
+      this.addSeparatorStyle(element);
 
       this.contentElements.push(element);
       this.wrapper?.appendChild(element);
@@ -193,28 +210,30 @@ export class Marquee {
 
     // Position elements and create clones
     const metrics = this.calculateMetrics();
-    const totalWidth = metrics.reduce((sum, m) => sum + m.size + m.spacing, 0);
+    const totalSize = metrics.reduce((sum, m) => sum + m.size + m.spacing, 0);
 
     // Position original elements
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-      el.style.transform = `translateX(${position}px)`;
+      el.style.transform = ['left', 'right'].includes(this.options.direction)
+        ? `translateX(${position}px)`
+        : `translateY(${position}px)`;
     });
 
     // Create and position clones
     if (this.options.cloneCount > 0) {
       for (let i = 0; i < this.options.cloneCount; i++) {
-        const offset = totalWidth * (i + 1);
+        const offset = totalSize * (i + 1);
         
         this.contentElements.forEach((original, index) => {
           const clone = original.cloneNode(true) as HTMLElement;
           clone.setAttribute('aria-hidden', 'true');
-          clone.style.transform = `translateX(${metrics[index].position + offset}px)`;
+          clone.style.transform = ['left', 'right'].includes(this.options.direction)
+            ? `translateX(${metrics[index].position + offset}px)`
+            : `translateY(${metrics[index].position + offset}px)`;
           
           // Add separator style to clone if not last element
-          if (index < this.contentElements.length - 1) {
-            this.addSeparatorStyle(clone);
-          }
+          this.addSeparatorStyle(clone);
           
           this.clones.push(clone);
           this.wrapper?.appendChild(clone);
@@ -227,18 +246,18 @@ export class Marquee {
     if (this.options.cloneCount === 0) return;
 
     const metrics = this.calculateMetrics();
-    const totalWidth = metrics[0].size + metrics[0].spacing;
+    const totalSize = metrics[0].size + metrics[0].spacing;
 
     for (let i = 0; i < this.options.cloneCount; i++) {
       const clone = this.element.cloneNode(true) as HTMLElement;
       clone.setAttribute('aria-hidden', 'true');
       clone.style.position = 'absolute';
-      clone.style.transform = `translateX(${totalWidth * (i + 1)}px)`;
+      clone.style.transform = ['left', 'right'].includes(this.options.direction)
+        ? `translateX(${totalSize * (i + 1)}px)`
+        : `translateY(${totalSize * (i + 1)}px)`;
       
       // Add separator style if not last clone
-      if (i < this.options.cloneCount - 1) {
-        this.addSeparatorStyle(clone);
-      }
+      this.addSeparatorStyle(clone);
 
       this.clones.push(clone);
       this.wrapper?.appendChild(clone);

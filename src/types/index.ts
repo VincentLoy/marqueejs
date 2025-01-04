@@ -34,6 +34,12 @@ export interface MarqueeOptions {
 
   /** Content validation options */
   contentValidation?: ContentValidationOptions;
+
+  /** Height of the marquee container in pixels. Only applicable for 'up' and 'down' directions. */
+  containerHeight?: number;
+
+  /** Whether to keep the original HTML content of the marquee element. */
+  keepOriginalContent?: boolean;
 }
 
 /**
