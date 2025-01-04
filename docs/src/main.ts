@@ -95,10 +95,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Basic example
-  marqueejs('.marquee-basic', {
+  let basic = marqueejs('.marquee-basic', {
     speed: 100,
     cloneCount: 10,
   });
+
+  console.log(basic.getContentList());
 
   // Right to left
   marqueejs('.marquee-rtl', {
@@ -122,33 +124,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sep.updateSeparator('•••');
     sep.updateGap(80);
-    sep.updateSpeed(500);
+    sep.updateCloneCount(0);
     
-    requestAnimationFrame(() => {
-      sep.addContent(newContent, true, () => {
-        console.log('Content added');
-      });
-      
+    sep.addContent(newContent, true, () => {
+      console.log('Content added');
     });
 
-    sep.recalculatePositions();
-  }, 4000);
+  }, 8000);
 
   // Vertical
   marqueejs('.marquee-vertical', {
     direction: 'up',
-    speed: 100,
+    speed: 50,
     gap: 20,
     cloneCount: 3,
     containerHeight: 350,
     keepOriginalContent: true,
-    // separator: '•',
     contentList: [
-      'First item',
-      'Second item with largest content size here',
-      'Third item with <i>italic tag</i> and <em>emphasis tag</em>',
-      'Another item here with <b>a bold tag</b> and <a class="text-blue-500 font-bold" href="#">link</a>',
-      'This one should pop out of the container scope and be displayed after'
+      '<b>Director:</b> Albus Dumbledore',
+      '<b>Producer:</b> Minerva McGonagall',
+      '<b>Screenwriter:</b> Severus Snape',
+      '<b>Composer:</b> Filius Flitwick',
+      '<b>Costume Designer:</b> Pomona Sprout',
+      '<b>Visual Effects:</b> Gilderoy Lockhart',
+      '<b>Editor:</b> Horace Slughorn',
+      '<b>Art Director:</b> Sybill Trelawney',
+      '<b>Makeup Artist:</b> Nymphadora Tonks',
+      '<b>Stunt Coordinator:</b> Mad-Eye Moody'
     ]
   });
 

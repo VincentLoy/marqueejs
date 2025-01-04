@@ -112,7 +112,7 @@ export class AnimationManager {
       }
     }
 
-    item.el.style.transform = `translateX(${item.position}px)`
+    item.el.style.transform = `translate3d(${item.position}px, 0, 0)`
   }
 
   private updateVerticalPosition(item: { el: HTMLElement; position: number }, movement: number): void {
@@ -137,7 +137,7 @@ export class AnimationManager {
       }
     }
 
-    item.el.style.transform = `translateY(${item.position}px)`
+    item.el.style.transform = `translate3d(0, ${item.position}px, 0)`
   }
 
   public stopAnimation(): void {

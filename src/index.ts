@@ -11,7 +11,7 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     resume() { instance.play() },
     destroy() { instance.destroy() },
     addContent(content: string | string[], addToStart: boolean = false, callback?: () => void) { instance.addContent(content, addToStart, callback) },
-    replaceContent(newContentList: string[]) { instance.replaceContent(newContentList) },
+    replaceContent(newContentList: string[], callback?: () => void) { instance.replaceContent(newContentList, callback) },
     getContentList() { return instance.getContentList() },
     updateSpeed(speed: number) { instance.updateSpeed(speed) },
     updateGap(gap: number) { instance.updateGap(gap) },

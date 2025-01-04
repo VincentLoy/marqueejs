@@ -64,7 +64,7 @@ export interface MarqueeInstance {
    * Replace the entire content list with a new one
    * @param newContentList - Array of new HTML contents to replace the existing list
    */
-  replaceContent(newContentList: string[]): void;
+  replaceContent(newContentList: string[], callback?: () => void): void;
 
   /**
    * Get the current content list
