@@ -371,7 +371,7 @@ export class Marquee {
     this.play();
   }
 
-  public replaceContentList(newContentList: string[]): void {
+  public replaceContent(newContentList: string[]): void {
     if (!Array.isArray(newContentList)) return;
 
     // Validate new content list

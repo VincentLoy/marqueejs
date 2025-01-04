@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 100);
 
   window.setTimeout(() => {
-    vertical.replaceContentList([
+    vertical.replaceContent([
       'New item replacing old ones',
       'Another new item added dynamically to replace the old fake content!!!'
     ]);
