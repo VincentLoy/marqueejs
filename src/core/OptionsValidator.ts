@@ -1,7 +1,7 @@
 import type { MarqueeOptions, ContentValidationResult, ContentValidationErrorType, ContentValidationOptions } from '../types'
 
 export class OptionsValidator {
-  static readonly MAX_CLONES = 15;
+  static readonly MAX_CLONES = 30;
   static readonly MIN_CLONES = 0;
   static readonly DEFAULT_MAX_LENGTH = 8500;
 
@@ -79,7 +79,7 @@ export class OptionsValidator {
     return options
   }
 
-  private static validateContentList(contentList: string[], options: MarqueeOptions): ContentValidationResult {
+  public static validateContentList(contentList: string[], options: MarqueeOptions): ContentValidationResult {
     const errors: {
       type: ContentValidationErrorType;
       message: string;
@@ -176,26 +176,26 @@ export class OptionsValidator {
     }
   }
 
-  private static validateSpeed(speed: number | undefined): void {
+  public static validateSpeed(speed: number | undefined): void {
     if (speed !== undefined && (typeof speed !== 'number' || speed <= 0)) {
       throw new Error('MarqueeJS: Speed must be a positive number')
     }
   }
 
-  private static validateDirection(direction: string | undefined): void {
+  public static validateDirection(direction: string | undefined): void {
     const validDirections = ['left', 'right', 'up', 'down']
     if (direction && !validDirections.includes(direction)) {
       throw new Error(`MarqueeJS: Direction must be one of: ${validDirections.join(', ')}`)
     }
   }
 
-  private static validateGap(gap: number | undefined): void {
+  public static validateGap(gap: number | undefined): void {
     if (gap !== undefined && (typeof gap !== 'number' || gap < 0)) {
       throw new Error('MarqueeJS: Gap must be a non-negative number')
     }
   }
 
-  private static validateContainerHeight(containerHeight: number | undefined, direction: string | undefined): void {
+  public static validateContainerHeight(containerHeight: number | undefined, direction: string | undefined): void {
     if (containerHeight !== undefined) {
       if (typeof containerHeight !== 'number' || containerHeight <= 0) {
         throw new Error('MarqueeJS: Container height must be a positive number');
@@ -206,7 +206,7 @@ export class OptionsValidator {
     }
   }
 
-  private static validateKeepOriginalContent(keepOriginalContent: boolean | undefined): void {
+  public static validateKeepOriginalContent(keepOriginalContent: boolean | undefined): void {
     if (keepOriginalContent !== undefined && typeof keepOriginalContent !== 'boolean') {
       throw new Error('MarqueeJS: keepOriginalContent must be a boolean');
     }

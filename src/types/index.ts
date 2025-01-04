@@ -70,6 +70,48 @@ export interface MarqueeInstance {
    * @returns The current content list
    */
   getContentList(): string[];
+
+  /**
+   * Update the scrolling speed
+   * @param speed - New speed in pixels per second
+   */
+  updateSpeed(speed: number): void;
+
+  /**
+   * Update the gap between elements
+   * @param gap - New gap in pixels
+   */
+  updateGap(gap: number): void;
+
+  /**
+   * Update the scrolling direction
+   * @param direction - New direction ('left', 'right', 'up', 'down')
+   */
+  updateDirection(direction: 'left' | 'right' | 'up' | 'down'): void;
+
+  /**
+   * Update the separator between elements
+   * @param separator - New separator string
+   */
+  updateSeparator(separator: string): void;
+
+  /**
+   * Update the number of clones
+   * @param cloneCount - New number of clones
+   */
+  updateCloneCount(cloneCount: number): void;
+
+  /**
+   * Update the container height
+   * @param containerHeight - New container height in pixels
+   */
+  updateContainerHeight(containerHeight: number): void;
+
+  /**
+   * Update the pause on hover option
+   * @param pauseOnHover - New pause on hover value
+   */
+  updatePauseOnHover(pauseOnHover: boolean): void;
 }
 
 /**

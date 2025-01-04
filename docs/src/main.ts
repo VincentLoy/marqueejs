@@ -17,11 +17,33 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // With separator
-  marqueejs('.marquee-separator', {
+  let sep = marqueejs('.marquee-separator', {
+    direction: 'left',
     separator: '•',
     gap: 40,
     cloneCount: 8
   });
+
+  window.setTimeout(() => {
+    sep.updateDirection('right');
+    sep.updateGap(150);
+    sep.updateCloneCount(10);
+    sep.updateSeparator(' > ');
+    sep.updateSpeed(350);
+  }, 2000);
+  
+  window.setTimeout(() => {
+    sep.updateSeparator('•••');
+    sep.updateDirection('left');
+    sep.updateGap(80);
+    sep.updateSpeed(188);
+    sep.addContent([
+      'New item added dynamically',
+      // '<script>alert("XSS ATTACK MOTHER FUCKER")</script>',
+      '<p><span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded">FLASH</span> <span>Batman killed in LA</span></p>',
+      '<p><span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-yellow-100 text-yellow-800 rounded">COINS</span> <span>Bitcoin reached 1M$</span></p>',
+    ], true);
+  }, 4000);
 
   // Vertical
   let vertical = marqueejs('.marquee-vertical', {
@@ -31,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cloneCount: 3,
     containerHeight: 450,
     keepOriginalContent: true,
-    separator: '•',
+    // separator: '•',
     contentList: [
       'First item',
       'Second item with largest content size here',
@@ -46,14 +68,17 @@ document.addEventListener('DOMContentLoaded', () => {
       'New item added dynamically',
       'Another new item added dynamically'
     ], true);
-  }, 2000);
+  }, 100);
 
   window.setTimeout(() => {
     vertical.replaceContentList([
       'New item replacing old ones',
       'Another new item added dynamically to replace the old fake content!!!'
     ]);
-  }, 6000);
+
+    vertical.updateGap(50);
+    // vertical.updateContainerHeight(50);
+  }, 500);
 
   // Fast with pause
   marqueejs('.marquee-fast', {

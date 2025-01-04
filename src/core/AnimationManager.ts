@@ -34,8 +34,8 @@ export class AnimationManager {
       group.style.top = '0';
       group.style.left = '0';
       group.style.transform = isHorizontal 
-        ? `translateX(${position}px)`
-        : `translateY(${position}px)`;
+        ? `translate3d(${position}px, 0, 0)`
+        : `translate3d(0, ${position}px, 0)`;
 
       // Update position for next element
       currentPosition += size;

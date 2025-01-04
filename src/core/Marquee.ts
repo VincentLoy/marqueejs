@@ -38,22 +38,23 @@ export class Marquee {
     const validatedOptions = OptionsValidator.validate(options);
     this.element = element as HTMLElement;
     this.options = { ...this.defaultOptions, ...validatedOptions };
+
+    // If contentList is empty, populate it with the direct children of the marquee element
+    if (!this.options.contentList.length) {
+      this.options.contentList = Array.from(this.element.children).map(child => child.outerHTML);
+    }
+
     this.init();
   }
 
   private init(): void {
     this.setupWrapper();
-    
-    if (this.options.contentList?.length) {
-      this.handleOriginalContent();
-      this.createContentElements();
-    } else {
-      this.cloneElements();
-    }
+    this.handleOriginalContent();
+    this.createContentElements();
 
     if (this.wrapper) {
       this.animationManager = new AnimationManager(
-        this.options.contentList?.length ? this.contentElements[0] : this.element,
+        this.contentElements[0],
         this.wrapper,
         this.options
       );
@@ -83,9 +84,7 @@ export class Marquee {
 
   private setupWrapper(): void {
     // Calculate max height from content if using contentList
-    const originalHeight = this.options.contentList?.length 
-      ? this.getMaxContentHeight()
-      : this.element.offsetHeight;
+    const originalHeight = this.getMaxContentHeight();
 
     // Create outer container
     this.container = document.createElement('div');
@@ -160,9 +159,7 @@ export class Marquee {
     const metrics: ElementMetrics[] = [];
     let currentPosition = 0;
 
-    const elements = this.options.contentList?.length 
-      ? this.contentElements 
-      : [this.element, ...this.clones];
+    const elements = this.contentElements;
 
     elements.forEach((el, index) => {
       const rect = el.getBoundingClientRect();
@@ -185,7 +182,7 @@ export class Marquee {
   }
 
   private createContentElements(): void {
-    if (!this.options.contentList?.length || !this.wrapper) return;
+    if (!this.wrapper) return;
 
     // Clear existing elements
     this.contentElements.forEach(el => el.remove());
@@ -239,28 +236,6 @@ export class Marquee {
           this.wrapper?.appendChild(clone);
         });
       }
-    }
-  }
-
-  private cloneElements(): void {
-    if (this.options.cloneCount === 0) return;
-
-    const metrics = this.calculateMetrics();
-    const totalSize = metrics[0].size + metrics[0].spacing;
-
-    for (let i = 0; i < this.options.cloneCount; i++) {
-      const clone = this.element.cloneNode(true) as HTMLElement;
-      clone.setAttribute('aria-hidden', 'true');
-      clone.style.position = 'absolute';
-      clone.style.transform = ['left', 'right'].includes(this.options.direction)
-        ? `translateX(${totalSize * (i + 1)}px)`
-        : `translateY(${totalSize * (i + 1)}px)`;
-      
-      // Add separator style if not last clone
-      this.addSeparatorStyle(clone);
-
-      this.clones.push(clone);
-      this.wrapper?.appendChild(clone);
     }
   }
 
@@ -374,6 +349,13 @@ export class Marquee {
     // Convert content to array if it's a string
     const newContent = Array.isArray(content) ? content : [content];
 
+    // Validate new content
+    const validationResult = OptionsValidator.validateContentList(newContent, this.options);
+    if (!validationResult.isValid) {
+      console.warn('MarqueeJS: Content validation failed:', validationResult.errors.map(e => e.message).join(', '));
+      return;
+    }
+
     // Add new content to the contentList
     if (addToStart) {
       this.options.contentList = [...newContent, ...this.options.contentList];
@@ -392,6 +374,13 @@ export class Marquee {
   public replaceContentList(newContentList: string[]): void {
     if (!Array.isArray(newContentList)) return;
 
+    // Validate new content list
+    const validationResult = OptionsValidator.validateContentList(newContentList, this.options);
+    if (!validationResult.isValid) {
+      console.warn('MarqueeJS: Content validation failed:', validationResult.errors.map(e => e.message).join(', '));
+      return;
+    }
+
     // Replace the contentList with the new one
     this.options.contentList = newContentList;
 
@@ -405,6 +394,99 @@ export class Marquee {
 
   public getContentList(): string[] {
     return this.options.contentList;
+  }
+
+  public updateSpeed(speed: number): void {
+    OptionsValidator.validateSpeed(speed);
+    this.options.speed = speed;
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updateGap(gap: number): void {
+    OptionsValidator.validateGap(gap);
+
+    // Nettoyage des anciennes classes de séparateur
+    this.cleanupSeparatorStyle(this.element);
+    this.contentElements.forEach(el => this.cleanupSeparatorStyle(el));
+    this.clones.forEach(el => this.cleanupSeparatorStyle(el));
+
+    this.options.gap = gap;
+    this.createContentElements();
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updateDirection(direction: 'left' | 'right' | 'up' | 'down'): void {
+    OptionsValidator.validateDirection(direction);
+
+    // Restrict direction changes to the opposite direction only
+    const oppositeDirections = {
+      left: 'right',
+      right: 'left',
+      up: 'down',
+      down: 'up'
+    };
+
+    if (oppositeDirections[this.options.direction] !== direction) {
+      console.warn(`MarqueeJS: Direction change from ${this.options.direction} to ${direction} is not allowed. Only opposite direction changes are allowed.`);
+      return;
+    }
+
+    this.options.direction = direction;
+    this.createContentElements();
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updateSeparator(separator: string): void {
+    // Nettoyage des anciennes classes de séparateur
+    this.cleanupSeparatorStyle(this.element);
+    this.contentElements.forEach(el => this.cleanupSeparatorStyle(el));
+    this.clones.forEach(el => this.cleanupSeparatorStyle(el));
+
+    this.options.separator = separator;
+    this.createContentElements();
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updateCloneCount(cloneCount: number): void {
+    if (!Number.isInteger(cloneCount) || cloneCount < 0 || cloneCount > OptionsValidator.MAX_CLONES) {
+      throw new Error(`MarqueeJS: cloneCount must be an integer between 0 and ${OptionsValidator.MAX_CLONES}`);
+    }
+    this.options.cloneCount = cloneCount;
+    this.createContentElements();
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updateContainerHeight(containerHeight: number): void {
+    OptionsValidator.validateContainerHeight(containerHeight, this.options.direction);
+    this.options.containerHeight = containerHeight;
+
+    // Apply forced height for 'up' and 'down' directions
+    if (['up', 'down'].includes(this.options.direction)) {
+      this.container.style.height = `${containerHeight}px`;
+    }
+
+    this.setupWrapper();
+    this.animationManager?.recalculatePositions();
+    this.play();
+  }
+
+  public updatePauseOnHover(pauseOnHover: boolean): void {
+    this.options.pauseOnHover = pauseOnHover;
+    this.eventManager?.destroy();
+    this.eventManager = new EventManager(
+      this.element,
+      this.wrapper,
+      this.options,
+      {
+        pause: () => this.pause(),
+        resume: () => this.play()
+      }
+    );
   }
 }
 
