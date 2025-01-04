@@ -11,6 +11,7 @@ export class Marquee {
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
   private domManager: DOMManager | null = null;
+  private htmlContentList: string[] = [];
 
   private defaultOptions: Required<MarqueeOptions> = {
     speed: 100,
@@ -34,10 +35,14 @@ export class Marquee {
     const validatedOptions = OptionsValidator.validate(options);
     this.element = element as HTMLElement;
     this.options = { ...this.defaultOptions, ...validatedOptions };
+    this.htmlContentList = Array.from(this.element.children).map(child => child.outerHTML);
 
     // If contentList is empty, populate it with the direct children of the marquee element
     if (!this.options.contentList.length) {
-      this.options.contentList = Array.from(this.element.children).map(child => child.outerHTML);
+      this.options.contentList = this.htmlContentList;
+    } else if (this.htmlContentList.length && this.options.keepOriginalContent) {
+      // If contentList is not empty, but the original content should be kept, append it to the contentList
+      this.options.contentList = [...this.htmlContentList, ...this.options.contentList];
     }
 
     this.init();

@@ -6,7 +6,6 @@
 > 
 > I encourage testing and feedbacks but don't recommend in production environments.
 
-
 [![Version](https://img.shields.io/npm/v/marqueejs?style=flat-square)](https://www.npmjs.com/package/marqueejs)
 [![License](https://img.shields.io/github/license/vincent/marqueejs?style=flat-square)](#)
 
