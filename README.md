@@ -28,11 +28,11 @@ MarqueeJS is a modern, lightweight JavaScript library for creating scrolling tex
    - [getContentList](#getcontentlist)  
    - [updateSpeed](#updatespeed)  
    - [updateGap](#updategap)  
-   - [updateDirection](#updatedirection)  
    - [updateSeparator](#updateseparator)  
    - [updateCloneCount](#updateclonecount)  
    - [updateContainerHeight](#updatecontainerheight)  
    - [updatePauseOnHover](#updatepauseonhover)  
+   - [recalculatePositions](#recalculatepositions)  
 6. [Advanced Usage](#advanced-usage)  
 7. [Examples](#examples)  
 8. [Development](#development)  
@@ -148,11 +148,14 @@ instance.destroy()
 ```
 
 ### addContent
-Adds new content (HTML string or array of strings) to the marquee. An optional `addToStart` parameter determines whether to add to the beginning or end of the list.
+Adds new content (HTML string or array of strings) to the marquee. An optional `addToStart` parameter determines whether to add to the beginning or end of the list. An optional `callback` parameter allows executing a function after the content is added.
 
 ```typescript
 instance.addContent('New item') // added at the end
 instance.addContent(['Item 1', 'Item 2'], true) // added at the start
+instance.addContent('New item', false, () => {
+  console.log('Content added');
+}) // added at the end with callback
 ```
 
 ### replaceContent
@@ -187,18 +190,6 @@ Updates the gap between elements.
 instance.updateGap(30)
 ```
 
-### updateDirection
-Updates the scrolling direction for the component. 
-
->The direction can only be changed between opposite axes:
->- From `right` to `left` (or vice-versa) - ✅ Allowed
->- From `up` to `down` (or vice-versa) - ✅ Allowed
->- From `right` to `up` (or other non-opposite) - ❌ Not allowed
-
-```typescript
-instance.updateDirection('right')
-```
-
 ### updateSeparator
 Updates the separator between elements.
 
@@ -225,6 +216,13 @@ Updates the pause on hover option.
 
 ```typescript
 instance.updatePauseOnHover(true)
+```
+
+### recalculatePositions
+Recalculates the positions of the elements. Useful if you encounter any issues with element positioning.
+
+```typescript
+instance.recalculatePositions()
 ```
 
 ---

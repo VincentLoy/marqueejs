@@ -56,8 +56,9 @@ export interface MarqueeInstance {
    * Add new content to the content list
    * @param content - New HTML content or array of contents to add
    * @param addToStart - Whether to add the new content at the start of the list
+   * @param callback - Function to execute after content is added
    */
-  addContent(content: string | string[], addToStart?: boolean): void;
+  addContent(content: string | string[], addToStart?: boolean, callback?: () => void): void;
 
   /**
    * Replace the entire content list with a new one
@@ -84,12 +85,6 @@ export interface MarqueeInstance {
   updateGap(gap: number): void;
 
   /**
-   * Update the scrolling direction
-   * @param direction - New direction ('left', 'right', 'up', 'down')
-   */
-  updateDirection(direction: 'left' | 'right' | 'up' | 'down'): void;
-
-  /**
    * Update the separator between elements
    * @param separator - New separator string
    */
@@ -112,6 +107,11 @@ export interface MarqueeInstance {
    * @param pauseOnHover - New pause on hover value
    */
   updatePauseOnHover(pauseOnHover: boolean): void;
+
+  /**
+   * Recalculate positions of elements
+   */
+  recalculatePositions(): void;
 }
 
 /**

@@ -191,6 +191,7 @@ export class Marquee {
     this.clones = [];
 
     // Create content elements
+    const fragment = document.createDocumentFragment();
     this.options.contentList.forEach((content, index) => {
       const element = document.createElement('div');
       element.className = 'marquee-content-item';
@@ -202,8 +203,11 @@ export class Marquee {
       this.addSeparatorStyle(element);
 
       this.contentElements.push(element);
-      this.wrapper?.appendChild(element);
+      fragment.appendChild(element);
     });
+
+    // Append all elements at once to minimize reflows
+    this.wrapper.appendChild(fragment);
 
     // Position elements and create clones
     const metrics = this.calculateMetrics();
@@ -219,6 +223,7 @@ export class Marquee {
 
     // Create and position clones
     if (this.options.cloneCount > 0) {
+      const cloneFragment = document.createDocumentFragment();
       for (let i = 0; i < this.options.cloneCount; i++) {
         const offset = totalSize * (i + 1);
         
@@ -233,9 +238,11 @@ export class Marquee {
           this.addSeparatorStyle(clone);
           
           this.clones.push(clone);
-          this.wrapper?.appendChild(clone);
+          cloneFragment.appendChild(clone);
         });
       }
+      // Append all clones at once to minimize reflows
+      this.wrapper.appendChild(cloneFragment);
     }
   }
 
@@ -343,7 +350,7 @@ export class Marquee {
   }
 
   // Add new methods for content list management
-  public addContent(content: string | string[], addToStart: boolean = false): void {
+  public addContent(content: string | string[], addToStart: boolean = false, callback?: () => void): void {
     if (!content) return;
 
     // Convert content to array if it's a string
@@ -369,6 +376,13 @@ export class Marquee {
     // Recalculate positions and restart animation
     this.animationManager?.recalculatePositions();
     this.play();
+
+    // Execute callback if provided, ensuring it runs after DOM updates
+    if (callback) {
+      requestAnimationFrame(() => {
+        callback();
+      });
+    }
   }
 
   public replaceContent(newContentList: string[]): void {
@@ -412,28 +426,6 @@ export class Marquee {
     this.clones.forEach(el => this.cleanupSeparatorStyle(el));
 
     this.options.gap = gap;
-    this.createContentElements();
-    this.animationManager?.recalculatePositions();
-    this.play();
-  }
-
-  public updateDirection(direction: 'left' | 'right' | 'up' | 'down'): void {
-    OptionsValidator.validateDirection(direction);
-
-    // Restrict direction changes to the opposite direction only
-    const oppositeDirections = {
-      left: 'right',
-      right: 'left',
-      up: 'down',
-      down: 'up'
-    };
-
-    if (oppositeDirections[this.options.direction] !== direction) {
-      console.warn(`MarqueeJS: Direction change from ${this.options.direction} to ${direction} is not allowed. Only opposite direction changes are allowed.`);
-      return;
-    }
-
-    this.options.direction = direction;
     this.createContentElements();
     this.animationManager?.recalculatePositions();
     this.play();
@@ -487,6 +479,11 @@ export class Marquee {
         resume: () => this.play()
       }
     );
+  }
+
+  public recalculatePositions(): void {
+    this.animationManager?.recalculatePositions();
+    this.play();
   }
 }
 
