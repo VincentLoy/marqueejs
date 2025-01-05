@@ -14,18 +14,18 @@ export class CloneCalculator {
     
     const metrics = this.calculateMetrics(containerElement, contentElements, gap, isHorizontal);
     
-    // Si les métriques sont identiques, retourner le cache
+    // If metrics are identical, return from cache
     if (this.cachedMetrics && 
-        this.cachedMetrics.containerSize === metrics.containerSize &&
-        this.cachedMetrics.contentSize === metrics.contentSize) {
+      this.cachedMetrics.containerSize === metrics.containerSize &&
+      this.cachedMetrics.contentSize === metrics.contentSize) {
       return this.cachedMetrics.calculatedCount;
     }
 
-    // Calculer le nombre minimum de clones nécessaires
-    // +1 pour assurer un défilement continu
+    // Calculate minimum number of clones needed
+    // +1 to ensure continuous scrolling
     const minClones = Math.ceil(metrics.containerSize / metrics.contentSize) + 1;
 
-    // Mettre en cache les nouvelles métriques
+    // Cache the new metrics
     this.cachedMetrics = {
       ...metrics,
       calculatedCount: minClones

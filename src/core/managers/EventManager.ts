@@ -1,8 +1,8 @@
-import type { MarqueeOptions } from '../types'
+import type { MarqueeOptions } from '../../types'
 
 export class EventManager {
   private wrapper: HTMLElement
-  private options: Required<MarqueeOptions>
+  private options: Partial<MarqueeOptions>
   private handlers: {
     pause: () => void
     resume: () => void
@@ -11,7 +11,7 @@ export class EventManager {
   constructor(
     _element: HTMLElement, 
     wrapper: HTMLElement, 
-    options: Required<MarqueeOptions>,
+    options: Partial<MarqueeOptions>,
     handlers: { pause: () => void; resume: () => void }
   ) {
     this.wrapper = wrapper
@@ -54,17 +54,16 @@ export class EventManager {
       const deltaX = e.touches[0].clientX - touchStartX
       const deltaY = e.touches[0].clientY - touchStartY
       
-      if (Math.abs(deltaX) > Math.abs(deltaY) && 
-         ['left', 'right'].includes(this.options.direction)) {
+      if (Math.abs(deltaX) > Math.abs(deltaY) && ['left', 'right'].includes(this.options.direction!)) {
         e.preventDefault()
       } else if (Math.abs(deltaY) > Math.abs(deltaX) && 
-                ['up', 'down'].includes(this.options.direction)) {
+                ['up', 'down'].includes(this.options.direction!)) {
         e.preventDefault()
       }
     }
 
     // Add non-passive touch move listener only when needed
-    if (['left', 'right', 'up', 'down'].includes(this.options.direction)) {
+    if (['left', 'right', 'up', 'down'].includes(this.options.direction!)) {
       this.wrapper.addEventListener('touchmove', handleTouchMove, { passive: false })
     } else {
       this.wrapper.addEventListener('touchmove', handleTouchMove, { passive: true })
@@ -87,8 +86,8 @@ export class EventManager {
       this.wrapper.removeEventListener('mouseleave', this.handlers.resume)
     }
     
-    this.wrapper.removeEventListener('touchstart', this.handlers.pause, { passive: true })
-    this.wrapper.removeEventListener('touchend', this.handlers.resume, { passive: true })
+    this.wrapper.removeEventListener('touchstart', this.handlers.pause)
+    this.wrapper.removeEventListener('touchend', this.handlers.resume)
     document.removeEventListener('visibilitychange', this.handlers.pause)
   }
 }

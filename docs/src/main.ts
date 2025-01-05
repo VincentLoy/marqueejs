@@ -100,8 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cloneCount: 'auto',
   });
 
-  console.log(basic.getContentList());
-
   // Right to left
   marqueejs('.marquee-rtl', {
     direction: 'right',
@@ -153,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   window.setTimeout(() => {
-    console.log('BRAP');
     test.randomize()
   }, 2000);
 

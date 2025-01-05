@@ -1,14 +1,14 @@
-import type { MarqueeOptions } from '../types'
+import type { MarqueeOptions } from '../../types'
 
 export class AnimationManager {
   private element: HTMLElement
   private wrapper: HTMLElement
-  private options: Required<MarqueeOptions>
+  private options: Partial<MarqueeOptions>
   private animationFrame: number | null = null
   private lastTime: number = 0
   private elements: Array<{ el: HTMLElement; position: number }> = []
 
-  constructor(element: HTMLElement, wrapper: HTMLElement, options: Required<MarqueeOptions>) {
+  constructor(element: HTMLElement, wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
     this.element = element
     this.wrapper = wrapper
     this.options = options
@@ -17,14 +17,14 @@ export class AnimationManager {
 
   private setupElements(): void {
     const groups = Array.from(this.wrapper.children) as HTMLElement[];
-    const isHorizontal = ['left', 'right'].includes(this.options.direction);
+    const isHorizontal = ['left', 'right'].includes(this.options.direction!);
     let currentPosition = 0;
 
     this.elements = groups.map(group => {
       // Calculate size including gap
       const size = isHorizontal 
-        ? group.offsetWidth + this.options.gap
-        : group.offsetHeight + this.options.gap;
+        ? group.offsetWidth + this.options.gap!
+        : group.offsetHeight + this.options.gap!;
 
       // Store current position for this element
       const position = currentPosition;
@@ -53,11 +53,11 @@ export class AnimationManager {
     const animate = (currentTime: number) => {
       const deltaTime = currentTime - this.lastTime
       this.lastTime = currentTime
-      const movement = (this.options.speed * deltaTime) / 1000
+      const movement = (this.options.speed! * deltaTime) / 1000
 
       // Update each element's position independently
       this.elements.forEach((item) => {
-        if (['left', 'right'].includes(this.options.direction)) {
+        if (['left', 'right'].includes(this.options.direction!)) {
           this.updateHorizontalPosition(item, movement)
         } else {
           this.updateVerticalPosition(item, movement)
@@ -71,8 +71,8 @@ export class AnimationManager {
   }
 
   private isPositionAvailable(newPosition: number, currentElement: HTMLElement): boolean {
-    const threshold = this.options.gap
-    const isHorizontal = ['left', 'right'].includes(this.options.direction)
+    const threshold = this.options.gap!
+    const isHorizontal = ['left', 'right'].includes(this.options.direction!)
     
     return !this.elements.some(({ el, position }) => {
       if (el === currentElement) return false

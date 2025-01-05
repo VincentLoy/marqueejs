@@ -5,22 +5,22 @@ export class DOMManager {
   private container: HTMLElement;
   private wrapper: HTMLElement;
   private element: HTMLElement;
-  private options: Required<MarqueeOptions>;
+  private options: Partial<MarqueeOptions>;
   private contentElements: HTMLElement[] = [];
   private clones: HTMLElement[] = [];
   private instanceId: string;
   private separatorStyleElement: HTMLStyleElement | null = null;
   private cloneCalculator: CloneCalculator;
 
-  constructor(element: HTMLElement, options: Required<MarqueeOptions>) {
-    this.instanceId = `marquee-${Math.random().toString(36).substr(2, 9)}`;
+  constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
+    this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
     this.element = element;
     this.options = options;
     this.container = this.createContainer();
     this.wrapper = this.createWrapper();
-    this.cloneCalculator = new CloneCalculator(options.direction);
+    this.cloneCalculator = new CloneCalculator(options.direction!);
     
-    // Vider l'élément original car tout passe par contentList
+    // Clear original element since everything goes through contentList
     this.element.innerHTML = '';
     
     this.setupDOM();
@@ -49,7 +49,7 @@ export class DOMManager {
     const originalHeight = this.getMaxContentHeight();
     
     // Configure container height
-    if (['up', 'down'].includes(this.options.direction) && this.options.containerHeight) {
+    if (['up', 'down'].includes(this.options.direction!) && this.options.containerHeight) {
       this.container.style.height = `${this.options.containerHeight}px`;
     } else {
       this.container.style.height = `${originalHeight}px`;
@@ -68,7 +68,7 @@ export class DOMManager {
     this.clearElements();
 
     const fragment = document.createDocumentFragment();
-    this.options.contentList.forEach((content, index) => {
+    this.options.contentList!.forEach((content) => {
       const element = this.createContentElement(content);
       this.contentElements.push(element);
       fragment.appendChild(element);
@@ -96,7 +96,7 @@ export class DOMManager {
     temp.style.left = '-9999px';
     document.body.appendChild(temp);
 
-    const heights = this.options.contentList.map(content => {
+    const heights = this.options.contentList!.map(content => {
       temp.innerHTML = content;
       return temp.offsetHeight;
     });
@@ -106,7 +106,7 @@ export class DOMManager {
   }
 
   private calculateMetrics(): ElementMetrics[] {
-    const isHorizontal = ['left', 'right'].includes(this.options.direction);
+    const isHorizontal = ['left', 'right'].includes(this.options.direction!);
     const metrics: ElementMetrics[] = [];
     let currentPosition = 0;
 
@@ -114,17 +114,17 @@ export class DOMManager {
       const rect = el.getBoundingClientRect();
       const size = isHorizontal ? rect.width : rect.height;
       const separatorOffset = this.options.separator && index < this.contentElements.length - 1 
-        ? this.options.gap / 2 
+        ? this.options.gap! / 2 
         : 0;
 
       metrics.push({
         size,
-        spacing: this.options.gap,
+        spacing: this.options.gap!,
         position: currentPosition,
         separatorOffset
       });
 
-      currentPosition += size + this.options.gap;
+      currentPosition += size + this.options.gap!;
     });
 
     return metrics;
@@ -134,7 +134,7 @@ export class DOMManager {
     const element = document.createElement('div');
     element.className = 'marquee-content-item';
     element.style.position = 'absolute';
-    element.style.whiteSpace = ['up', 'down'].includes(this.options.direction) ? 'normal' : 'nowrap';
+    element.style.whiteSpace = ['up', 'down'].includes(this.options.direction!) ? 'normal' : 'nowrap';
     element.innerHTML = content;
     return element;
   }
@@ -143,7 +143,7 @@ export class DOMManager {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-    el.style.transform = ['left', 'right'].includes(this.options.direction)
+    el.style.transform = ['left', 'right'].includes(this.options.direction!)
       ? `translate3d(${position}px, 0, 0)`
       : `translate3d(0, ${position}px, 0)`;
     });
@@ -155,11 +155,11 @@ export class DOMManager {
       ? this.cloneCalculator.calculateOptimalCloneCount(
           this.container,
           this.contentElements,
-          this.options.gap
+          this.options.gap!
         )
-      : this.options.cloneCount;
+      : this.options.cloneCount!;
 
-    if (cloneCount <= 0) return;
+    if (cloneCount! <= 0) return;
 
     const metrics = this.calculateMetrics();
     const totalSize = metrics.reduce((sum, m) => sum + m.size + m.spacing, 0);
@@ -170,7 +170,7 @@ export class DOMManager {
       this.contentElements.forEach((original, index) => {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute('aria-hidden', 'true');
-        clone.style.transform = ['left', 'right'].includes(this.options.direction)
+        clone.style.transform = ['left', 'right'].includes(this.options.direction!)
           ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
           : `translate3d(0, ${metrics[index].position + offset}px, 0)`;
         
@@ -185,18 +185,18 @@ export class DOMManager {
   private updateSeparatorStyles(): void {
     this.separatorStyleElement?.remove();
 
-    if (!this.options.separator || ['up', 'down'].includes(this.options.direction)) {
+    if (!this.options.separator || ['up', 'down'].includes(this.options.direction!)) {
       return;
     }
 
     const style = document.createElement('style');
     style.textContent = `
       .${this.instanceId} .marquee-content-item::before {
-        content: '${this.options.separator}';
-        position: absolute;
-        left: -${this.options.gap / 2}px;
-        transform: translateX(-50%);
-        white-space: pre;
+      content: '${this.options.separator}';
+      position: absolute;
+      left: -${this.options.gap! / 2}px;
+      transform: translate3d(-50%, 0, 0);
+      white-space: pre;
       }
     `;
     

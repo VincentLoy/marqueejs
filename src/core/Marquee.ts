@@ -5,16 +5,16 @@ import { EventManager } from './managers/EventManager';
 import { DOMManager } from './managers/DOMManager';
 
 export class Marquee {
-  private element: HTMLElement;
+  private element!: HTMLElement;
   private originalElement: HTMLElement;
-  private options: Required<MarqueeOptions>;
+  private options!: Partial<MarqueeOptions>;
   private isPlaying: boolean = false;
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
   private domManager: DOMManager | null = null;
   private htmlContentList: string[] = [];
 
-  private defaultOptions: Required<MarqueeOptions> = {
+  private defaultOptions: Partial<MarqueeOptions> = {
     speed: 100,
     direction: 'left',
     pauseOnHover: false,
@@ -34,7 +34,7 @@ export class Marquee {
       throw new Error('Invalid element selector');
     }
     
-    // Stocker une copie profonde de l'élément original
+    // Store a deep copy of the original element
     this.originalElement = element.cloneNode(true) as HTMLElement;
     this.setupInstance(element as HTMLElement, options);
     this.init();
@@ -47,7 +47,7 @@ export class Marquee {
     this.htmlContentList = Array.from(this.element.children).map(child => child.outerHTML);
 
     // If contentList is empty, populate it with the direct children of the marquee element
-    if (!this.options.contentList.length) {
+    if (!this.options.contentList?.length) {
       this.options.contentList = this.htmlContentList;
     } else if (this.htmlContentList.length && this.options.keepOriginalContent) {
       // If contentList is not empty, but the original content should be kept, append it to the contentList
@@ -90,7 +90,7 @@ export class Marquee {
   }
 
   private randomizeContent(): string[] {
-    const shuffledContent = [...this.options.contentList];
+    const shuffledContent = [...this.options.contentList!];
     for (let i = shuffledContent.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [shuffledContent[i], shuffledContent[j]] = [shuffledContent[j], shuffledContent[i]];
@@ -98,27 +98,26 @@ export class Marquee {
     return shuffledContent;
   }
 
-  // Modification de la méthode reset pour une réinitialisation plus douce
   public async reset(): Promise<void> {
     return new Promise<void>(async (resolve) => {
-      // Arrêter l'animation en cours
+      // Stop current animation
       this.pause();
 
-      // Recréer l'élément à partir de l'original
+      // Recreate element from original
       const newElement = this.originalElement.cloneNode(true) as HTMLElement;
       
-      // Remplacer l'ancien élément par le nouveau
+      // Replace old element with new one
       if (this.element.parentElement) {
         this.element.parentElement.replaceChild(newElement, this.element);
       }
 
-      // Attendre que le nettoyage soit terminé
+      // Wait for cleanup to complete
       await Promise.resolve(this.destroy());
 
-      // Réinitialiser complètement l'instance
+      // Completely reset the instance
       this.setupInstance(newElement, this.options);
 
-      // Attendre que l'initialisation soit terminée
+      // Wait for initialization to complete
       await this.init();
 
       resolve();
@@ -171,7 +170,7 @@ export class Marquee {
 
     this.pause();
     this.options.contentList = newContent;
-    await this.domManager?.createContentElements();
+    this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
     this.play();
   }
@@ -192,14 +191,12 @@ export class Marquee {
 
     // Add new content to the contentList
     if (addToStart) {
-      this.options.contentList = [...newContent, ...this.options.contentList];
+      this.options.contentList = [...newContent, ...this.options.contentList!];
     } else {
-      this.options.contentList = [...this.options.contentList, ...newContent];
+      this.options.contentList = [...this.options.contentList!, ...newContent];
     }
 
-    console.log(this.options);
-
-    // Attendre que le reset soit terminé
+    // Wait for reset to complete
     await this.reset();
 
     // Execute callback if provided, ensuring it runs after DOM updates
@@ -232,7 +229,7 @@ export class Marquee {
   }
 
   public getContentList(): string[] {
-    return this.options.contentList;
+    return this.options.contentList!;
   }
 
   public updateSpeed(speed: number): void {
@@ -272,7 +269,7 @@ export class Marquee {
     this.options.containerHeight = containerHeight;
 
     // Apply forced height for 'up' and 'down' directions
-    if (['up', 'down'].includes(this.options.direction)) {
+    if (['up', 'down'].includes(this.options.direction!)) {
       this.domManager?.updateContainerHeight(containerHeight);
     }
 
