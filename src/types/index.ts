@@ -40,6 +40,9 @@ export interface MarqueeOptions {
 
   /** Whether to keep the original HTML content of the marquee element. */
   keepOriginalContent?: boolean;
+
+  /** Randomize order in contentList */
+  randomize?: boolean;
 }
 
 /**
@@ -112,6 +115,11 @@ export interface MarqueeInstance {
    * Recalculate positions of elements
    */
   recalculatePositions(): void;
+
+  /**
+   * Randomize the order of content items
+   */
+  randomize(): void;
 }
 
 /**

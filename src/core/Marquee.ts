@@ -21,6 +21,7 @@ export class Marquee {
     gap: 20,
     cloneCount: 'auto',
     separator: '',
+    randomize: false,
     contentList: []
   };
 
@@ -52,6 +53,11 @@ export class Marquee {
       // If contentList is not empty, but the original content should be kept, append it to the contentList
       this.options.contentList = [...this.htmlContentList, ...this.options.contentList];
     }
+
+    // Randomize contentList if required
+    if (this.options.randomize) {
+      this.options.contentList = this.randomizeContent();
+    }
   }
 
   private async init(): Promise<void> {
@@ -81,6 +87,15 @@ export class Marquee {
       );
       this.play();
     }
+  }
+
+  private randomizeContent(): string[] {
+    const shuffledContent = [...this.options.contentList];
+    for (let i = shuffledContent.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffledContent[i], shuffledContent[j]] = [shuffledContent[j], shuffledContent[i]];
+    }
+    return shuffledContent;
   }
 
   // Modification de la méthode reset pour une réinitialisation plus douce
@@ -261,7 +276,6 @@ export class Marquee {
       this.domManager?.updateContainerHeight(containerHeight);
     }
 
-    this.domManager?.setupWrapper();
     this.animationManager?.recalculatePositions();
     this.play();
   }
@@ -283,5 +297,10 @@ export class Marquee {
   public recalculatePositions(): void {
     this.animationManager?.recalculatePositions();
     this.play();
+  }
+
+  public randomize(): void {
+    this.options.randomize = true;
+    this.reset();
   }
 }

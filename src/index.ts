@@ -19,7 +19,8 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     updateCloneCount(cloneCount: number) { instance.updateCloneCount(cloneCount) },
     updateContainerHeight(containerHeight: number) { instance.updateContainerHeight(containerHeight) },
     updatePauseOnHover(pauseOnHover: boolean) { instance.updatePauseOnHover(pauseOnHover) },
-    recalculatePositions() { instance.recalculatePositions() }
+    recalculatePositions() { instance.recalculatePositions() },
+    randomize() { instance.randomize() }
   }
 }
 

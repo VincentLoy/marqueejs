@@ -132,11 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 2000);
 
   // Vertical
-  marqueejs('.marquee-vertical', {
+  let test = marqueejs('.marquee-vertical', {
     direction: 'up',
     speed: 50,
     gap: 20,
-    cloneCount: 3,
     containerHeight: 350,
     keepOriginalContent: true,
     contentList: [
@@ -152,6 +151,11 @@ document.addEventListener('DOMContentLoaded', () => {
       '<b>Stunt Coordinator:</b> Mad-Eye Moody'
     ]
   });
+
+  window.setTimeout(() => {
+    console.log('BRAP');
+    test.randomize()
+  }, 2000);
 
   // Fast with pause
   marqueejs('.marquee-fast', {
