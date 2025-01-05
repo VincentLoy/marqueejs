@@ -6,7 +6,7 @@ export interface MarqueeOptions {
   speed?: number;
 
   /** Direction of the marquee animation. */
-  direction?: 'left' | 'right' | 'up' | 'down';
+  direction?: "left" | "right" | "up" | "down";
 
   /** Whether to pause animation on mouse hover. */
   pauseOnHover?: boolean;
@@ -15,7 +15,7 @@ export interface MarqueeOptions {
   gap?: number;
 
   /** Number of times each item should be cloned. Maximum 15. */
-  cloneCount?: number | 'auto';  // Updated type
+  cloneCount?: number | "auto"; // Updated type
 
   /** Character or string to separate items. Not supported for vertical directions. */
   separator?: string;
@@ -54,7 +54,7 @@ export interface MarqueeInstance {
   pause(): void;
   resume(): void;
   destroy(): void;
-  
+
   /**
    * Add new content to the content list
    * @param content - New HTML content or array of contents to add
@@ -125,12 +125,12 @@ export interface MarqueeInstance {
 /**
  * Content validation error types
  */
-export type ContentValidationErrorType = 
-  | 'EMPTY_CONTENT'
-  | 'INVALID_HTML'
-  | 'UNSAFE_TAG_DETECTED'
-  | 'MAX_LENGTH_EXCEEDED'
-  | 'UNSAFE_ATTRIBUTES';
+export type ContentValidationErrorType =
+  | "EMPTY_CONTENT"
+  | "INVALID_HTML"
+  | "UNSAFE_TAG_DETECTED"
+  | "MAX_LENGTH_EXCEEDED"
+  | "UNSAFE_ATTRIBUTES";
 
 /**
  * Content validation result

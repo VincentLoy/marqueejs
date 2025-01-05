@@ -1,23 +1,25 @@
-import type { CloneMetrics } from '../../types';
+import type { CloneMetrics } from "../../types";
 
 export class CloneCalculator {
   private cachedMetrics: CloneMetrics | null = null;
 
-  constructor(private direction: 'left' | 'right' | 'up' | 'down') {}
+  constructor(private direction: "left" | "right" | "up" | "down") {}
 
   public calculateOptimalCloneCount(
     containerElement: HTMLElement,
     contentElements: HTMLElement[],
     gap: number
   ): number {
-    const isHorizontal = ['left', 'right'].includes(this.direction);
-    
+    const isHorizontal = ["left", "right"].includes(this.direction);
+
     const metrics = this.calculateMetrics(containerElement, contentElements, gap, isHorizontal);
-    
+
     // If metrics are identical, return from cache
-    if (this.cachedMetrics && 
+    if (
+      this.cachedMetrics &&
       this.cachedMetrics.containerSize === metrics.containerSize &&
-      this.cachedMetrics.contentSize === metrics.contentSize) {
+      this.cachedMetrics.contentSize === metrics.contentSize
+    ) {
       return this.cachedMetrics.calculatedCount;
     }
 
@@ -28,7 +30,7 @@ export class CloneCalculator {
     // Cache the new metrics
     this.cachedMetrics = {
       ...metrics,
-      calculatedCount: minClones
+      calculatedCount: minClones,
     };
 
     return minClones;
@@ -39,10 +41,8 @@ export class CloneCalculator {
     elements: HTMLElement[],
     gap: number,
     isHorizontal: boolean
-  ): Omit<CloneMetrics, 'calculatedCount'> {
-    const containerSize = isHorizontal 
-      ? container.offsetWidth 
-      : container.offsetHeight;
+  ): Omit<CloneMetrics, "calculatedCount"> {
+    const containerSize = isHorizontal ? container.offsetWidth : container.offsetHeight;
 
     const contentSize = elements.reduce((total, el) => {
       const size = isHorizontal ? el.offsetWidth : el.offsetHeight;
@@ -51,7 +51,7 @@ export class CloneCalculator {
 
     return {
       containerSize,
-      contentSize
+      contentSize,
     };
   }
 

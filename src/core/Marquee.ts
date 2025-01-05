@@ -1,8 +1,8 @@
-import type { MarqueeOptions } from '../types';
-import { OptionsValidator } from './OptionsValidator';
-import { AnimationManager } from './managers/AnimationManager';
-import { EventManager } from './managers/EventManager';
-import { DOMManager } from './managers/DOMManager';
+import type { MarqueeOptions } from "../types";
+import { OptionsValidator } from "./OptionsValidator";
+import { AnimationManager } from "./managers/AnimationManager";
+import { EventManager } from "./managers/EventManager";
+import { DOMManager } from "./managers/DOMManager";
 
 export class Marquee {
   private element!: HTMLElement;
@@ -16,24 +16,22 @@ export class Marquee {
 
   private defaultOptions: Partial<MarqueeOptions> = {
     speed: 100,
-    direction: 'left',
+    direction: "left",
     pauseOnHover: false,
     gap: 20,
-    cloneCount: 'auto',
-    separator: '',
+    cloneCount: "auto",
+    separator: "",
     randomize: false,
-    contentList: []
+    contentList: [],
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {
-    const element = typeof selector === 'string' 
-      ? document.querySelector(selector) 
-      : selector;
+    const element = typeof selector === "string" ? document.querySelector(selector) : selector;
 
     if (!element) {
-      throw new Error('Invalid element selector');
+      throw new Error("Invalid element selector");
     }
-    
+
     // Store a deep copy of the original element
     this.originalElement = element.cloneNode(true) as HTMLElement;
     this.setupInstance(element as HTMLElement, options);
@@ -44,7 +42,7 @@ export class Marquee {
     const validatedOptions = OptionsValidator.validate(options);
     this.element = element;
     this.options = { ...this.defaultOptions, ...validatedOptions };
-    this.htmlContentList = Array.from(this.element.children).map(child => child.outerHTML);
+    this.htmlContentList = Array.from(this.element.children).map((child) => child.outerHTML);
 
     // If contentList is empty, populate it with the direct children of the marquee element
     if (!this.options.contentList?.length) {
@@ -71,20 +69,11 @@ export class Marquee {
     const contentElements = this.domManager.getContentElements();
 
     if (wrapper && contentElements.length > 0) {
-      this.animationManager = new AnimationManager(
-        contentElements[0],
-        wrapper,
-        this.options
-      );
-      this.eventManager = new EventManager(
-        this.element,
-        wrapper,
-        this.options,
-        {
-          pause: () => this.pause(),
-          resume: () => this.play()
-        }
-      );
+      this.animationManager = new AnimationManager(contentElements[0], wrapper, this.options);
+      this.eventManager = new EventManager(this.element, wrapper, this.options, {
+        pause: () => this.pause(),
+        resume: () => this.play(),
+      });
       this.play();
     }
   }
@@ -105,7 +94,7 @@ export class Marquee {
 
       // Recreate element from original
       const newElement = this.originalElement.cloneNode(true) as HTMLElement;
-      
+
       // Replace old element with new one
       if (this.element.parentElement) {
         this.element.parentElement.replaceChild(newElement, this.element);
@@ -130,7 +119,7 @@ export class Marquee {
       this.animationManager?.stopAnimation();
       this.eventManager?.destroy();
       this.domManager?.destroy();
-      
+
       // S'assurer que le DOM a eu le temps de se mettre à jour
       requestAnimationFrame(() => {
         resolve();
@@ -160,11 +149,14 @@ export class Marquee {
 
   public async updateContent(content: string | string[]): Promise<void> {
     const newContent = Array.isArray(content) ? content : [content];
-    
+
     // Validate new content
     const validationResult = OptionsValidator.validateContentList(newContent, this.options);
     if (!validationResult.isValid) {
-      console.warn('MarqueeJS: Content validation failed:', validationResult.errors.map(e => e.message).join(', '));
+      console.warn(
+        "MarqueeJS: Content validation failed:",
+        validationResult.errors.map((e) => e.message).join(", ")
+      );
       return;
     }
 
@@ -175,7 +167,11 @@ export class Marquee {
     this.play();
   }
 
-  public async addContent(content: string | string[], addToStart: boolean = false, callback?: () => void): Promise<void> {
+  public async addContent(
+    content: string | string[],
+    addToStart: boolean = false,
+    callback?: () => void
+  ): Promise<void> {
     if (!content) return;
     this.pause();
 
@@ -185,7 +181,10 @@ export class Marquee {
     // Validate new content
     const validationResult = OptionsValidator.validateContentList(newContent, this.options);
     if (!validationResult.isValid) {
-      console.warn('MarqueeJS: Content validation failed:', validationResult.errors.map(e => e.message).join(', '));
+      console.warn(
+        "MarqueeJS: Content validation failed:",
+        validationResult.errors.map((e) => e.message).join(", ")
+      );
       return;
     }
 
@@ -213,7 +212,10 @@ export class Marquee {
     // Validate new content list
     const validationResult = OptionsValidator.validateContentList(newContentList, this.options);
     if (!validationResult.isValid) {
-      console.warn('MarqueeJS: Content validation failed:', validationResult.errors.map(e => e.message).join(', '));
+      console.warn(
+        "MarqueeJS: Content validation failed:",
+        validationResult.errors.map((e) => e.message).join(", ")
+      );
       return;
     }
 
@@ -255,8 +257,14 @@ export class Marquee {
   }
 
   public updateCloneCount(cloneCount: number): void {
-    if (!Number.isInteger(cloneCount) || cloneCount < 0 || cloneCount > OptionsValidator.MAX_CLONES) {
-      throw new Error(`MarqueeJS: cloneCount must be an integer between 0 and ${OptionsValidator.MAX_CLONES}`);
+    if (
+      !Number.isInteger(cloneCount) ||
+      cloneCount < 0 ||
+      cloneCount > OptionsValidator.MAX_CLONES
+    ) {
+      throw new Error(
+        `MarqueeJS: cloneCount must be an integer between 0 and ${OptionsValidator.MAX_CLONES}`
+      );
     }
     this.options.cloneCount = cloneCount;
     this.domManager?.createContentElements();
@@ -269,7 +277,7 @@ export class Marquee {
     this.options.containerHeight = containerHeight;
 
     // Apply forced height for 'up' and 'down' directions
-    if (['up', 'down'].includes(this.options.direction!)) {
+    if (["up", "down"].includes(this.options.direction!)) {
       this.domManager?.updateContainerHeight(containerHeight);
     }
 
@@ -286,7 +294,7 @@ export class Marquee {
       this.options,
       {
         pause: () => this.pause(),
-        resume: () => this.play()
+        resume: () => this.play(),
       }
     );
   }
