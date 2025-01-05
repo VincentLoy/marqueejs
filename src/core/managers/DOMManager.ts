@@ -78,7 +78,7 @@ export class DOMManager {
     this.positionElements();
     this.createClones();
     
-    // Ajouter les styles de séparateur après la création des éléments
+    // Add separator styles after creating elements
     this.updateSeparatorStyles();
   }
 
@@ -136,21 +136,21 @@ export class DOMManager {
     element.style.position = 'absolute';
     element.style.whiteSpace = ['up', 'down'].includes(this.options.direction) ? 'normal' : 'nowrap';
     element.innerHTML = content;
-    return element; // Plus besoin d'ajouter la classe de séparateur ici
+    return element;
   }
 
   private positionElements(): void {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-      el.style.transform = ['left', 'right'].includes(this.options.direction)
-        ? `translateX(${position}px)`
-        : `translateY(${position}px)`;
+    el.style.transform = ['left', 'right'].includes(this.options.direction)
+      ? `translate3d(${position}px, 0, 0)`
+      : `translate3d(0, ${position}px, 0)`;
     });
   }
 
   private createClones(): void {
-    // Si cloneCount est 'auto', utiliser CloneCalculator
+    // If cloneCount is 'auto', use CloneCalculator
     const cloneCount = this.options.cloneCount === 'auto'
       ? this.cloneCalculator.calculateOptimalCloneCount(
           this.container,
@@ -171,8 +171,8 @@ export class DOMManager {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute('aria-hidden', 'true');
         clone.style.transform = ['left', 'right'].includes(this.options.direction)
-          ? `translateX(${metrics[index].position + offset}px)`
-          : `translateY(${metrics[index].position + offset}px)`;
+          ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
+          : `translate3d(0, ${metrics[index].position + offset}px, 0)`;
         
         this.clones.push(clone);
         fragment.appendChild(clone);
@@ -215,7 +215,7 @@ export class DOMManager {
     this.createContentElements();
   }
 
-  // Méthode utilitaire pour forcer le recalcul des clones
+// Utility method to force recalculation of clones
   public recalculateClones(): void {
     this.cloneCalculator.invalidateCache();
     this.createContentElements();
