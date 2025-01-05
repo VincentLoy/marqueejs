@@ -63,21 +63,6 @@ export class DOMManager {
     this.createContentElements();
   }
 
-  private setupElementStyles(height: number): void {
-    this.element.style.position = 'absolute';
-    this.element.style.top = '0';
-    this.element.style.left = '0';
-    this.element.style.flexShrink = '0';
-    this.element.style.height = ['up', 'down'].includes(this.options.direction) ? 'auto' : `${height}px`;
-    
-    if (['left', 'right'].includes(this.options.direction)) {
-      this.element.style.marginRight = `${this.options.gap}px`;
-    } else {
-      this.element.style.marginBottom = `${this.options.gap}px`;
-      this.element.style.whiteSpace = 'normal';
-    }
-  }
-
   public createContentElements(): void {
     // Clear existing elements
     this.clearElements();

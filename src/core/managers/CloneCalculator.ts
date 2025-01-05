@@ -31,8 +31,6 @@ export class CloneCalculator {
       calculatedCount: minClones
     };
 
-    console.log('minClones', minClones);
-    
     return minClones;
   }
 

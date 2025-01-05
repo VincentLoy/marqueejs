@@ -6,6 +6,7 @@ import { DOMManager } from './managers/DOMManager';
 
 export class Marquee {
   private element: HTMLElement;
+  private originalElement: HTMLElement;
   private options: Required<MarqueeOptions>;
   private isPlaying: boolean = false;
   private animationManager: AnimationManager | null = null;
@@ -31,9 +32,16 @@ export class Marquee {
     if (!element) {
       throw new Error('Invalid element selector');
     }
+    
+    // Stocker une copie profonde de l'élément original
+    this.originalElement = element.cloneNode(true) as HTMLElement;
+    this.setupInstance(element as HTMLElement, options);
+    this.init();
+  }
 
+  private setupInstance(element: HTMLElement, options: MarqueeOptions): void {
     const validatedOptions = OptionsValidator.validate(options);
-    this.element = element as HTMLElement;
+    this.element = element;
     this.options = { ...this.defaultOptions, ...validatedOptions };
     this.htmlContentList = Array.from(this.element.children).map(child => child.outerHTML);
 
@@ -44,11 +52,12 @@ export class Marquee {
       // If contentList is not empty, but the original content should be kept, append it to the contentList
       this.options.contentList = [...this.htmlContentList, ...this.options.contentList];
     }
-
-    this.init();
   }
 
   private async init(): Promise<void> {
+    // Cleanup existing managers if they exist
+    this.destroy();
+
     this.domManager = new DOMManager(this.element, this.options);
     await this.domManager.createContentElements();
 
@@ -74,6 +83,47 @@ export class Marquee {
     }
   }
 
+  // Modification de la méthode reset pour une réinitialisation plus douce
+  public async reset(): Promise<void> {
+    return new Promise<void>(async (resolve) => {
+      // Arrêter l'animation en cours
+      this.pause();
+
+      // Recréer l'élément à partir de l'original
+      const newElement = this.originalElement.cloneNode(true) as HTMLElement;
+      
+      // Remplacer l'ancien élément par le nouveau
+      if (this.element.parentElement) {
+        this.element.parentElement.replaceChild(newElement, this.element);
+      }
+
+      // Attendre que le nettoyage soit terminé
+      await Promise.resolve(this.destroy());
+
+      // Réinitialiser complètement l'instance
+      this.setupInstance(newElement, this.options);
+
+      // Attendre que l'initialisation soit terminée
+      await this.init();
+
+      resolve();
+    });
+  }
+
+  public destroy(): Promise<void> {
+    return new Promise<void>((resolve) => {
+      this.pause();
+      this.animationManager?.stopAnimation();
+      this.eventManager?.destroy();
+      this.domManager?.destroy();
+      
+      // S'assurer que le DOM a eu le temps de se mettre à jour
+      requestAnimationFrame(() => {
+        resolve();
+      });
+    });
+  }
+
   public play(): void {
     if (this.isPlaying) return;
     this.isPlaying = true;
@@ -94,13 +144,6 @@ export class Marquee {
     this.animationManager?.stopAnimation();
   }
 
-  public destroy(): void {
-    this.pause();
-    this.animationManager?.stopAnimation();
-    this.eventManager?.destroy();
-    this.domManager?.destroy();
-  }
-
   public async updateContent(content: string | string[]): Promise<void> {
     const newContent = Array.isArray(content) ? content : [content];
     
@@ -118,7 +161,7 @@ export class Marquee {
     this.play();
   }
 
-  public addContent(content: string | string[], addToStart: boolean = false, callback?: () => void): void {
+  public async addContent(content: string | string[], addToStart: boolean = false, callback?: () => void): Promise<void> {
     if (!content) return;
     this.pause();
 
@@ -139,12 +182,10 @@ export class Marquee {
       this.options.contentList = [...this.options.contentList, ...newContent];
     }
 
-    // Recreate content elements
-    this.domManager?.createContentElements();
+    console.log(this.options);
 
-    // Recalculate positions and restart animation
-    this.animationManager?.recalculatePositions();
-    this.play();
+    // Attendre que le reset soit terminé
+    await this.reset();
 
     // Execute callback if provided, ensuring it runs after DOM updates
     if (callback) {
@@ -189,14 +230,14 @@ export class Marquee {
   public updateGap(gap: number): void {
     OptionsValidator.validateGap(gap);
     this.options.gap = gap;
-    this.domManager?.createContentElements(); // Cela va recréer les éléments avec le nouveau gap
+    this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
     this.play();
   }
 
   public updateSeparator(separator: string): void {
     this.options.separator = separator;
-    this.domManager?.createContentElements(); // Cela va recréer les éléments avec le nouveau séparateur
+    this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
     this.play();
   }
@@ -243,10 +284,4 @@ export class Marquee {
     this.animationManager?.recalculatePositions();
     this.play();
   }
-}
-
-interface ElementMetrics {
-  size: number;
-  spacing: number;
-  separatorSpace: number;
 }

@@ -124,7 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sep.updateSeparator('•••');
     sep.updateGap(80);
-    sep.updateCloneCount(0);
     
     sep.addContent('OK OK OK OK', true, () => {
       console.log('Content added');
