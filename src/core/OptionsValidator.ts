@@ -57,13 +57,14 @@ export class OptionsValidator {
 
     // Handle clone count separately to return modified options
     if (options.cloneCount !== undefined) {
-      if (!Number.isInteger(options.cloneCount) || options.cloneCount < 0) {
+      if (options.cloneCount === 'auto') {
+        // 'auto' est une valeur valide, ne rien faire
+      } else if (!Number.isInteger(options.cloneCount) || options.cloneCount < 0) {
         console.warn(`MarqueeJS: Requested ${options.cloneCount} clones, but minimum is ${this.MIN_CLONES}. Using ${this.MIN_CLONES} clones instead.`)
-        options.cloneCount = this.MIN_CLONES
-      }
-      if (options.cloneCount > this.MAX_CLONES) {
+        options.cloneCount = this.MIN_CLONES;
+      } else if (typeof options.cloneCount === 'number' && options.cloneCount > this.MAX_CLONES) {
         console.warn(`MarqueeJS: Requested ${options.cloneCount} clones, but maximum is ${this.MAX_CLONES}. Using ${this.MAX_CLONES} clones instead.`)
-        options.cloneCount = this.MAX_CLONES
+        options.cloneCount = this.MAX_CLONES;
       }
     }
 
@@ -209,6 +210,12 @@ export class OptionsValidator {
   public static validateKeepOriginalContent(keepOriginalContent: boolean | undefined): void {
     if (keepOriginalContent !== undefined && typeof keepOriginalContent !== 'boolean') {
       throw new Error('MarqueeJS: keepOriginalContent must be a boolean');
+    }
+  }
+
+  public static validateCloneCount(cloneCount: number | 'auto'): void {
+    if (cloneCount !== 'auto' && (!Number.isInteger(cloneCount) || cloneCount < 0 || cloneCount > this.MAX_CLONES)) {
+      throw new Error(`MarqueeJS: cloneCount must be 'auto' or an integer between ${this.MIN_CLONES} and ${this.MAX_CLONES}`);
     }
   }
 }

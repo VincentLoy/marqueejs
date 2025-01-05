@@ -15,7 +15,7 @@ export interface MarqueeOptions {
   gap?: number;
 
   /** Number of times each item should be cloned. Maximum 15. */
-  cloneCount?: number;
+  cloneCount?: number | 'auto';  // Updated type
 
   /** Character or string to separate items. Not supported for vertical directions. */
   separator?: string;
@@ -157,4 +157,11 @@ export interface ElementMetrics {
   spacing: number;
   position: number;
   separatorOffset?: number;
+}
+
+// Add new interface for clone calculator
+export interface CloneMetrics {
+  containerSize: number;
+  contentSize: number;
+  calculatedCount: number;
 }

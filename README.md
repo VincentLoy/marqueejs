@@ -97,7 +97,7 @@ Below is a summary of the main configuration options:
 | direction               | 'left' \| 'right' \| 'up' \| 'down'   | 'left'        | The direction in which the marquee scrolls.                                                               |
 | pauseOnHover            | boolean                               | false         | Whether to pause the animation on mouse hover.                                                            |
 | gap                     | number                                | 20            | Gap in pixels between items or clones.                                                                    |
-| cloneCount              | number                                | 4             | Number of times each item is cloned (for continuous flow). Maximum 15.                                    |
+| cloneCount              | number | 'auto'                       | 'auto'        | Number of times each item is cloned (for continuous flow). Maximum 15.                                    |
 | separator               | string                                | ''            | Character or string to show between items for horizontal directions. Ignored for vertical scrolling.      |
 | contentList             | string[]                              | []            | Array of HTML strings to be displayed by the marquee.                                                     |
 | keepOriginalContent     | boolean                               | false         | Whether to preserve the original HTML content inside the marquee element when using contentList.          |

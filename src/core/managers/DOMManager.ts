@@ -1,4 +1,5 @@
 import type { MarqueeOptions, ElementMetrics } from '../../types';
+import { CloneCalculator } from './CloneCalculator';
 
 export class DOMManager {
   private container: HTMLElement;
@@ -9,6 +10,7 @@ export class DOMManager {
   private clones: HTMLElement[] = [];
   private instanceId: string;
   private separatorStyleElement: HTMLStyleElement | null = null;
+  private cloneCalculator: CloneCalculator;
 
   constructor(element: HTMLElement, options: Required<MarqueeOptions>) {
     this.instanceId = `marquee-${Math.random().toString(36).substr(2, 9)}`;
@@ -16,6 +18,7 @@ export class DOMManager {
     this.options = options;
     this.container = this.createContainer();
     this.wrapper = this.createWrapper();
+    this.cloneCalculator = new CloneCalculator(options.direction);
     
     // Vider l'élément original car tout passe par contentList
     this.element.innerHTML = '';
@@ -162,13 +165,22 @@ export class DOMManager {
   }
 
   private createClones(): void {
-    if (this.options.cloneCount <= 0) return;
+    // Si cloneCount est 'auto', utiliser CloneCalculator
+    const cloneCount = this.options.cloneCount === 'auto'
+      ? this.cloneCalculator.calculateOptimalCloneCount(
+          this.container,
+          this.contentElements,
+          this.options.gap
+        )
+      : this.options.cloneCount;
+
+    if (cloneCount <= 0) return;
 
     const metrics = this.calculateMetrics();
     const totalSize = metrics.reduce((sum, m) => sum + m.size + m.spacing, 0);
     const fragment = document.createDocumentFragment();
 
-    for (let i = 0; i < this.options.cloneCount; i++) {
+    for (let i = 0; i < cloneCount; i++) {
       const offset = totalSize * (i + 1);
       this.contentElements.forEach((original, index) => {
         const clone = original.cloneNode(true) as HTMLElement;
@@ -214,6 +226,13 @@ export class DOMManager {
 
   public updateContent(newContent: string[]): void {
     this.options.contentList = newContent;
+    this.cloneCalculator.invalidateCache();
+    this.createContentElements();
+  }
+
+  // Méthode utilitaire pour forcer le recalcul des clones
+  public recalculateClones(): void {
+    this.cloneCalculator.invalidateCache();
     this.createContentElements();
   }
 

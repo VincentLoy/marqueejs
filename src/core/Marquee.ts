@@ -18,9 +18,9 @@ export class Marquee {
     direction: 'left',
     pauseOnHover: false,
     gap: 20,
-    cloneCount: 4,
+    cloneCount: 'auto',
     separator: '',
-    contentList: []  // Default to empty array
+    contentList: []
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {
@@ -48,8 +48,10 @@ export class Marquee {
     this.init();
   }
 
-  private init(): void {
+  private async init(): Promise<void> {
     this.domManager = new DOMManager(this.element, this.options);
+    await this.domManager.createContentElements();
+
     const wrapper = this.domManager.getWrapper();
     const contentElements = this.domManager.getContentElements();
 
@@ -99,7 +101,7 @@ export class Marquee {
     this.domManager?.destroy();
   }
 
-  public updateContent(content: string | string[]): void {
+  public async updateContent(content: string | string[]): Promise<void> {
     const newContent = Array.isArray(content) ? content : [content];
     
     // Validate new content
@@ -109,8 +111,9 @@ export class Marquee {
       return;
     }
 
+    this.pause();
     this.options.contentList = newContent;
-    this.domManager?.updateContent(newContent);
+    await this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
     this.play();
   }

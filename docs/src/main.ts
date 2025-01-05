@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Basic example
   let basic = marqueejs('.marquee-basic', {
     speed: 100,
-    cloneCount: 10,
+    cloneCount: 'auto',
   });
 
   console.log(basic.getContentList());
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     direction: 'left',
     separator: '•',
     gap: 40,
-    cloneCount: 8
+    cloneCount: 'auto',
   });
   
   window.setTimeout(() => {
@@ -126,11 +126,11 @@ document.addEventListener('DOMContentLoaded', () => {
     sep.updateGap(80);
     sep.updateCloneCount(0);
     
-    sep.addContent(newContent, true, () => {
+    sep.addContent('OK OK OK OK', true, () => {
       console.log('Content added');
     });
 
-  }, 8000);
+  }, 2000);
 
   // Vertical
   marqueejs('.marquee-vertical', {
