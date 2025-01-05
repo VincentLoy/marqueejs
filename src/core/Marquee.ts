@@ -69,7 +69,7 @@ export class Marquee {
     const contentElements = this.domManager.getContentElements();
 
     if (wrapper && contentElements.length > 0) {
-      this.animationManager = new AnimationManager(contentElements[0], wrapper, this.options);
+      this.animationManager = new AnimationManager(wrapper, this.options);
       this.eventManager = new EventManager(this.element, wrapper, this.options, {
         pause: () => this.pause(),
         resume: () => this.play(),
