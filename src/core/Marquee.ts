@@ -198,7 +198,6 @@ export class Marquee {
     // Wait for reset to complete
     await this.reset();
 
-    // Execute callback if provided, ensuring it runs after DOM updates
     if (callback) {
       requestAnimationFrame(() => {
         callback();
@@ -227,7 +226,12 @@ export class Marquee {
 
     // Recalculate positions and restart animation
     this.animationManager?.recalculatePositions();
-    this.play();
+
+    if (callback) {
+      requestAnimationFrame(() => {
+        callback();
+      });
+    }
   }
 
   public getContentList(): string[] {
