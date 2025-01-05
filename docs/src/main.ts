@@ -136,10 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Vertical
   let test = marqueejs('.marquee-vertical', {
     direction: 'up',
-    speed: 50,
-    gap: 20,
+    speed: 25,
+    gap: 15,
     containerHeight: 350,
     keepOriginalContent: true,
+    randomize: true,
     contentList: [
       '<b>Director:</b> Albus Dumbledore',
       '<b>Producer:</b> Minerva McGonagall',
@@ -154,14 +155,99 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
-  window.setTimeout(() => {
-    test.randomize()
-  }, 2000);
-
   // Fast with pause
   marqueejs('.marquee-fast', {
     speed: 200,
     pauseOnHover: true,
     cloneCount: 3
+  });
+
+  // Advanced Examples Section
+
+  // 1. News Ticker with Dynamic Updates
+  const newsMarquee = marqueejs('#news-ticker', {
+    speed: 80,
+    pauseOnHover: true,
+    gap: 40,
+    separator: '⚡',
+    randomize: true,
+    contentList: FAKED_DATA.map(item =>
+      `${getBadge(item.color, item.badge_text)} ${item.title}`
+    )
+  });
+
+  // 2. Social Media Feed
+  const socialFeed = marqueejs('#social-feed', {
+    direction: 'up',
+    speed: 40,
+    containerHeight: 200,
+    gap: 30,
+    contentList: [
+      '🐦 Latest Tweet from Hogwarts',
+      '📸 New Instagram post from @wizard_weekly',
+      '📱 Facebook update from Ministry of Magic',
+      '💼 LinkedIn: Dumbledore is hiring!'
+    ]
+  });
+
+  // 3. Multi-Speed Demo
+  const speedDemo = marqueejs('#speed-demo', {
+    speed: 50,
+    cloneCount: 2
+  });
+
+  const speeds = [50, 100, 150, 200];
+  let currentSpeed = 0;
+  setInterval(() => {
+    currentSpeed = (currentSpeed + 1) % speeds.length;
+    speedDemo.updateSpeed(speeds[currentSpeed]);
+  }, 3000);
+
+  // 4. Interactive Gap Demo
+  const gapDemo = marqueejs('#gap-demo', {
+    gap: parseInt(document.querySelector('#gap-control')?.value) || 20,
+    separator: '↔️',
+    contentList: ['<b>Adjust</b>', 'The', '<b>Gap</b>', 'Size']
+  });
+
+  document.querySelector('#gap-control')?.addEventListener('input', (e) => {
+    gapDemo.updateGap(Number((e.target as HTMLInputElement).value));
+  });
+
+  // 5. Alternating Direction
+  const directionDemo = marqueejs('#direction-demo', {
+    direction: 'left',
+    speed: 200
+  });
+
+  setInterval(() => {
+      directionDemo.switchDirection();
+  }, 5000);
+
+  // 6. Clone Count Showcase - Improved
+  const cloneDemo = marqueejs('#clone-demo', {
+    speed: 80,
+    gap: 50,
+    cloneCount: 3,
+    contentList: [
+      '<div class="clone-item px-4 py-2">Text Example</div>',
+    ]
+  });
+
+  // Add index to cloned items
+  let updtEltsIdx = () => {
+    document.querySelectorAll('.clone-demo .marquee-cloned-item .clone-item').forEach((item, index) => {
+      console.log(item)
+      item.innerHTML = `${item.innerHTML} - <b> clone: ${index + 1} </b>`;
+    });
+  };
+  updtEltsIdx();
+
+  document.querySelector('#clone-control')?.addEventListener('input', (e) => {
+    const value = Number((e.target as HTMLInputElement).value);
+    document.querySelector('#clone-count-display')!.textContent = `${value} clones`;
+    cloneDemo.updateCloneCount(value);
+    updtEltsIdx();
+    cloneDemo.recalculatePositions();
   });
 });

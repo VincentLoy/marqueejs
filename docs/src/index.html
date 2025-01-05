@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MarqueeJS - Modern Marquee Plugin</title>
-    <link rel="stylesheet" href="./style.css">
 </head>
 <body class="bg-white dark:bg-gray-900">
     <header class="py-16 px-4 bg-gradient-to-r from-blue-500 to-indigo-600">
@@ -42,7 +41,7 @@
                 speed: 150
             });</code></pre>
         </section>
-        
+
         <!-- With Separator -->
         <section class="mb-12">
             <h2 class="text-2xl font-bold mb-4 dark:text-white">With Separator</h2>
@@ -109,6 +108,63 @@
 });</code></pre>
         </section>
 
+        <!-- Advanced Examples -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold mb-4 dark:text-white">Advanced Examples</h2>
+
+            <!-- Dynamic News Ticker -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Dynamic News Ticker</h3>
+                <div id="news-ticker"></div>
+            </div>
+
+            <!-- Social Feed -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Social Media Feed</h3>
+                <div id="social-feed"></div>
+            </div>
+
+            <!-- Speed Control Demo -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Auto-changing Speed</h3>
+                <div id="speed-demo">
+                    <span>Watch the speed change every 3 seconds!</span>
+                </div>
+            </div>
+
+            <!-- Interactive Gap Control -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Interactive Gap Control</h3>
+                <div id="gap-demo"></div>
+                <input type="range" id="gap-control" min="10" max="100" value="50" class="w-full mt-4">
+            </div>
+
+            <!-- Direction Switching -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Alternating Direction</h3>
+                <div id="direction-demo">
+                    <h1 class="text-5xl">Watch me switch direction every 5 seconds!</h1>
+                </div>
+            </div>
+
+            <!-- Clone Count Demo -->
+            <div class="demo-box mb-8">
+                <h3 class="text-lg font-semibold mb-2">Clone Count Control</h3>
+                <p class="text-sm text-gray-600 mb-4">Adjust the number of clones to see how it affects the marquee</p>
+                <p class="text-sm text-gray-600 mb-4">
+                    You can see <span class="clone-example-original">Original item</span>
+                    & <span class="clone-example-cloned">Cloned items</span>
+                </p>
+                <div class="flex items-center gap-4 mb-4">
+                    <input type="range" id="clone-control" min="0" max="15" value="3" class="w-full">
+                    <span id="clone-count-display" class="text-sm font-mono bg-gray-100 px-2 py-1 rounded">3 clones</span>
+                </div>
+                <div class="demo-box">
+                    <div class="clone-demo" id="clone-demo"></div>
+                </div>
+            </div>
+        </section>
+
         <!-- Installation -->
         <section class="mb-12">
             <h2 class="text-2xl font-bold mb-4 dark:text-white">Installation</h2>
@@ -133,7 +189,7 @@ marqueejs('.selector', {
         </section>
     </main>
 
-    
+
     <footer class="bg-gray-800 text-white py-8">
         <div class="ma</footer>x-w-4xl mx-auto px-4 text-center">
             <div class="flex flex-col space-y-4">

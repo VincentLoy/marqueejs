@@ -11,4 +11,17 @@
   .marquee-vertical {
     height: 100%;
   }
+
+  .clone-example-original,
+  .clone-demo .marquee-content-item:not(.marquee-cloned-item) {
+    @apply bg-blue-300 text-blue-900;
+  }
+
+  .clone-example-cloned,
+  .clone-demo .marquee-cloned-item {
+    @apply bg-green-300 text-green-900;
+  }
 }
+
+
+
