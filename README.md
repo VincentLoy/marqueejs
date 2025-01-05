@@ -6,8 +6,10 @@
 > 
 > I encourage testing and feedbacks but don't recommend in production environments.
 
-[![Version](https://img.shields.io/npm/v/marqueejs?style=flat-square)](https://www.npmjs.com/package/marqueejs)
-[![License](https://img.shields.io/github/license/vincent/marqueejs?style=flat-square)](#)
+<p class="center">
+    <img src="https://img.shields.io/github/package-json/version/VincentLoy/marqueejs?style=flat-square" alt="Version" /> 
+    <img src="https://img.shields.io/github/license/VincentLoy/marqueejs?style=flat-square" alt="License" />
+</p>
 
 MarqueeJS is a modern, lightweight JavaScript library for creating scrolling text or HTML content, inspired by the old-school &lt;marquee&gt; element. It supports various directions, pause-on-hover, dynamic content updates, and more, providing an easy way to add animated scrolling content to your web applications without heavy dependencies.
 

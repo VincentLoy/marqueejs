@@ -1,7 +1,7 @@
 import './style.css'
 import { marqueejs } from '../../src/index'
 
-/* all supported classes for color props 
+/* all supported classes for color props
     bg-yellow-100 text-yellow-800
     bg-blue-100 text-blue-800
     bg-red-100 text-red-800
@@ -114,17 +114,21 @@ document.addEventListener('DOMContentLoaded', () => {
     gap: 40,
     cloneCount: 'auto',
   });
-  
+
   window.setTimeout(() => {
-    const newContent = FAKED_DATA.map(item => 
+    const newContent = FAKED_DATA.map(item =>
       `<p>${getBadge(item.color, item.badge_text)} <span>${item.title}</span></p>`
     );
 
     sep.updateSeparator('•••');
     sep.updateGap(80);
-    
-    sep.addContent('OK OK OK OK', true, () => {
-      console.log('Content added');
+
+    // sep.addContent('OK OK OK OK', true, () => {
+    //   console.log('Content added');
+    // });
+
+    sep.replaceContent(['OK OK OK OK', 'test'], () => {
+      console.log('Content replaced');
     });
 
   }, 2000);

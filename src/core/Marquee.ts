@@ -69,7 +69,7 @@ export class Marquee {
     const contentElements = this.domManager.getContentElements();
 
     if (wrapper && contentElements.length > 0) {
-      this.animationManager = new AnimationManager(contentElements[0], wrapper, this.options);
+      this.animationManager = new AnimationManager(wrapper, this.options);
       this.eventManager = new EventManager(this.element, wrapper, this.options, {
         pause: () => this.pause(),
         resume: () => this.play(),
@@ -198,7 +198,6 @@ export class Marquee {
     // Wait for reset to complete
     await this.reset();
 
-    // Execute callback if provided, ensuring it runs after DOM updates
     if (callback) {
       requestAnimationFrame(() => {
         callback();
@@ -227,7 +226,12 @@ export class Marquee {
 
     // Recalculate positions and restart animation
     this.animationManager?.recalculatePositions();
-    this.play();
+
+    if (callback) {
+      requestAnimationFrame(() => {
+        callback();
+      });
+    }
   }
 
   public getContentList(): string[] {

@@ -1,15 +1,13 @@
 import type { MarqueeOptions } from "../../types";
 
 export class AnimationManager {
-  private element: HTMLElement;
   private wrapper: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private animationFrame: number | null = null;
   private lastTime: number = 0;
   private elements: Array<{ el: HTMLElement; position: number }> = [];
 
-  constructor(element: HTMLElement, wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
-    this.element = element;
+  constructor(wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
     this.wrapper = wrapper;
     this.options = options;
     this.setupElements();
