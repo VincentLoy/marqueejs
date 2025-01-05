@@ -140,18 +140,19 @@ document.addEventListener('DOMContentLoaded', () => {
     gap: 15,
     containerHeight: 350,
     keepOriginalContent: true,
+    pauseOnHover: true,
     randomize: true,
     contentList: [
-      '<b>Director:</b> Albus Dumbledore',
-      '<b>Producer:</b> Minerva McGonagall',
-      '<b>Screenwriter:</b> Severus Snape',
-      '<b>Composer:</b> Filius Flitwick',
-      '<b>Costume Designer:</b> Pomona Sprout',
-      '<b>Visual Effects:</b> Gilderoy Lockhart',
-      '<b>Editor:</b> Horace Slughorn',
-      '<b>Art Director:</b> Sybill Trelawney',
-      '<b>Makeup Artist:</b> Nymphadora Tonks',
-      '<b>Stunt Coordinator:</b> Mad-Eye Moody'
+      '<b>Director:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Albus_Dumbledore" rel="nofollow noopener" target="_blank">Albus Dumbledore</a>',
+      '<b>Producer:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Minerva_McGonagall" rel="nofollow noopener" target="_blank">Minerva McGonagall</a>',
+      '<b>Screenwriter:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Severus_Snape" rel="nofollow noopener" target="_blank">Severus Snape</a>',
+      '<b>Composer:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Filius_Flitwick" rel="nofollow noopener" target="_blank">Filius Flitwick</a>',
+      '<b>Costume Designer:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Pomona_Sprout" rel="nofollow noopener" target="_blank">Pomona Sprout</a>',
+      '<b>Visual Effects:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Gilderoy_Lockhart" rel="nofollow noopener" target="_blank">Gilderoy Lockhart</a>',
+      '<b>Editor:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Horace_Slughorn" rel="nofollow noopener" target="_blank">Horace Slughorn</a>',
+      '<b>Art Director:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Sybill_Trelawney" rel="nofollow noopener" target="_blank">Sybill Trelawney</a>',
+      '<b>Makeup Artist:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Nymphadora_Tonks" rel="nofollow noopener" target="_blank">Nymphadora Tonks</a>',
+      '<b>Stunt Coordinator:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Alastor_Moody" rel="nofollow noopener" target="_blank">Mad-Eye Moody</a>'
     ]
   });
 

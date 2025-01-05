@@ -14,12 +14,12 @@
 
   .clone-example-original,
   .clone-demo .marquee-content-item:not(.marquee-cloned-item) {
-    @apply bg-blue-300 text-blue-900;
+    @apply bg-blue-300 text-blue-900 rounded-md;
   }
 
   .clone-example-cloned,
   .clone-demo .marquee-cloned-item {
-    @apply bg-green-300 text-green-900;
+    @apply bg-green-300 text-green-900 rounded-md;
   }
 }
 
