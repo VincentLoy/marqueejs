@@ -53,6 +53,9 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     randomize() {
       instance.randomize();
     },
+    switchDirection(direction: MarqueeOptions["direction"]) {
+      instance.switchDirection(direction);
+    }
   };
 }
 

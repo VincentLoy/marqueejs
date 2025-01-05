@@ -312,4 +312,15 @@ export class Marquee {
     this.options.randomize = true;
     this.reset();
   }
+
+  public switchDirection(): void {
+    const oppositeDirection: Record<string, MarqueeOptions['direction']> = {
+      left: "right",
+      right: "left",
+      up: "down",
+      down: "up",
+    };
+
+    this.options.direction = oppositeDirection[this.options.direction!];
+  }
 }

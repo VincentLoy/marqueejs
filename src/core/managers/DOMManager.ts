@@ -29,6 +29,10 @@ export class DOMManager {
   private createContainer(): HTMLElement {
     const container = document.createElement("div");
     container.classList.add(this.instanceId, "marquee-container");
+    const elementClasses = Array.from(this.element.classList);
+    const elementId = this.element.id;
+    container.classList.add(...elementClasses);
+    if (elementId) container.id = elementId;
     container.style.width = "100%";
     container.style.overflow = "hidden";
     container.style.position = "relative";
@@ -138,6 +142,9 @@ export class DOMManager {
     element.style.whiteSpace = ["up", "down"].includes(this.options.direction!)
       ? "normal"
       : "nowrap";
+    element.style.width = ["up", "down"].includes(this.options.direction!)
+    ? "100%"
+    : "auto";
     element.innerHTML = content;
     return element;
   }
@@ -174,6 +181,7 @@ export class DOMManager {
       this.contentElements.forEach((original, index) => {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute("aria-hidden", "true");
+        clone.classList.add("marquee-cloned-item");
         clone.style.transform = ["left", "right"].includes(this.options.direction!)
           ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
           : `translate3d(0, ${metrics[index].position + offset}px, 0)`;

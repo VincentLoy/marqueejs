@@ -120,6 +120,12 @@ export interface MarqueeInstance {
    * Randomize the order of content items
    */
   randomize(): void;
+
+  /**
+   * Update the direction of the marquee animation
+   * @param direction - New direction value
+   */
+  switchDirection(): void;
 }
 
 /**
