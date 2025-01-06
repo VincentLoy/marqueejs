@@ -61,7 +61,7 @@ export interface MarqueeInstance {
    * @param addToStart - Whether to add the new content at the start of the list
    * @param callback - Function to execute after content is added
    */
-  addContent(content: string | string[], addToStart?: boolean, callback?: () => void): void;
+  addContent(content: string | string[], addToStart?: boolean, reset?: boolean, callback?: () => void): void;
 
   /**
    * Replace the entire content list with a new one
@@ -126,6 +126,14 @@ export interface MarqueeInstance {
    * @param direction - New direction value
    */
   switchDirection(): void;
+
+  /**
+   * Patch content at specified position
+   * @param content - New HTML content or array of contents to patch
+   * @param position - Position where to patch ('start' or 'end')
+   * @param callback - Function to execute after content is patched
+   */
+  patchContent(content: string | string[], position: 'start' | 'end', reset?: boolean, callback?: () => void): void;
 }
 
 /**
