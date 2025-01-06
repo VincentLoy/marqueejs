@@ -34,6 +34,7 @@ MarqueeJS is a modern, lightweight JavaScript library for creating scrolling tex
    - [updateContainerHeight](#updatecontainerheight)  
    - [updatePauseOnHover](#updatepauseonhover)  
    - [recalculatePositions](#recalculatepositions)  
+   - [patchContent](#patchcontent)  
 6. [Advanced Usage](#advanced-usage)  
 7. [Examples](#examples)  
 8. [Development](#development)  
@@ -224,6 +225,45 @@ Recalculates the positions of the elements. Useful if you encounter any issues w
 
 ```typescript
 instance.recalculatePositions()
+```
+
+### patchContent
+Modifies the content list by adding or replacing items at specified positions (start or end). This method provides flexible content management with various options for updating the marquee content.
+
+#### Parameters
+- `content` (string | string[]): Single string or array of strings to add/replace
+- `position` ('start' | 'end'): Where to patch the content
+- `reset` (boolean, optional): If true, pauses and resets the marquee before patching (default: false)
+- `callback` (() => void, optional): Function called after patching completes
+
+#### Behavior
+- If the current content list is empty, the new content becomes the entire list
+- If new content length ≥ current content length, replaces all existing content
+- If new content length < current content length:
+    - For 'start' position: Replaces elements at the beginning
+    - For 'end' position: Replaces elements at the end
+
+#### Note
+- Content is automatically validated before patching
+- Invalid content triggers a warning and aborts the operation
+- When reset is false, content elements are recreated and positions recalculated
+- When reset is true, the marquee completely resets after patching
+- Callback executes on the next animation frame after patching completes
+
+```typescript
+// Add content at the start
+instance.patchContent('New content', 'start')
+
+// Add content at the end
+instance.patchContent(['Item 1', 'Item 2'], 'end')
+
+// Replace existing content at start
+instance.patchContent('New content', 'start', true)
+
+// Add with callback
+instance.patchContent('New content', 'end', false, () => {
+    console.log('Content patched')
+})
 ```
 
 ---

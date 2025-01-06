@@ -115,24 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
     cloneCount: 'auto',
   });
 
-  window.setTimeout(() => {
-    const newContent = FAKED_DATA.map(item =>
-      `<p>${getBadge(item.color, item.badge_text)} <span>${item.title}</span></p>`
-    );
-
-    sep.updateSeparator('•••');
-    sep.updateGap(80);
-
-    // sep.addContent('OK OK OK OK', true, () => {
-    //   console.log('Content added');
-    // });
-
-    sep.replaceContent(['OK OK OK OK', 'test'], () => {
-      console.log('Content replaced');
-    });
-
-  }, 2000);
-
   // Vertical
   let test = marqueejs('.marquee-vertical', {
     direction: 'up',

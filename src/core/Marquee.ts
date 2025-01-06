@@ -170,10 +170,14 @@ export class Marquee {
   public async addContent(
     content: string | string[],
     addToStart: boolean = false,
+    reset: boolean = false,
     callback?: () => void
   ): Promise<void> {
     if (!content) return;
-    this.pause();
+
+    if (reset) {
+      this.pause();
+    }
 
     // Convert content to array if it's a string
     const newContent = Array.isArray(content) ? content : [content];
@@ -195,8 +199,16 @@ export class Marquee {
       this.options.contentList = [...this.options.contentList!, ...newContent];
     }
 
-    // Wait for reset to complete
-    await this.reset();
+    if (reset) {
+      // Wait for reset to complete
+      await this.reset();
+    } else {
+      // Recreate content elements
+      this.domManager?.createContentElements();
+
+      // Recalculate positions and restart animation
+      this.animationManager?.recalculatePositions();
+    }
 
     if (callback) {
       requestAnimationFrame(() => {
@@ -322,5 +334,74 @@ export class Marquee {
     };
 
     this.options.direction = oppositeDirection[this.options.direction!];
+  }
+
+  public async patchContent(
+    content: string | string[],
+    position: 'start' | 'end',
+    reset: boolean = false,
+    callback?: () => void
+  ): Promise<void> {
+    if (!content) return;
+    if (position !== 'start' && position !== 'end') {
+      throw new Error('MarqueeJS (patchContent): position must be either "start" or "end"');
+    }
+
+    if (reset) {
+      this.pause();
+    }
+
+    // Convert content to array if it's a string
+    const newContent = Array.isArray(content) ? content : [content];
+
+    // Validate new content
+    const validationResult = OptionsValidator.validateContentList(newContent, this.options);
+    if (!validationResult.isValid) {
+      console.warn(
+        "MarqueeJS: Content validation failed:",
+        validationResult.errors.map((e) => e.message).join(", ")
+      );
+      return;
+    }
+
+    // If current content list is empty, just use the new content
+    if (!this.options.contentList?.length) {
+      this.options.contentList = newContent;
+    } else {
+      // If new content length is greater or equal to current content
+      // replace everything
+      if (newContent.length >= this.options.contentList.length) {
+        this.options.contentList = newContent;
+      } else {
+        // Otherwise patch at specified position
+        const currentContent = [...this.options.contentList];
+        if (position === 'start') {
+          // Replace elements at start
+          currentContent.splice(0, newContent.length, ...newContent);
+        } else {
+          // Replace elements at end
+          const startIndex = currentContent.length - newContent.length;
+          currentContent.splice(startIndex, newContent.length, ...newContent);
+        }
+        this.options.contentList = currentContent;
+      }
+    }
+
+    if (reset) {
+      // Wait for reset to complete
+      await this.reset();
+    } else {
+      // Recreate content elements
+      this.domManager?.createContentElements();
+
+      // Recalculate positions and restart animation
+      this.animationManager?.recalculatePositions();
+    }
+
+    if (callback) {
+      requestAnimationFrame(() => {
+        callback();
+      });
+    }
   }
 }
