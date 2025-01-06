@@ -142,9 +142,7 @@ export class DOMManager {
     element.style.whiteSpace = ["up", "down"].includes(this.options.direction!)
       ? "normal"
       : "nowrap";
-    element.style.width = ["up", "down"].includes(this.options.direction!)
-    ? "100%"
-    : "auto";
+    element.style.width = ["up", "down"].includes(this.options.direction!) ? "100%" : "auto";
     element.innerHTML = content;
     return element;
   }
@@ -219,12 +217,6 @@ export class DOMManager {
   private cleanupSeparatorStyles(): void {
     this.separatorStyleElement?.remove();
     this.separatorStyleElement = null;
-  }
-
-  public updateContent(newContent: string[]): void {
-    this.options.contentList = newContent;
-    this.cloneCalculator.invalidateCache();
-    this.createContentElements();
   }
 
   // Utility method to force recalculation of clones

@@ -147,26 +147,6 @@ export class Marquee {
     this.animationManager?.stopAnimation();
   }
 
-  public async updateContent(content: string | string[]): Promise<void> {
-    const newContent = Array.isArray(content) ? content : [content];
-
-    // Validate new content
-    const validationResult = OptionsValidator.validateContentList(newContent, this.options);
-    if (!validationResult.isValid) {
-      console.warn(
-        "MarqueeJS: Content validation failed:",
-        validationResult.errors.map((e) => e.message).join(", ")
-      );
-      return;
-    }
-
-    this.pause();
-    this.options.contentList = newContent;
-    this.domManager?.createContentElements();
-    this.animationManager?.recalculatePositions();
-    this.play();
-  }
-
   public async addContent(
     content: string | string[],
     addToStart: boolean = false,
@@ -253,8 +233,6 @@ export class Marquee {
   public updateSpeed(speed: number): void {
     OptionsValidator.validateSpeed(speed);
     this.options.speed = speed;
-    this.animationManager?.recalculatePositions();
-    this.play();
   }
 
   public updateGap(gap: number): void {
@@ -262,14 +240,12 @@ export class Marquee {
     this.options.gap = gap;
     this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
-    this.play();
   }
 
   public updateSeparator(separator: string): void {
     this.options.separator = separator;
     this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
-    this.play();
   }
 
   public updateCloneCount(cloneCount: number): void {
@@ -285,7 +261,6 @@ export class Marquee {
     this.options.cloneCount = cloneCount;
     this.domManager?.createContentElements();
     this.animationManager?.recalculatePositions();
-    this.play();
   }
 
   public updateContainerHeight(containerHeight: number): void {
@@ -326,7 +301,7 @@ export class Marquee {
   }
 
   public switchDirection(): void {
-    const oppositeDirection: Record<string, MarqueeOptions['direction']> = {
+    const oppositeDirection: Record<string, MarqueeOptions["direction"]> = {
       left: "right",
       right: "left",
       up: "down",
@@ -338,12 +313,12 @@ export class Marquee {
 
   public async patchContent(
     content: string | string[],
-    position: 'start' | 'end',
+    position: "start" | "end",
     reset: boolean = false,
     callback?: () => void
   ): Promise<void> {
     if (!content) return;
-    if (position !== 'start' && position !== 'end') {
+    if (position !== "start" && position !== "end") {
       throw new Error('MarqueeJS (patchContent): position must be either "start" or "end"');
     }
 
@@ -375,7 +350,7 @@ export class Marquee {
       } else {
         // Otherwise patch at specified position
         const currentContent = [...this.options.contentList];
-        if (position === 'start') {
+        if (position === "start") {
           // Replace elements at start
           currentContent.splice(0, newContent.length, ...newContent);
         } else {
