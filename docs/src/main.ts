@@ -1,5 +1,5 @@
-import './style.css'
-import { marqueejs } from '../../src/index'
+import "./style.css";
+import { marqueejs } from "../../src/index";
 
 /* all supported classes for color props
     bg-yellow-100 text-yellow-800
@@ -12,112 +12,112 @@ import { marqueejs } from '../../src/index'
     */
 const FAKED_DATA = [
   {
-    "title": "Hogwarts is now open for visitors",
-    "badge_text": "NEW",
-    "color": "blue"
+    title: "Hogwarts is now open for visitors",
+    badge_text: "NEW",
+    color: "blue",
   },
   {
-    "title": "Breaking: Who is behind the mask?",
-    "badge_text": "HOT",
-    "color": "red"
+    title: "Breaking: Who is behind the mask?",
+    badge_text: "HOT",
+    color: "red",
   },
   {
-    "title": "Stupefy: the new spell that everyone is talking about",
-    "badge_text": "TRENDING",
-    "color": "purple"
+    title: "Stupefy: the new spell that everyone is talking about",
+    badge_text: "TRENDING",
+    color: "purple",
   },
   {
-    "title": "Limited Time: Get free spells with every purchase",
-    "badge_text": "PROMO",
-    "color": "green"
+    title: "Limited Time: Get free spells with every purchase",
+    badge_text: "PROMO",
+    color: "green",
   },
   {
-    "title": "Quick Update: Moon anomaly spotted tonight",
-    "badge_text": "FLASH",
-    "color": "yellow"
+    title: "Quick Update: Moon anomaly spotted tonight",
+    badge_text: "FLASH",
+    color: "yellow",
   },
   {
-    "title": "Breaking: Harry Potter will come back in 2047!",
-    "badge_text": "HOT",
-    "color": "purple"
+    title: "Breaking: Harry Potter will come back in 2047!",
+    badge_text: "HOT",
+    color: "purple",
   },
   {
-    "title": "Special Offer: use code <b>WELCOME</b> for 10% off",
-    "badge_text": "PROMO",
-    "color": "green"
+    title: "Special Offer: use code <b>WELCOME</b> for 10% off",
+    badge_text: "PROMO",
+    color: "green",
   },
   {
-    "title": "Quick Update: Philosopher's Stone now available",
-    "badge_text": "FLASH",
-    "color": "yellow"
+    title: "Quick Update: Philosopher's Stone now available",
+    badge_text: "FLASH",
+    color: "yellow",
   },
   {
-    "title": "Update: Xbox Series X restocked",
-    "badge_text": "INFO",
-    "color": "purple"
+    title: "Update: Xbox Series X restocked",
+    badge_text: "INFO",
+    color: "purple",
   },
   {
-    "title": "Exclusive: Batman VS Joker showdown imminent",
-    "badge_text": "EXCLUSIVE",
-    "color": "pink"
+    title: "Exclusive: Batman VS Joker showdown imminent",
+    badge_text: "EXCLUSIVE",
+    color: "pink",
   },
   {
-    "title": "<strong>Quick Update:</strong> Bitcoin hits new record",
-    "badge_text": "FLASH",
-    "color": "yellow"
+    title: "<strong>Quick Update:</strong> Bitcoin hits new record",
+    badge_text: "FLASH",
+    color: "yellow",
   },
   {
-    "title": "<strong>Get Ready:</strong> Android system upgrade ready",
-    "badge_text": "NEWS",
-    "color": "blue"
+    title: "<strong>Get Ready:</strong> Android system upgrade ready",
+    badge_text: "NEWS",
+    color: "blue",
   },
   {
-    "title": "New spell discovered in <b><i>Hogwarts</i></b>",
-    "badge_text": "FLASH",
-    "color": "yellow"
+    title: "New spell discovered in <b><i>Hogwarts</i></b>",
+    badge_text: "FLASH",
+    color: "yellow",
   },
   {
-    "title": "Urgent: <strong>Voldemort</strong> returns from the dead",
-    "badge_text": "URGENT",
-    "color": "red"
+    title: "Urgent: <strong>Voldemort</strong> returns from the dead",
+    badge_text: "URGENT",
+    color: "red",
   },
   {
-    "title": "<b>Eco-friendly:</b> Complete guide to Wingardium Leviosa",
-    "badge_text": "ECO",
-    "color": "green"
-  }
+    title: "<b>Eco-friendly:</b> Complete guide to Wingardium Leviosa",
+    badge_text: "ECO",
+    color: "green",
+  },
 ];
 
 // Initialize demos
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   let getBadge = (color: string, text: string) => {
     return `<span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-${color}-100 text-${color}-800 rounded">${text}</span>`;
-  }
+  };
 
   // Basic example
-  let basic = marqueejs('.marquee-basic', {
+  let basic = marqueejs(".marquee-basic", {
     speed: 100,
-    cloneCount: 'auto',
+    cloneCount: "auto",
   });
 
   // Right to left
-  marqueejs('.marquee-rtl', {
-    direction: 'right',
+  marqueejs(".marquee-rtl", {
+    direction: "right",
     speed: 150,
-    cloneCount: 3
+    cloneCount: 3,
   });
 
   // With separator
-  let sep = marqueejs('.marquee-separator', {
-    direction: 'left',
-    separator: '•',
+  let sep = marqueejs(".marquee-separator", {
+    direction: "left",
+    separator: "•",
     gap: 40,
-    cloneCount: 'auto',
+    cloneCount: "auto",
   });
 
   // Vertical
-  let test = marqueejs('.marquee-vertical', {
-    direction: 'up',
+  let test = marqueejs(".marquee-vertical", {
+    direction: "up",
     speed: 25,
     gap: 15,
     containerHeight: 350,
@@ -134,101 +134,97 @@ document.addEventListener('DOMContentLoaded', () => {
       '<b>Editor:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Horace_Slughorn" rel="nofollow noopener" target="_blank">Horace Slughorn</a>',
       '<b>Art Director:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Sybill_Trelawney" rel="nofollow noopener" target="_blank">Sybill Trelawney</a>',
       '<b>Makeup Artist:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Nymphadora_Tonks" rel="nofollow noopener" target="_blank">Nymphadora Tonks</a>',
-      '<b>Stunt Coordinator:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Alastor_Moody" rel="nofollow noopener" target="_blank">Mad-Eye Moody</a>'
-    ]
+      '<b>Stunt Coordinator:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Alastor_Moody" rel="nofollow noopener" target="_blank">Mad-Eye Moody</a>',
+    ],
   });
 
   // Fast with pause
-  marqueejs('.marquee-fast', {
+  marqueejs(".marquee-fast", {
     speed: 200,
     pauseOnHover: true,
-    cloneCount: 3
+    cloneCount: 3,
   });
 
   // Advanced Examples Section
 
   // 1. News Ticker with Dynamic Updates
-  const newsMarquee = marqueejs('#news-ticker', {
+  const newsMarquee = marqueejs("#news-ticker", {
     speed: 80,
     pauseOnHover: true,
     gap: 40,
-    separator: '⚡',
+    separator: "⚡",
     randomize: true,
-    contentList: FAKED_DATA.map(item =>
-      `${getBadge(item.color, item.badge_text)} ${item.title}`
-    )
+    contentList: FAKED_DATA.map((item) => `${getBadge(item.color, item.badge_text)} ${item.title}`),
   });
 
   // 2. Social Media Feed
-  const socialFeed = marqueejs('#social-feed', {
-    direction: 'up',
+  const socialFeed = marqueejs("#social-feed", {
+    direction: "up",
     speed: 40,
     containerHeight: 200,
     gap: 30,
     contentList: [
-      '🐦 Latest Tweet from Hogwarts',
-      '📸 New Instagram post from @wizard_weekly',
-      '📱 Facebook update from Ministry of Magic',
-      '💼 LinkedIn: Dumbledore is hiring!'
-    ]
+      "🐦 Latest Tweet from Hogwarts",
+      "📸 New Instagram post from @wizard_weekly",
+      "📱 Facebook update from Ministry of Magic",
+      "💼 LinkedIn: Dumbledore is hiring!",
+    ],
   });
 
   // 3. Multi-Speed Demo
-  const speedDemo = marqueejs('#speed-demo', {
+  const speedDemo = marqueejs("#speed-demo", {
     speed: 50,
-    cloneCount: 2
+    cloneCount: "auto",
   });
 
-  const speeds = [50, 100, 150, 200];
-  let currentSpeed = 0;
   setInterval(() => {
-    currentSpeed = (currentSpeed + 1) % speeds.length;
-    speedDemo.updateSpeed(speeds[currentSpeed]);
+    const randomSpeed = parseInt((Math.random() * 150 + 50).toString());
+    speedDemo.updateSpeed(randomSpeed);
   }, 3000);
 
   // 4. Interactive Gap Demo
-  const gapDemo = marqueejs('#gap-demo', {
-    gap: parseInt(document.querySelector('#gap-control')?.value) || 20,
-    separator: '↔️',
-    contentList: ['<b>Adjust</b>', 'The', '<b>Gap</b>', 'Size']
+  const gapDemo = marqueejs("#gap-demo", {
+    gap: parseInt(document.querySelector("#gap-control")?.value) || 20,
+    separator: "↔️",
+    contentList: ["<b>Adjust</b>", "The", "<b>Gap</b>", "Size"],
   });
 
-  document.querySelector('#gap-control')?.addEventListener('input', (e) => {
+  document.querySelector("#gap-control")?.addEventListener("input", (e) => {
     gapDemo.updateGap(Number((e.target as HTMLInputElement).value));
   });
 
   // 5. Alternating Direction
-  const directionDemo = marqueejs('#direction-demo', {
-    direction: 'left',
-    speed: 200
+  const directionDemo = marqueejs("#direction-demo", {
+    direction: "left",
+    speed: 200,
   });
 
   setInterval(() => {
-      directionDemo.switchDirection();
+    directionDemo.switchDirection();
   }, 5000);
 
   // 6. Clone Count Showcase - Improved
-  const cloneDemo = marqueejs('#clone-demo', {
+  const cloneDemo = marqueejs("#clone-demo", {
     speed: 80,
     gap: 50,
     cloneCount: 3,
-    contentList: [
-      '<div class="clone-item px-4 py-2">Text Example</div>',
-    ]
+    contentList: ['<div class="clone-item px-4 py-2">Text Example</div>'],
   });
 
   // Add index to cloned items
   let updtEltsIdx = () => {
-    document.querySelectorAll('.clone-demo .marquee-cloned-item .clone-item').forEach((item, index) => {
-      console.log(item)
-      item.innerHTML = `${item.innerHTML} - <b> clone: ${index + 1} </b>`;
-    });
+    document
+      .querySelectorAll(".clone-demo .marquee-cloned-item .clone-item")
+      .forEach((item, index) => {
+        console.log(item);
+        item.innerHTML = `${item.innerHTML} - <b> clone: ${index + 1} </b>`;
+      });
   };
   updtEltsIdx();
 
-  document.querySelector('#clone-control')?.addEventListener('input', (e) => {
+  document.querySelector("#clone-control")?.addEventListener("input", (e) => {
     const value = Number((e.target as HTMLInputElement).value);
-    document.querySelector('#clone-count-display')!.textContent = `${value} clones`;
+    document.querySelector("#clone-count-display")!.textContent = `${value} clones`;
     cloneDemo.updateCloneCount(value);
     updtEltsIdx();
     cloneDemo.recalculatePositions();
