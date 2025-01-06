@@ -20,7 +20,12 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     destroy() {
       instance.destroy();
     },
-    addContent(content: string | string[], addToStart: boolean = false, reset: boolean = false, callback?: () => void) {
+    addContent(
+      content: string | string[],
+      addToStart: boolean = false,
+      reset: boolean = false,
+      callback?: () => void
+    ) {
       instance.addContent(content, addToStart, reset, callback);
     },
     replaceContent(newContentList: string[], callback?: () => void) {
@@ -53,12 +58,17 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     randomize() {
       instance.randomize();
     },
-    switchDirection(direction: MarqueeOptions["direction"]) {
-      instance.switchDirection(direction);
+    switchDirection() {
+      instance.switchDirection();
     },
-    patchContent(content: string | string[], position: 'start' | 'end', reset: boolean = false, callback?: () => void) {
+    patchContent(
+      content: string | string[],
+      position: "start" | "end",
+      reset: boolean = false,
+      callback?: () => void
+    ) {
       instance.patchContent(content, position, reset, callback);
-    }
+    },
   };
 }
 

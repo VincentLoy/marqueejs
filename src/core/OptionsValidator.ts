@@ -106,6 +106,7 @@ export class OptionsValidator {
 
     this.validateContainerHeight(options.containerHeight, options.direction);
     this.validateKeepOriginalContent(options.keepOriginalContent);
+    this.validateContentValidationOptions(options.contentValidation);
 
     return options;
   }
@@ -209,6 +210,32 @@ export class OptionsValidator {
     };
   }
 
+  public static validateContentValidationOptions(
+    validationOptions: ContentValidationOptions
+  ): void {
+    if (
+      validationOptions.maxLength !== undefined &&
+      (typeof validationOptions.maxLength !== "number" || validationOptions.maxLength <= 0)
+    ) {
+      throw new Error("MarqueeJS: maxLength must be a positive number");
+    }
+
+    if (
+      validationOptions.forbiddenTags !== undefined &&
+      (!Array.isArray(validationOptions.forbiddenTags) ||
+        validationOptions.forbiddenTags.some((tag) => typeof tag !== "string"))
+    ) {
+      throw new Error("MarqueeJS: forbiddenTags must be an array of strings");
+    }
+
+    if (
+      validationOptions.forbiddenAttributes !== undefined &&
+      (!Array.isArray(validationOptions.forbiddenAttributes) ||
+        validationOptions.forbiddenAttributes.some((attr) => typeof attr !== "string"))
+    ) {
+      throw new Error("MarqueeJS: forbiddenAttributes must be an array of strings");
+    }
+  }
   public static validateSpeed(speed: number | undefined): void {
     if (speed !== undefined && (typeof speed !== "number" || speed <= 0)) {
       throw new Error("MarqueeJS: Speed must be a positive number");
