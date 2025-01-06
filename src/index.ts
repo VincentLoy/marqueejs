@@ -20,8 +20,8 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     destroy() {
       instance.destroy();
     },
-    addContent(content: string | string[], addToStart: boolean = false, callback?: () => void) {
-      instance.addContent(content, addToStart, callback);
+    addContent(content: string | string[], addToStart: boolean = false, reset: boolean = false, callback?: () => void) {
+      instance.addContent(content, addToStart, reset, callback);
     },
     replaceContent(newContentList: string[], callback?: () => void) {
       instance.replaceContent(newContentList, callback);
@@ -55,6 +55,9 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     },
     switchDirection(direction: MarqueeOptions["direction"]) {
       instance.switchDirection(direction);
+    },
+    patchContent(content: string | string[], position: 'start' | 'end', reset: boolean = false, callback?: () => void) {
+      instance.patchContent(content, position, reset, callback);
     }
   };
 }
