@@ -1,5 +1,7 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
+import tailwindcss from "tailwindcss";
+import autoprefixer from "autoprefixer";
 
 export default defineConfig(({ command, mode }) => {
   if (command === "serve") {
@@ -9,7 +11,7 @@ export default defineConfig(({ command, mode }) => {
       },
       css: {
         postcss: {
-          plugins: [require("tailwindcss"), require("autoprefixer")],
+          plugins: [tailwindcss, autoprefixer],
         },
       },
     };
@@ -29,14 +31,23 @@ export default defineConfig(({ command, mode }) => {
       lib: {
         entry: resolve(__dirname, "src/index.ts"),
         name: "MarqueeJS",
-        fileName: (format) => `marqueejs.${format}${format === "umd" ? ".min" : ""}.js`,
-        formats: ["es", "umd"],
       },
       sourcemap: true,
+      minify: "esbuild",
       rollupOptions: {
-        output: {
-          exports: "named",
-        },
+        output: [
+          {
+            format: "es",
+            entryFileNames: "marqueejs.es.min.js",
+            compact: true,
+          },
+          {
+            format: "umd",
+            entryFileNames: "marqueejs.umd.min.js",
+            name: "MarqueeJS",
+            compact: true,
+          },
+        ],
       },
     },
   };
