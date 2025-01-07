@@ -14,8 +14,8 @@
     "build": "vite build && bun run build:types",
     "build:types": "tsc && cp -R ./src/types ./dist/declarations/types",
     "build:docs": "vite build docs/src --outDir ../dist --emptyOutDir",
-    "preview": "bun run build:docs && vite docs/dist --open",
-    "test": "bun test"
+    "build:all": "bun run build && bun run build:docs",
+    "preview": "bun run build:docs && vite docs/dist --open"
   },
   "devDependencies": {
     "@types/bun": "latest",
