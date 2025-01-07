@@ -1,3 +1,4 @@
 node_modules
-bak.devbook.md
-refactoring_roadmap.md
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
