@@ -49,8 +49,6 @@ export interface MarqueeOptions {
  * Public API for controlling a MarqueeJS instance
  */
 export interface MarqueeInstance {
-  start(): void;
-  stop(): void;
   pause(): void;
   resume(): void;
   destroy(): void;

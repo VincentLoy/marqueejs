@@ -5,12 +5,6 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
   const instance = new Marquee(selector, options);
 
   return {
-    start() {
-      instance.play();
-    },
-    stop() {
-      instance.pause();
-    },
     pause() {
       instance.pause();
     },
