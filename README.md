@@ -250,6 +250,8 @@ Modifies the content list by adding or replacing items at specified positions (s
 -   Callback executes on the next animation frame after patching completes
 
 ```typescript
+let instance = marqueejs(".marquee-element", options);
+
 // example
 console.log(instance.getContentList());
 // > output: ['a', 'b', 'c', 'd']
