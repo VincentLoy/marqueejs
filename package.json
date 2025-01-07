@@ -18,6 +18,9 @@
     "preview": "bun run build:docs && vite docs/dist --open"
   },
   "devDependencies": {
+    "@iconify-json/lucide": "^1.2.21",
+    "@iconify/tailwind": "^1.2.0",
+    "@tailwindcss/typography": "^0.5.16",
     "@types/bun": "latest",
     "@types/node": "^22.10.5",
     "autoprefixer": "^10.0.0",

@@ -228,4 +228,35 @@ document.addEventListener("DOMContentLoaded", () => {
     updtEltsIdx();
     cloneDemo.recalculatePositions();
   });
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll("[data-smooth]").forEach((anchor) => {
+    anchor.addEventListener("click", (e) => {
+      e.preventDefault();
+      const href = (e.currentTarget as HTMLAnchorElement).getAttribute("href") || "#";
+      const target =
+        href === "#" ? document.documentElement : document.querySelector(href.toString());
+
+      console.log(target);
+
+      if (target) {
+        const targetPosition = target.getBoundingClientRect().top + window.scrollY - 25;
+        document.querySelector(".nav-active")?.classList.remove("nav-active");
+        anchor.classList.add("nav-active");
+        window.scrollTo({
+          top: targetPosition,
+          behavior: "smooth",
+        });
+        // Update URL without reload
+        history.pushState(null, "", href);
+      } else {
+        window.scrollTo({
+          top: 20,
+          behavior: "smooth",
+        });
+        // Update URL to top
+        history.pushState(null, "", "");
+      }
+    });
+  });
 });
