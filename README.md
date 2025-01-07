@@ -407,6 +407,11 @@ Below are some basic examples to illustrate different marquee configurations.
 
 ## Development
 
+Current Node version can be found in `.nvmrc` file. If you use `nvm`, install the just run `nvm install && nvm use`
+
+Bun is the recommended package manager for this project. _(Why ? Because I loved it)_
+check : [bun official website](https://bun.sh/)
+
 To contribute or run this project locally:
 
 1. **Install Dependencies**
@@ -432,9 +437,6 @@ To contribute or run this project locally:
     ```
 
     This generates the optimized production builds for your distribution or documentation.
-
-4. **Testing**
-   Currently in progress. Add your tests in the `tests/` folder.
 
 We welcome pull requests and suggestions!
 
