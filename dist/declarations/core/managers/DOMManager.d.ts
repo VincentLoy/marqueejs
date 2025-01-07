@@ -1,0 +1,32 @@
+import type { MarqueeOptions } from "../../types";
+export declare class DOMManager {
+    private container;
+    private wrapper;
+    private element;
+    private options;
+    private contentElements;
+    private clones;
+    private instanceId;
+    private separatorStyleElement;
+    private cloneCalculator;
+    constructor(element: HTMLElement, options: Partial<MarqueeOptions>);
+    private createContainer;
+    private createWrapper;
+    setupDOM(): void;
+    createContentElements(): void;
+    private clearElements;
+    private getMaxContentHeight;
+    private calculateMetrics;
+    private createContentElement;
+    private positionElements;
+    private createClones;
+    private updateSeparatorStyles;
+    private cleanupSeparatorStyles;
+    recalculateClones(): void;
+    updateContainerHeight(height: number): void;
+    updateSeparators(): void;
+    getWrapper(): HTMLElement;
+    getContainer(): HTMLElement;
+    getContentElements(): HTMLElement[];
+    destroy(): void;
+}

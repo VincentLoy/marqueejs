@@ -1,0 +1,35 @@
+import type { MarqueeOptions } from "../types";
+export declare class Marquee {
+    private element;
+    private originalElement;
+    private options;
+    private isPlaying;
+    private animationManager;
+    private eventManager;
+    private domManager;
+    private htmlContentList;
+    private defaultOptions;
+    constructor(selector: string | HTMLElement, options?: MarqueeOptions);
+    private setupInstance;
+    private init;
+    private randomizeContent;
+    reset(): Promise<void>;
+    destroy(): Promise<void>;
+    play(): void;
+    pause(): void;
+    private startAnimation;
+    private stopAnimation;
+    addContent(content: string | string[], addToStart?: boolean, reset?: boolean, callback?: () => void): Promise<void>;
+    replaceContent(newContentList: string[], callback?: () => void): void;
+    getContentList(): string[];
+    updateSpeed(speed: number): void;
+    updateGap(gap: number): void;
+    updateSeparator(separator: string): void;
+    updateCloneCount(cloneCount: number): void;
+    updateContainerHeight(containerHeight: number): void;
+    updatePauseOnHover(pauseOnHover: boolean): void;
+    recalculatePositions(): void;
+    randomize(): void;
+    switchDirection(): void;
+    patchContent(content: string | string[], position: "start" | "end", reset?: boolean, callback?: () => void): Promise<void>;
+}

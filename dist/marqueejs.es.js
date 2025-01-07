@@ -1,7 +1,7 @@
 var g = Object.defineProperty;
-var E = (l, t, e) => t in l ? g(l, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : l[t] = e;
-var a = (l, t, e) => E(l, typeof t != "symbol" ? t + "" : t, e);
-const c = class c {
+var E = (d, t, e) => t in d ? g(d, t, { enumerable: !0, configurable: !0, writable: !0, value: e }) : d[t] = e;
+var a = (d, t, e) => E(d, typeof t != "symbol" ? t + "" : t, e);
+const m = class m {
   static validate(t) {
     if (this.validateSpeed(t.speed), this.validateDirection(t.direction), this.validateGap(t.gap), t.contentValidation ? t.contentValidation = {
       maxLength: t.contentValidation.maxLength || this.DEFAULT_MAX_LENGTH,
@@ -25,10 +25,10 @@ const c = class c {
       `MarqueeJS: Requested ${t.cloneCount} clones, but maximum is ${this.MAX_CLONES}. Using ${this.MAX_CLONES} clones instead.`
     ), t.cloneCount = this.MAX_CLONES))), ["up", "down"].includes(t.direction || "") && t.separator && (console.warn(
       "MarqueeJS: Separator is not supported for vertical directions. Separator will be ignored."
-    ), t.separator = ""), this.validateContainerHeight(t.containerHeight, t.direction), this.validateKeepOriginalContent(t.keepOriginalContent), t;
+    ), t.separator = ""), this.validateContainerHeight(t.containerHeight, t.direction), this.validateKeepOriginalContent(t.keepOriginalContent), this.validateContentValidationOptions(t.contentValidation), t;
   }
   static validateContentList(t, e) {
-    var r, p, d;
+    var r, l, c;
     const n = [];
     if (!Array.isArray(t))
       return {
@@ -46,56 +46,64 @@ const c = class c {
       forbiddenTags: [...this.FORBIDDEN_TAGS, ...((r = e.contentValidation) == null ? void 0 : r.forbiddenTags) || []],
       forbiddenAttributes: [
         ...this.FORBIDDEN_ATTRIBUTES,
-        ...((p = e.contentValidation) == null ? void 0 : p.forbiddenAttributes) || []
+        ...((l = e.contentValidation) == null ? void 0 : l.forbiddenAttributes) || []
       ],
-      maxLength: ((d = e.contentValidation) == null ? void 0 : d.maxLength) || this.DEFAULT_MAX_LENGTH
+      maxLength: ((c = e.contentValidation) == null ? void 0 : c.maxLength) || this.DEFAULT_MAX_LENGTH
     }, s = new RegExp(
       `</?(?:${i.forbiddenTags.join("|")})\\b[^>]*>`,
       "i"
     ), o = new RegExp(
-      i.forbiddenAttributes.map((u) => `${u}\\s*=\\s*["']?[^"']*["']?`).join("|"),
+      i.forbiddenAttributes.map((h) => `${h}\\s*=\\s*["']?[^"']*["']?`).join("|"),
       "i"
     );
-    for (let u = 0; u < t.length; u++) {
-      const m = t[u];
-      if (!m || typeof m != "string") {
+    for (let h = 0; h < t.length; h++) {
+      const p = t[h];
+      if (!p || typeof p != "string") {
         n.push({
           type: "EMPTY_CONTENT",
           message: "Content item must be a non-empty string",
-          index: u,
-          content: m
+          index: h,
+          content: p
         });
         continue;
       }
-      if (s.test(m)) {
+      if (s.test(p)) {
         n.push({
           type: "UNSAFE_TAG_DETECTED",
           message: "Content contains forbidden HTML tags",
-          index: u,
-          content: m.substring(0, 50) + "..."
+          index: h,
+          content: p.substring(0, 50) + "..."
         });
         continue;
       }
-      if (o.test(m)) {
+      if (o.test(p)) {
         n.push({
           type: "UNSAFE_ATTRIBUTES",
           message: "Content contains forbidden HTML attributes",
-          index: u,
-          content: m.substring(0, 50) + "..."
+          index: h,
+          content: p.substring(0, 50) + "..."
         });
         continue;
       }
-      m.length > i.maxLength && n.push({
+      p.length > i.maxLength && n.push({
         type: "MAX_LENGTH_EXCEEDED",
         message: `Content item exceeds maximum length of ${i.maxLength} characters`,
-        index: u,
-        content: m.substring(0, 50) + "..."
+        index: h,
+        content: p.substring(0, 50) + "..."
       });
     }
     return {
       isValid: n.length === 0,
       errors: n
     };
+  }
+  static validateContentValidationOptions(t) {
+    if (t.maxLength !== void 0 && (typeof t.maxLength != "number" || t.maxLength <= 0))
+      throw new Error("MarqueeJS: maxLength must be a positive number");
+    if (t.forbiddenTags !== void 0 && (!Array.isArray(t.forbiddenTags) || t.forbiddenTags.some((e) => typeof e != "string")))
+      throw new Error("MarqueeJS: forbiddenTags must be an array of strings");
+    if (t.forbiddenAttributes !== void 0 && (!Array.isArray(t.forbiddenAttributes) || t.forbiddenAttributes.some((e) => typeof e != "string")))
+      throw new Error("MarqueeJS: forbiddenAttributes must be an array of strings");
   }
   static validateSpeed(t) {
     if (t !== void 0 && (typeof t != "number" || t <= 0))
@@ -130,7 +138,7 @@ const c = class c {
       );
   }
 };
-a(c, "MAX_CLONES", 30), a(c, "MIN_CLONES", 0), a(c, "DEFAULT_MAX_LENGTH", 8500), a(c, "FORBIDDEN_TAGS", [
+a(m, "MAX_CLONES", 30), a(m, "MIN_CLONES", 0), a(m, "DEFAULT_MAX_LENGTH", 8500), a(m, "FORBIDDEN_TAGS", [
   "script",
   "style",
   "iframe",
@@ -145,7 +153,7 @@ a(c, "MAX_CLONES", 30), a(c, "MIN_CLONES", 0), a(c, "DEFAULT_MAX_LENGTH", 8500),
   "head",
   "html",
   "body"
-]), a(c, "FORBIDDEN_ATTRIBUTES", [
+]), a(m, "FORBIDDEN_ATTRIBUTES", [
   "onclick",
   "onmouseover",
   "onmouseout",
@@ -156,12 +164,12 @@ a(c, "MAX_CLONES", 30), a(c, "MIN_CLONES", 0), a(c, "DEFAULT_MAX_LENGTH", 8500),
   "xlink:href",
   "action",
   "javascript"
-]), a(c, "DEFAULT_VALIDATION_OPTIONS", {
-  maxLength: c.DEFAULT_MAX_LENGTH,
-  forbiddenTags: c.FORBIDDEN_TAGS,
-  forbiddenAttributes: c.FORBIDDEN_ATTRIBUTES
+]), a(m, "DEFAULT_VALIDATION_OPTIONS", {
+  maxLength: m.DEFAULT_MAX_LENGTH,
+  forbiddenTags: m.FORBIDDEN_TAGS,
+  forbiddenAttributes: m.FORBIDDEN_ATTRIBUTES
 });
-let h = c;
+let u = m;
 class C {
   constructor(t, e) {
     a(this, "wrapper");
@@ -305,9 +313,9 @@ class v {
     }, o;
   }
   calculateMetrics(t, e, n, i) {
-    const s = i ? t.offsetWidth : t.offsetHeight, o = e.reduce((r, p) => {
-      const d = i ? p.offsetWidth : p.offsetHeight;
-      return r + d + n;
+    const s = i ? t.offsetWidth : t.offsetHeight, o = e.reduce((r, l) => {
+      const c = i ? l.offsetWidth : l.offsetHeight;
+      return r + c + n;
     }, 0);
     return {
       containerSize: s,
@@ -333,7 +341,9 @@ class M {
   }
   createContainer() {
     const t = document.createElement("div");
-    return t.classList.add(this.instanceId, "marquee-container"), t.style.width = "100%", t.style.overflow = "hidden", t.style.position = "relative", t;
+    t.classList.add(this.instanceId, "marquee-container");
+    const e = Array.from(this.element.classList), n = this.element.id;
+    return t.classList.add(...e), n && (t.id = n), t.style.width = "100%", t.style.overflow = "hidden", t.style.position = "relative", t;
   }
   createWrapper() {
     const t = document.createElement("div");
@@ -365,18 +375,18 @@ class M {
     const t = ["left", "right"].includes(this.options.direction), e = [];
     let n = 0;
     return this.contentElements.forEach((i, s) => {
-      const o = i.getBoundingClientRect(), r = t ? o.width : o.height, p = this.options.separator && s < this.contentElements.length - 1 ? this.options.gap / 2 : 0;
+      const o = i.getBoundingClientRect(), r = t ? o.width : o.height, l = this.options.separator && s < this.contentElements.length - 1 ? this.options.gap / 2 : 0;
       e.push({
         size: r,
         spacing: this.options.gap,
         position: n,
-        separatorOffset: p
+        separatorOffset: l
       }), n += r + this.options.gap;
     }), e;
   }
   createContentElement(t) {
     const e = document.createElement("div");
-    return e.className = "marquee-content-item", e.style.position = "absolute", e.style.whiteSpace = ["up", "down"].includes(this.options.direction) ? "normal" : "nowrap", e.innerHTML = t, e;
+    return e.className = "marquee-content-item", e.style.position = "absolute", e.style.whiteSpace = ["up", "down"].includes(this.options.direction) ? "normal" : "nowrap", e.style.width = ["up", "down"].includes(this.options.direction) ? "100%" : "auto", e.innerHTML = t, e;
   }
   positionElements() {
     const t = this.calculateMetrics();
@@ -395,9 +405,9 @@ class M {
     const e = this.calculateMetrics(), n = e.reduce((s, o) => s + o.size + o.spacing, 0), i = document.createDocumentFragment();
     for (let s = 0; s < t; s++) {
       const o = n * (s + 1);
-      this.contentElements.forEach((r, p) => {
-        const d = r.cloneNode(!0);
-        d.setAttribute("aria-hidden", "true"), d.style.transform = ["left", "right"].includes(this.options.direction) ? `translate3d(${e[p].position + o}px, 0, 0)` : `translate3d(0, ${e[p].position + o}px, 0)`, this.clones.push(d), i.appendChild(d);
+      this.contentElements.forEach((r, l) => {
+        const c = r.cloneNode(!0);
+        c.setAttribute("aria-hidden", "true"), c.classList.add("marquee-cloned-item"), c.style.transform = ["left", "right"].includes(this.options.direction) ? `translate3d(${e[l].position + o}px, 0, 0)` : `translate3d(0, ${e[l].position + o}px, 0)`, this.clones.push(c), i.appendChild(c);
       });
     }
     this.wrapper.appendChild(i);
@@ -420,9 +430,6 @@ class M {
   cleanupSeparatorStyles() {
     var t;
     (t = this.separatorStyleElement) == null || t.remove(), this.separatorStyleElement = null;
-  }
-  updateContent(t) {
-    this.options.contentList = t, this.cloneCalculator.invalidateCache(), this.createContentElements();
   }
   // Utility method to force recalculation of clones
   recalculateClones() {
@@ -475,7 +482,7 @@ class y {
   }
   setupInstance(t, e) {
     var i;
-    const n = h.validate(e);
+    const n = u.validate(e);
     this.element = t, this.options = { ...this.defaultOptions, ...n }, this.htmlContentList = Array.from(this.element.children).map((s) => s.outerHTML), (i = this.options.contentList) != null && i.length ? this.htmlContentList.length && this.options.keepOriginalContent && (this.options.contentList = [...this.htmlContentList, ...this.options.contentList]) : this.options.contentList = this.htmlContentList, this.options.randomize && (this.options.contentList = this.randomizeContent());
   }
   async init() {
@@ -523,37 +530,26 @@ class y {
     var t;
     (t = this.animationManager) == null || t.stopAnimation();
   }
-  async updateContent(t) {
-    var i, s;
-    const e = Array.isArray(t) ? t : [t], n = h.validateContentList(e, this.options);
-    if (!n.isValid) {
-      console.warn(
-        "MarqueeJS: Content validation failed:",
-        n.errors.map((o) => o.message).join(", ")
-      );
-      return;
-    }
-    this.pause(), this.options.contentList = e, (i = this.domManager) == null || i.createContentElements(), (s = this.animationManager) == null || s.recalculatePositions(), this.play();
-  }
-  async addContent(t, e = !1, n) {
+  async addContent(t, e = !1, n = !1, i) {
+    var r, l;
     if (!t) return;
-    this.pause();
-    const i = Array.isArray(t) ? t : [t], s = h.validateContentList(i, this.options);
-    if (!s.isValid) {
+    n && this.pause();
+    const s = Array.isArray(t) ? t : [t], o = u.validateContentList(s, this.options);
+    if (!o.isValid) {
       console.warn(
         "MarqueeJS: Content validation failed:",
-        s.errors.map((o) => o.message).join(", ")
+        o.errors.map((c) => c.message).join(", ")
       );
       return;
     }
-    e ? this.options.contentList = [...i, ...this.options.contentList] : this.options.contentList = [...this.options.contentList, ...i], await this.reset(), n && requestAnimationFrame(() => {
-      n();
+    e ? this.options.contentList = [...s, ...this.options.contentList] : this.options.contentList = [...this.options.contentList, ...s], n ? await this.reset() : ((r = this.domManager) == null || r.createContentElements(), (l = this.animationManager) == null || l.recalculatePositions()), i && requestAnimationFrame(() => {
+      i();
     });
   }
   replaceContent(t, e) {
     var i, s;
     if (!Array.isArray(t)) return;
-    const n = h.validateContentList(t, this.options);
+    const n = u.validateContentList(t, this.options);
     if (!n.isValid) {
       console.warn(
         "MarqueeJS: Content validation failed:",
@@ -569,28 +565,27 @@ class y {
     return this.options.contentList;
   }
   updateSpeed(t) {
-    var e;
-    h.validateSpeed(t), this.options.speed = t, (e = this.animationManager) == null || e.recalculatePositions(), this.play();
+    u.validateSpeed(t), this.options.speed = t;
   }
   updateGap(t) {
     var e, n;
-    h.validateGap(t), this.options.gap = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions(), this.play();
+    u.validateGap(t), this.options.gap = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions();
   }
   updateSeparator(t) {
     var e, n;
-    this.options.separator = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions(), this.play();
+    this.options.separator = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions();
   }
   updateCloneCount(t) {
     var e, n;
-    if (!Number.isInteger(t) || t < 0 || t > h.MAX_CLONES)
+    if (!Number.isInteger(t) || t < 0 || t > u.MAX_CLONES)
       throw new Error(
-        `MarqueeJS: cloneCount must be an integer between 0 and ${h.MAX_CLONES}`
+        `MarqueeJS: cloneCount must be an integer between 0 and ${u.MAX_CLONES}`
       );
-    this.options.cloneCount = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions(), this.play();
+    this.options.cloneCount = t, (e = this.domManager) == null || e.createContentElements(), (n = this.animationManager) == null || n.recalculatePositions();
   }
   updateContainerHeight(t) {
     var e, n;
-    h.validateContainerHeight(t, this.options.direction), this.options.containerHeight = t, ["up", "down"].includes(this.options.direction) && ((e = this.domManager) == null || e.updateContainerHeight(t)), (n = this.animationManager) == null || n.recalculatePositions(), this.play();
+    u.validateContainerHeight(t, this.options.direction), this.options.containerHeight = t, ["up", "down"].includes(this.options.direction) && ((e = this.domManager) == null || e.updateContainerHeight(t)), (n = this.animationManager) == null || n.recalculatePositions(), this.play();
   }
   updatePauseOnHover(t) {
     var e, n;
@@ -611,9 +606,50 @@ class y {
   randomize() {
     this.options.randomize = !0, this.reset();
   }
+  switchDirection() {
+    const t = {
+      left: "right",
+      right: "left",
+      up: "down",
+      down: "up"
+    };
+    this.options.direction = t[this.options.direction];
+  }
+  async patchContent(t, e, n = !1, i) {
+    var r, l, c;
+    if (!t) return;
+    if (e !== "start" && e !== "end")
+      throw new Error('MarqueeJS (patchContent): position must be either "start" or "end"');
+    n && this.pause();
+    const s = Array.isArray(t) ? t : [t], o = u.validateContentList(s, this.options);
+    if (!o.isValid) {
+      console.warn(
+        "MarqueeJS: Content validation failed:",
+        o.errors.map((h) => h.message).join(", ")
+      );
+      return;
+    }
+    if (!((r = this.options.contentList) != null && r.length))
+      this.options.contentList = s;
+    else if (s.length >= this.options.contentList.length)
+      this.options.contentList = s;
+    else {
+      const h = [...this.options.contentList];
+      if (e === "start")
+        h.splice(0, s.length, ...s);
+      else {
+        const p = h.length - s.length;
+        h.splice(p, s.length, ...s);
+      }
+      this.options.contentList = h;
+    }
+    n ? await this.reset() : ((l = this.domManager) == null || l.createContentElements(), (c = this.animationManager) == null || c.recalculatePositions()), i && requestAnimationFrame(() => {
+      i();
+    });
+  }
 }
-function L(l, t = {}) {
-  const e = new y(l, t);
+function b(d, t = {}) {
+  const e = new y(d, t);
   return {
     start() {
       e.play();
@@ -630,8 +666,8 @@ function L(l, t = {}) {
     destroy() {
       e.destroy();
     },
-    addContent(n, i = !1, s) {
-      e.addContent(n, i, s);
+    addContent(n, i = !1, s = !1, o) {
+      e.addContent(n, i, s, o);
     },
     replaceContent(n, i) {
       e.replaceContent(n, i);
@@ -662,10 +698,16 @@ function L(l, t = {}) {
     },
     randomize() {
       e.randomize();
+    },
+    switchDirection() {
+      e.switchDirection();
+    },
+    patchContent(n, i, s = !1, o) {
+      e.patchContent(n, i, s, o);
     }
   };
 }
 export {
-  L as marqueejs
+  b as marqueejs
 };
-//# sourceMappingURL=marqueejs.js.map
+//# sourceMappingURL=marqueejs.es.js.map
