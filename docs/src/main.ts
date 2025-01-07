@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 4. Interactive Gap Demo
   const gapDemo = marqueejs("#gap-demo", {
-    gap: parseInt(document.querySelector("#gap-control")?.value) || 20,
+    gap: parseInt((document.querySelector("#gap-control") as HTMLInputElement)?.value) || 20,
     separator: "↔️",
     contentList: ["<b>Adjust</b>", "The", "<b>Gap</b>", "Size"],
   });
