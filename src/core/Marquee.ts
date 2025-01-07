@@ -23,6 +23,7 @@ export class Marquee {
     separator: "",
     randomize: false,
     contentList: [],
+    startAfter: 0,
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {
@@ -74,7 +75,9 @@ export class Marquee {
         pause: () => this.pause(),
         resume: () => this.play(),
       });
-      this.play();
+      setTimeout(() => {
+        this.play();
+      }, this.options.startAfter);
     }
   }
 

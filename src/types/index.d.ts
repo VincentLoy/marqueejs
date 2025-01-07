@@ -43,6 +43,11 @@ export interface MarqueeOptions {
 
   /** Randomize order in contentList */
   randomize?: boolean;
+
+  /**
+   * Marquee animation will start after the specified time in ms
+   */
+  startAfter?: number;
 }
 
 /**
