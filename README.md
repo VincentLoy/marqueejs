@@ -35,9 +35,10 @@ MarqueeJS is a modern, lightweight JavaScript library for creating scrolling tex
     - [recalculatePositions](#recalculatepositions)
     - [patchContent](#patchcontent)
 6. [Advanced Usage](#advanced-usage)
-7. [Examples](#examples)
-8. [Development](#development)
-9. [License](#license)
+7. [Content Validation](#content-validation)
+8. [Examples](#examples)
+9. [Development](#development)
+10. [License](#license)
 
 ---
 
@@ -94,18 +95,20 @@ By default, MarqueeJS will scroll the content leftward at a speed of 80 pixels p
 
 Below is a summary of the main configuration options:
 
-| Option              | Type                                | Default | Description                                                                                          |
-| ------------------- | ----------------------------------- | ------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| speed               | number                              | 100     | Scrolling speed in pixels per second. Must be positive.                                              |
-| direction           | 'left' \| 'right' \| 'up' \| 'down' | 'left'  | The direction in which the marquee scrolls.                                                          |
-| pauseOnHover        | boolean                             | false   | Whether to pause the animation on mouse hover.                                                       |
-| gap                 | number                              | 20      | Gap in pixels between items or clones.                                                               |
-| cloneCount          | number                              | 'auto'  | 'auto'                                                                                               | Number of times each item is cloned (for continuous flow). Maximum 15. |
-| separator           | string                              | ''      | Character or string to show between items for horizontal directions. Ignored for vertical scrolling. |
-| contentList         | string[]                            | []      | Array of HTML strings to be displayed by the marquee.                                                |
-| keepOriginalContent | boolean                             | false   | Whether to preserve the original HTML content inside the marquee element when using contentList.     |
-| containerHeight     | number                              | (auto)  | Fixed height for container (required for vertical directions to ensure a consistent layout).         |
-| contentValidation   | object                              | Varies  | Additional content validation options (like forbidden tags, maxLength, etc.).                        |
+| Option              | Type                                | Default | Description                                                                                                                                            |
+| ------------------- | ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| speed               | number                              | 100     | Scrolling speed in pixels per second. Must be positive.                                                                                                |
+| direction           | 'left' \| 'right' \| 'up' \| 'down' | 'left'  | The direction in which the marquee scrolls.                                                                                                            |
+| pauseOnHover        | boolean                             | false   | Pauses the animation when the mouse hovers over the marquee.                                                                                           |
+| gap                 | number                              | 20      | The gap in pixels between items/clones.                                                                                                                |
+| cloneCount          | number \| 'auto'                    | 'auto'  | Number of times each item is cloned for continuous flow. Maximum is 15.                                                                                |
+| separator           | string                              | ''      | Character or string to display between items for horizontal scrolling. Ignored for vertical scrolling. The separator appears in the middle of the gap. |
+| contentList         | string[]                            | []      | Array of HTML strings to be displayed by the marquee.                                                                                                  |
+| keepOriginalContent | boolean                             | false   | Whether to preserve the original HTML content inside the marquee element when using contentList.                                                       |
+| containerHeight     | number                              | (auto)  | Fixed height for container (required for vertical directions to ensure a consistent layout).                                                           |
+| contentValidation   | object                              | Varies  | Additional [content validation](#content-validation) options (like forbidden tags, maxLength, etc.).                                                   |
+| randomize           | boolean                             | false   | Whether to randomize the order of content items.                                                                                                       |
+| startAfter          | number                              | 0       | Marquee animation will start after the specified time in milliseconds.                                                                                 |
 
 ---
 
