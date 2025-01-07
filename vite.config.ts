@@ -1,58 +1,55 @@
-import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { defineConfig } from "vite";
+import { resolve } from "path";
 
 export default defineConfig(({ command, mode }) => {
-  if (command === 'serve') {
+  if (command === "serve") {
     return {
       server: {
-        open: true
+        open: true,
       },
       css: {
         postcss: {
-          plugins: [
-            require('tailwindcss'),
-            require('autoprefixer'),
-          ],
+          plugins: [require("tailwindcss"), require("autoprefixer")],
         },
-      }
-    }
+      },
+    };
   }
 
-  if (command === 'preview') {
+  if (command === "preview") {
     return {
       preview: {
         port: 4173,
-        open: true
-      }
-    }
+        open: true,
+      },
+    };
   }
 
   const config = {
     build: {
       lib: {
-        entry: resolve(__dirname, 'src/index.ts'),
-        name: 'MarqueeJS',
-        fileName: 'marqueejs',
-        formats: ['es', 'umd']
+        entry: resolve(__dirname, "src/index.ts"),
+        name: "MarqueeJS",
+        fileName: (format) => `marqueejs.${format}${format === "umd" ? ".min" : ""}.js`,
+        formats: ["es", "umd"],
       },
       sourcemap: true,
       rollupOptions: {
         output: {
-          exports: 'named'
-        }
-      }
-    }
-  }
+          exports: "named",
+        },
+      },
+    },
+  };
 
-  if (mode === 'docs') {
+  if (mode === "docs") {
     return {
-      root: 'docs/src',
+      root: "docs/src",
       build: {
-        outDir: '../dist',
-        emptyOutDir: true
-      }
-    }
+        outDir: "../dist",
+        emptyOutDir: true,
+      },
+    };
   }
 
-  return config
-})
+  return config;
+});

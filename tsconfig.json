@@ -9,12 +9,18 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationDir": "./dist/declarations",
+    "emitDeclarationOnly": true
   },
-  "include": ["src"]
+  "include": ["src/**/*"],
+  "files": ["src/index.ts"],
+  "exclude": ["node_modules", "dist", "docs"]
 }
