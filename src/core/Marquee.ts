@@ -75,6 +75,7 @@ export class Marquee {
         pause: () => this.pause(),
         resume: () => this.play(),
       });
+
       setTimeout(() => {
         this.play();
       }, this.options.startAfter);

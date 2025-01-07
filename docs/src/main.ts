@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", () => {
   marqueejs(".marquee-rtl", {
     direction: "right",
     speed: 150,
-    cloneCount: 3,
   });
 
   // With separator
