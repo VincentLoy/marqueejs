@@ -229,6 +229,13 @@ document.addEventListener("DOMContentLoaded", () => {
     cloneDemo.recalculatePositions();
   });
 
+  // 7. Complexe HTML Structure
+  marqueejs(".marquee-complex", {
+    heightSecurityMargin: 30,
+    speed: 33,
+    cloneCount: 1,
+  });
+
   // Smooth scroll for anchor links
   document.querySelectorAll("[data-smooth]").forEach((anchor) => {
     anchor.addEventListener("click", (e) => {
