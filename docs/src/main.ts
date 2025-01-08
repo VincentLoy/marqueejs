@@ -107,11 +107,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // With separator
-  let sep = marqueejs(".marquee-separator", {
+  let sep = marqueejs(".marquee-with-separator", {
     direction: "left",
-    separator: "•",
-    gap: 40,
-    cloneCount: "auto",
+    separator: "/",
+    separatorStyles: "color: #58e; font-size: 1.8rem;",
+    heightSecurityMargin: 100,
+    gap: 100,
   });
 
   // Vertical
@@ -215,7 +216,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document
       .querySelectorAll(".clone-demo .marquee-cloned-item .clone-item")
       .forEach((item, index) => {
-        console.log(item);
         item.innerHTML = `${item.innerHTML} - <b> clone: ${index + 1} </b>`;
       });
   };
@@ -231,7 +231,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 7. Complexe HTML Structure
   marqueejs(".marquee-complex", {
-    heightSecurityMargin: 30,
+    heightSecurityMargin: 150,
+    separator: "⚡",
+    gap: 80,
     speed: 33,
     cloneCount: 1,
   });

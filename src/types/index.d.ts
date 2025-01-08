@@ -21,9 +21,9 @@ export interface MarqueeOptions {
   separator?: string;
 
   /**
-   * Font size of the separator. Only applicable when separator is set.
+   * Custom additional CSS rules for the separator element. Separator element is ::before pseudo-element.
    */
-  separatorFontSize?: string;
+  separatorStyles?: string;
 
   /**
    * Array of HTML strings to use as marquee items.
