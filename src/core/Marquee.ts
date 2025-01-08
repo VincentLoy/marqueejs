@@ -66,7 +66,7 @@ export class Marquee {
     this.destroy();
 
     this.domManager = new DOMManager(this.element, this.options);
-    await this.domManager.createContentElements();
+    this.domManager.createContentElements();
 
     const wrapper = this.domManager.getWrapper();
     const contentElements = this.domManager.getContentElements();
