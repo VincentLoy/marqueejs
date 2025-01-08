@@ -18,9 +18,6 @@ export class AnimationManager {
     const isHorizontal = ["left", "right"].includes(this.options.direction!);
     let currentPosition = 0;
 
-    // Get parent container height
-    const containerHeight = this.wrapper.parentElement?.offsetHeight || 0;
-
     this.elements = groups.map((group) => {
       // Calculate size including gap
       const size = isHorizontal
@@ -30,14 +27,11 @@ export class AnimationManager {
       // Store current position for this element
       const position = currentPosition;
 
-      // Calculate vertical centering offset when horizontal
-      const verticalOffset = isHorizontal ? (containerHeight - group.offsetHeight) / 2 : 0;
-
       // Position element
       group.style.position = "absolute";
       group.style.left = "0";
       group.style.transform = isHorizontal
-        ? `translate3d(${position}px, ${verticalOffset}px, 0)`
+        ? `translate3d(${position}px, 0, 0)`
         : `translate3d(0, ${position}px, 0)`;
 
       // Update position for next element
@@ -46,7 +40,6 @@ export class AnimationManager {
       return {
         el: group,
         position,
-        verticalOffset,
       };
     });
   }

@@ -21,6 +21,7 @@ export class Marquee {
     gap: 20,
     cloneCount: "auto",
     separator: "",
+    separatorFontSize: "1rem",
     randomize: false,
     contentList: [],
     startAfter: 0,

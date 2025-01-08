@@ -21,6 +21,11 @@ export interface MarqueeOptions {
   separator?: string;
 
   /**
+   * Font size of the separator. Only applicable when separator is set.
+   */
+  separatorFontSize?: string;
+
+  /**
    * Array of HTML strings to use as marquee items.
    * Each item will be cloned according to cloneCount.
    * @example
@@ -196,7 +201,6 @@ export interface ElementMetrics {
   size: number;
   spacing: number;
   position: number;
-  separatorOffset?: number;
 }
 
 // Add new interface for clone calculator

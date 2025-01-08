@@ -116,19 +116,14 @@ export class DOMManager {
     const metrics: ElementMetrics[] = [];
     let currentPosition = 0;
 
-    this.contentElements.forEach((el, index) => {
+    this.contentElements.forEach((el) => {
       const rect = el.getBoundingClientRect();
       const size = isHorizontal ? rect.width : rect.height;
-      const separatorOffset =
-        this.options.separator && index < this.contentElements.length - 1
-          ? this.options.gap! / 2
-          : 0;
 
       metrics.push({
         size,
         spacing: this.options.gap!,
         position: currentPosition,
-        separatorOffset,
       });
 
       currentPosition += size + this.options.gap!;
@@ -204,11 +199,13 @@ export class DOMManager {
     const style = document.createElement("style");
     style.textContent = `
       .${this.instanceId} .marquee-content-item::before {
-      content: '${this.options.separator}';
-      position: absolute;
-      left: -${this.options.gap! / 2}px;
-      transform: translate3d(-50%, 0, 0);
-      white-space: pre;
+        content: '${this.options.separator}';
+        position: absolute;
+        left: -${this.options.gap! / 2}px;
+        top: 50%;
+        transform: translate3d(-50%, -50%, 0);
+        font-size: ${this.options.separatorFontSize!};
+        white-space: pre;
       }
     `;
 
