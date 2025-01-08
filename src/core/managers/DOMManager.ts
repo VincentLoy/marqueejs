@@ -35,7 +35,6 @@ export class DOMManager {
     if (elementId) container.id = elementId;
     container.style.width = "100%";
     container.style.overflow = "hidden";
-    container.style.position = "relative";
     return container;
   }
 
@@ -45,6 +44,8 @@ export class DOMManager {
     wrapper.style.width = "100%";
     wrapper.style.height = "100%";
     wrapper.style.overflow = "visible";
+    wrapper.style.display = "flex";
+    wrapper.style.alignItems = "center";
     wrapper.classList.add("marquee-wrapper");
     return wrapper;
   }
@@ -95,6 +96,7 @@ export class DOMManager {
 
   private getMaxContentHeight(): number {
     const temp = document.createElement("div");
+    const heightSecurityMargin = this.options.heightSecurityMargin || 0;
     temp.style.position = "absolute";
     temp.style.visibility = "hidden";
     temp.style.left = "-9999px";
@@ -102,7 +104,7 @@ export class DOMManager {
 
     const heights = this.options.contentList!.map((content) => {
       temp.innerHTML = content;
-      return temp.offsetHeight;
+      return temp.offsetHeight + heightSecurityMargin;
     });
 
     document.body.removeChild(temp);

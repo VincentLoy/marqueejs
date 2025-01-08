@@ -24,6 +24,7 @@ export class Marquee {
     randomize: false,
     contentList: [],
     startAfter: 0,
+    heightSecurityMargin: 0,
   };
 
   constructor(selector: string | HTMLElement, options: MarqueeOptions = {}) {

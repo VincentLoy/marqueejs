@@ -48,6 +48,11 @@ export interface MarqueeOptions {
    * Marquee animation will start after the specified time in ms
    */
   startAfter?: number;
+
+  /**
+   * Security margin for height calculation in pixels. Only applicable for 'up' and 'down' directions.
+   */
+  heightSecurityMargin?: number;
 }
 
 /**

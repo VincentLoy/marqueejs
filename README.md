@@ -95,20 +95,21 @@ By default, MarqueeJS will scroll the content leftward at a speed of 80 pixels p
 
 Below is a summary of the main configuration options:
 
-| Option              | Type                                | Default | Description                                                                                                                                            |
-| ------------------- | ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| speed               | number                              | 100     | Scrolling speed in pixels per second. Must be positive.                                                                                                |
-| direction           | 'left' \| 'right' \| 'up' \| 'down' | 'left'  | The direction in which the marquee scrolls.                                                                                                            |
-| pauseOnHover        | boolean                             | false   | Pauses the animation when the mouse hovers over the marquee.                                                                                           |
-| gap                 | number                              | 20      | The gap in pixels between items/clones.                                                                                                                |
-| cloneCount          | number \| 'auto'                    | 'auto'  | Number of times each item is cloned for continuous flow. Maximum is 15.                                                                                |
-| separator           | string                              | ''      | Character or string to display between items for horizontal scrolling. Ignored for vertical scrolling. The separator appears in the middle of the gap. |
-| contentList         | string[]                            | []      | Array of HTML strings to be displayed by the marquee.                                                                                                  |
-| keepOriginalContent | boolean                             | false   | Whether to preserve the original HTML content inside the marquee element when using contentList.                                                       |
-| containerHeight     | number                              | (auto)  | Fixed height for container (required for vertical directions to ensure a consistent layout).                                                           |
-| contentValidation   | object                              | Varies  | Additional [content validation](#content-validation) options (like forbidden tags, maxLength, etc.).                                                   |
-| randomize           | boolean                             | false   | Whether to randomize the order of content items.                                                                                                       |
-| startAfter          | number                              | 0       | Marquee animation will start after the specified time in milliseconds.                                                                                 |
+| Option               | Type                                | Default | Description                                                                                                                                            |
+| -------------------- | ----------------------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| speed                | number                              | 100     | Scrolling speed in pixels per second. Must be positive.                                                                                                |
+| direction            | 'left' \| 'right' \| 'up' \| 'down' | 'left'  | The direction in which the marquee scrolls.                                                                                                            |
+| pauseOnHover         | boolean                             | false   | Pauses the animation when the mouse hovers over the marquee.                                                                                           |
+| gap                  | number                              | 20      | The gap in pixels between items/clones.                                                                                                                |
+| cloneCount           | number \| 'auto'                    | 'auto'  | Number of times each item is cloned for continuous flow. Maximum is 15.                                                                                |
+| separator            | string                              | ''      | Character or string to display between items for horizontal scrolling. Ignored for vertical scrolling. The separator appears in the middle of the gap. |
+| contentList          | string[]                            | []      | Array of HTML strings to be displayed by the marquee.                                                                                                  |
+| keepOriginalContent  | boolean                             | false   | Whether to preserve the original HTML content inside the marquee element when using contentList.                                                       |
+| containerHeight      | number                              | (auto)  | Fixed height for container (required for vertical directions to ensure a consistent layout).                                                           |
+| heightSecurityMargin | number                              | 0       | Additional height in pixels to ensure content visibility. Useful when content contains shadows, etc.                                                   |
+| contentValidation    | object                              | Varies  | Additional [content validation](#content-validation) options (like forbidden tags, maxLength, etc.).                                                   |
+| randomize            | boolean                             | false   | Whether to randomize the order of content items.                                                                                                       |
+| startAfter           | number                              | 0       | Marquee animation will start after the specified time in milliseconds.                                                                                 |
 
 ---
 
