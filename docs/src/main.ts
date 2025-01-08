@@ -231,11 +231,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // 7. Complexe HTML Structure
   marqueejs(".marquee-complex", {
-    heightSecurityMargin: 150,
+    heightSecurityMargin: 30,
     separator: "⚡",
     gap: 80,
     speed: 33,
     cloneCount: 1,
+  });
+
+  // 7. Complexe Showcase
+  let t = marqueejs(".marquee-showcase", {
+    direction: "left",
+    heightSecurityMargin: 30,
+    gap: 100,
+    speed: 66,
+    cloneCount: 10,
   });
 
   // Smooth scroll for anchor links
@@ -245,8 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const href = (e.currentTarget as HTMLAnchorElement).getAttribute("href") || "#";
       const target =
         href === "#" ? document.documentElement : document.querySelector(href.toString());
-
-      console.log(target);
 
       if (target) {
         const targetPosition = target.getBoundingClientRect().top + window.scrollY - 25;

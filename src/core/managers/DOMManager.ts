@@ -187,8 +187,6 @@ export class DOMManager {
     }
 
     this.wrapper.appendChild(fragment);
-
-    console.log("CLONES CREATED");
   }
 
   private createSeparatorElement(): HTMLElement {
@@ -219,7 +217,6 @@ export class DOMManager {
       const separatorRect = separator.getBoundingClientRect();
 
       // Position separator in the middle of the gap
-      console.log(separator);
       const left = elRect.width - separatorRect.width / 2 + this.options.gap! / 2;
       separator.style.left = `${left}px`;
       separator.style.top = "50%";
