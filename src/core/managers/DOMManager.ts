@@ -9,7 +9,7 @@ export class DOMManager {
   private contentElements: HTMLElement[] = [];
   private clones: HTMLElement[] = [];
   private instanceId: string;
-  private separatorStyleElement: HTMLStyleElement | null = null;
+  private separatorElements: HTMLElement[] = [];
   private cloneCalculator: CloneCalculator;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
@@ -68,7 +68,7 @@ export class DOMManager {
     this.createContentElements();
   }
 
-  public createContentElements(): void {
+  public async createContentElements(): Promise<void> {
     // Clear existing elements
     this.clearElements();
 
@@ -81,10 +81,10 @@ export class DOMManager {
 
     this.wrapper.appendChild(fragment);
     this.positionElements();
-    this.createClones();
+    await this.createClones();
 
     // Add separator styles after creating elements
-    this.updateSeparatorStyles();
+    this.updateSeparators();
   }
 
   private clearElements(): void {
@@ -154,7 +154,7 @@ export class DOMManager {
     });
   }
 
-  private createClones(): void {
+  private async createClones(): Promise<void> {
     // If cloneCount is 'auto', use CloneCalculator
     const cloneCount =
       this.options.cloneCount === "auto"
@@ -187,35 +187,50 @@ export class DOMManager {
     }
 
     this.wrapper.appendChild(fragment);
+
+    console.log("CLONES CREATED");
   }
 
-  private updateSeparatorStyles(): void {
-    this.separatorStyleElement?.remove();
+  private createSeparatorElement(): HTMLElement {
+    const separator = document.createElement("span");
+    separator.className = "marquee-separator";
+    separator.innerHTML = `<span style="display: inline-block; ${this.options.separatorStyles}">${this.options.separator}</span>`;
+    separator.style.position = "absolute";
+    separator.style.whiteSpace = "pre";
+    this.separatorElements.push(separator);
+    return separator;
+  }
+
+  private updateSeparators(): void {
+    // Cleanup existing separators
+    this.separatorElements.forEach((el) => el.remove());
+    this.separatorElements = [];
+    const elements = this.wrapper.querySelectorAll(".marquee-content-item");
 
     if (!this.options.separator || ["up", "down"].includes(this.options.direction!)) {
       return;
     }
 
-    const style = document.createElement("style");
-    style.textContent = `
-      .${this.instanceId} .marquee-content-item::before {
-        content: '${this.options.separator}';
-        position: absolute;
-        left: -${this.options.gap! / 2}px;
-        top: 50%;
-        transform: translate3d(-50%, -50%, 0);
-        font-size: ${this.options.separatorFontSize!};
-        white-space: pre;
-      }
-    `;
+    // Create new separators between items
+    elements.forEach((el) => {
+      const separator = this.createSeparatorElement();
+      el.appendChild(separator);
+      const elRect = el.getBoundingClientRect();
+      const separatorRect = separator.getBoundingClientRect();
 
-    document.head.appendChild(style);
-    this.separatorStyleElement = style;
+      // Position separator in the middle of the gap
+      console.log(separator);
+      const left = elRect.width - separatorRect.width / 2 + this.options.gap! / 2;
+      separator.style.left = `${left}px`;
+      separator.style.top = "50%";
+      separator.style.lineHeight = "0.70";
+      separator.style.transform = "translateY(-50%)";
+    });
   }
 
-  private cleanupSeparatorStyles(): void {
-    this.separatorStyleElement?.remove();
-    this.separatorStyleElement = null;
+  private clearSeparatorElements(): void {
+    this.separatorElements.forEach((el) => el.remove());
+    this.separatorElements = [];
   }
 
   // Utility method to force recalculation of clones
@@ -228,10 +243,6 @@ export class DOMManager {
     if (this.container) {
       this.container.style.height = `${height}px`;
     }
-  }
-
-  public updateSeparators(): void {
-    this.updateSeparatorStyles();
   }
 
   public getWrapper(): HTMLElement {
@@ -252,7 +263,7 @@ export class DOMManager {
       this.wrapper.parentNode.insertBefore(this.element, this.wrapper);
       this.container.remove();
     }
-    this.cleanupSeparatorStyles();
+    this.clearSeparatorElements();
     document.querySelector(`.${this.instanceId}`)?.remove();
   }
 }
