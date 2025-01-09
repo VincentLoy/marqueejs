@@ -275,4 +275,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
+
+  /**
+   * MOBILE NAVIGATION
+   */
+  const mobileMenuToggle = document.getElementById("mobile-menu-toggle");
+  const mobileMenuOverlay = document.getElementById("mobile-menu-overlay");
+  const aside = document.querySelector("aside");
+
+  function toggleMenu() {
+    const isOpen = aside?.classList.contains("translate-x-0");
+    aside?.classList.toggle("translate-x-0", !isOpen);
+    aside?.classList.toggle("-translate-x-full", isOpen);
+    mobileMenuOverlay?.classList.toggle("hidden", isOpen);
+    document.body.classList.toggle("overflow-hidden", !isOpen);
+  }
+
+  mobileMenuToggle?.addEventListener("click", toggleMenu);
+  mobileMenuOverlay?.addEventListener("click", toggleMenu);
+
+  // Close menu when clicking navigation links on mobile
+  document.querySelectorAll("aside a[data-smooth]").forEach((link) => {
+    link.addEventListener("click", () => {
+      if (window.innerWidth < 1024) {
+        // lg breakpoint
+        toggleMenu();
+      }
+    });
+  });
 });
