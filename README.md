@@ -195,6 +195,14 @@ Updates the separator between elements.
 instance.updateSeparator(" • ");
 ```
 
+### updateSeparatorStyles
+
+update separators CSS styles.
+
+```typescript
+instance.updateSeparatorStyles("font-size: 1.8rem;");
+```
+
 ### updateCloneCount
 
 Updates the number of clones.

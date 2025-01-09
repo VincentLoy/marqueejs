@@ -37,6 +37,9 @@ export function marqueejs(selector: string, options: MarqueeOptions = {}): Marqu
     updateSeparator(separator: string) {
       instance.updateSeparator(separator);
     },
+    updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>) {
+      instance.updateSeparatorStyles(styles);
+    },
     updateCloneCount(cloneCount: number) {
       instance.updateCloneCount(cloneCount);
     },

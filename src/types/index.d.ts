@@ -23,7 +23,7 @@ export interface MarqueeOptions {
   /**
    * Custom additional CSS rules for the separator element. Separator element is ::before pseudo-element.
    */
-  separatorStyles?: string;
+  separatorStyles?: Partial<CSSStyleDeclaration>;
 
   /**
    * Array of HTML strings to use as marquee items.
@@ -110,6 +110,12 @@ export interface MarqueeInstance {
    * @param separator - New separator string
    */
   updateSeparator(separator: string): void;
+
+  /**
+   * Update the separator styles
+   * @param styles - New separator styles
+   */
+  updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void;
 
   /**
    * Update the number of clones

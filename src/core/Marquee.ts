@@ -254,6 +254,10 @@ export class Marquee {
     this.animationManager?.recalculatePositions();
   }
 
+  public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
+    this.options.separatorStyles = styles;
+  }
+
   public updateCloneCount(cloneCount: number): void {
     if (
       !Number.isInteger(cloneCount) ||

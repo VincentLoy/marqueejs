@@ -112,8 +112,13 @@ document.addEventListener("DOMContentLoaded", () => {
     separator: "/",
     separatorStyles: "color: #58e; font-size: 1.8rem;",
     heightSecurityMargin: 100,
-    gap: 100,
+    gap: 40,
   });
+
+  setTimeout(() => {
+    sep.updateSeparator("🚀");
+    sep.updateSeparatorStyles("color: #f00; font-size: 1rem;");
+  }, 2000);
 
   // Vertical
   let test = marqueejs(".marquee-vertical", {
@@ -142,7 +147,6 @@ document.addEventListener("DOMContentLoaded", () => {
   marqueejs(".marquee-fast", {
     speed: 200,
     pauseOnHover: true,
-    cloneCount: 3,
   });
 
   // Advanced Examples Section
