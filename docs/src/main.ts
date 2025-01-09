@@ -1,5 +1,14 @@
 import "./style.css";
+import "highlight.js/styles/atom-one-dark.css";
 import { marqueejs } from "../../src/index";
+import hljs from "highlight.js/lib/core";
+import javascript from "highlight.js/lib/languages/javascript";
+import css from "highlight.js/lib/languages/css";
+import elm from "highlight.js/lib/languages/elm";
+import xml from "highlight.js/lib/languages/xml";
+import json from "highlight.js/lib/languages/json";
+
+import { InteractiveDemo } from "./ts/InteractiveDemo";
 
 /* all supported classes for color props
     bg-yellow-100 text-yellow-800
@@ -90,6 +99,13 @@ const FAKED_DATA = [
 
 // Initialize demos
 document.addEventListener("DOMContentLoaded", () => {
+  hljs.registerLanguage("javascript", javascript);
+  hljs.registerLanguage("css", css);
+  hljs.registerLanguage("elm", elm);
+  hljs.registerLanguage("html", xml);
+  hljs.registerLanguage("json", json);
+  hljs.highlightAll();
+
   let getBadge = (color: string, text: string) => {
     return `<span class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-${color}-100 text-${color}-800 rounded">${text}</span>`;
   };
@@ -145,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fast with pause
   marqueejs(".marquee-fast", {
-    speed: 200,
+    speed: 350,
     pauseOnHover: true,
   });
 
@@ -251,6 +267,9 @@ document.addEventListener("DOMContentLoaded", () => {
     cloneCount: 10,
   });
 
+  // 8. Interactive Demo
+  new InteractiveDemo();
+
   // Smooth scroll for anchor links
   document.querySelectorAll("[data-smooth]").forEach((anchor) => {
     anchor.addEventListener("click", (e) => {
@@ -280,6 +299,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  function updateActiveNavFromURL() {
+    // Get current hash from URL
+    const hash = window.location.hash;
+
+    // Remove all active classes first
+    document.querySelectorAll(".nav-active").forEach((el) => el.classList.remove("nav-active"));
+
+    // If we have a hash, find and activate matching link
+    if (hash) {
+      const activeLink = document.querySelector(`[data-smooth][href="${hash}"]`);
+      activeLink?.classList.add("nav-active");
+    }
+  }
+
+  updateActiveNavFromURL();
+
   /**
    * MOBILE NAVIGATION
    */
@@ -306,5 +341,51 @@ document.addEventListener("DOMContentLoaded", () => {
         toggleMenu();
       }
     });
+  });
+
+  /**
+   * PACKAGE MANAGER SWITCHER
+   */
+  // Elements
+  const buttons = document.querySelectorAll(".package-manager-btn");
+  const commands = document.querySelectorAll(".package-manager-cmd");
+  const copyButton = document.querySelector(".copy-button");
+
+  // Switch package manager
+  buttons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const manager = (btn as HTMLElement).dataset.packageManager;
+      if (!manager) return;
+
+      // Update button states
+      buttons.forEach((b) => b.classList.toggle("active", b === btn));
+
+      // Update command visibility
+      commands.forEach((cmd) => {
+        cmd.classList.toggle("active", cmd.classList.contains(manager));
+      });
+    });
+  });
+
+  // Copy command
+  copyButton?.addEventListener("click", async () => {
+    const activeCommand = document.querySelector(".package-manager-cmd.active code");
+    if (!activeCommand) return;
+
+    try {
+      await navigator.clipboard.writeText(activeCommand.textContent || "");
+
+      // Visual feedback
+      const icon = copyButton.querySelector("i");
+      icon?.classList.remove("icon-[lucide--copy]");
+      icon?.classList.add("icon-[lucide--check]");
+
+      setTimeout(() => {
+        icon?.classList.remove("icon-[lucide--check]");
+        icon?.classList.add("icon-[lucide--copy]");
+      }, 2000);
+    } catch (err) {
+      console.error("Failed to copy:", err);
+    }
   });
 });

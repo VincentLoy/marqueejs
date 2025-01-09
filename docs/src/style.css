@@ -35,10 +35,14 @@
   }
 
   .nav-active {
-    @apply text-blue-600 dark:text-blue-400;
+    @apply text-blue-600 dark:text-blue-400 font-bold;
   }
 
   .sections {
     @apply bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 rounded-xl p-4 lg:p-8;
+  }
+
+  .package-manager-cmd:not(.active) {
+    @apply hidden;
   }
 }

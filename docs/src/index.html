@@ -32,83 +32,112 @@
                     View on GitHub </a>
             </div>
         </div>
-
         <!-- Mobile Menu Button -->
         <button id="mobile-menu-toggle"
             class="fixed top-4 right-4 z-50 p-2 rounded-lg bg-white shadow-md lg:hidden w-12 h-12 flex items-center justify-center">
             <i class="icon-[lucide--menu] w-6 h-6"></i>
         </button>
-
     </header>
 
     <div class="container mx-auto">
         <div class="grid grid-cols-12 gap-8">
-
             <!-- Sidebar -->
             <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
             <aside
-                class="fixed inset-y-0 left-0 w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:bg-transparent lg:sticky lg:top-8 lg:transform-none lg:z-0 lg:col-span-2 lg:p-8">
-                <nav class="h-full overflow-y-auto p-6 lg:p-0">
-                    <ul class="space-y-4">
-                        <li class="mt-4">
-                            <a href="#" data-smooth class="nav-link">
-                                <h2 class="text-2xl font-extrabold text-black mb-6 tracking-tight">
-                                    <span class="inline-block animate-fade-in-up">Marquee</span>
-                                    <span
-                                        class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400 animate-fade-in-up animation-delay-100">JS</span>
-                                </h2>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#why" data-smooth class="nav-link">
-                                <i class="icon-[lucide--lightbulb] w-4 h-4 mr-1"></i>
-                                Why MarqueeJS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#installation" data-smooth class="nav-link">
-                                <i class="icon-[lucide--download] w-4 h-4 mr-1"></i>
-                                Installation
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#examples" data-smooth class="nav-link">
-                                <i class="icon-[lucide--layout-list] w-4 h-4 mr-1"></i>
-                                Examples
-                            </a>
+                class="fixed inset-y-0 left-0 w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:bg-transparent lg:block lg:transform-none lg:z-0 lg:col-span-2">
+                <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto p-6 lg:p-0">
+                    <nav class="h-full">
+                        <ul class="space-y-4">
+                            <li class="mt-4">
+                                <a href="#" data-smooth class="nav-link">
+                                    <h2 class="text-2xl font-extrabold text-black mb-6 tracking-tight">
+                                        <span class="inline-block animate-fade-in-up">Marquee</span>
+                                        <span
+                                            class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400 animate-fade-in-up animation-delay-100">JS</span>
+                                    </h2>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#why" data-smooth class="nav-link">
+                                    <i class="icon-[lucide--lightbulb] w-4 h-4 mr-1"></i>
+                                    Why MarqueeJS
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#installation" data-smooth class="nav-link">
+                                    <i class="icon-[lucide--download] w-4 h-4 mr-1"></i>
+                                    Installation
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#examples" data-smooth class="nav-link">
+                                    <i class="icon-[lucide--layout-list] w-4 h-4 mr-1"></i>
+                                    Examples
+                                </a>
 
-                            <ul class="pl-4 mt-2 space-y-2 border-l border-gray-200 dark:border-gray-700">
-                                <li class="relative">
-                                    <a href="#rtl" data-smooth class="nav-sub-link">Left to Right</a>
-                                </li>
-                                <li class="relative">
-                                    <a href="#with-separator" data-smooth class="nav-sub-link">With Separator</a>
-                                </li>
-                                <li class="relative">
-                                    <a href="#vertical-animation" data-smooth class="nav-sub-link">Vertical
-                                        Animation</a>
-                                </li>
-                                <li class="relative">
-                                    <a href="#advanced-examples" data-smooth class="nav-sub-link">Advanced Examples</a>
-                                </li>
-                            </ul>
-                        </li>
+                                <ul class="pl-4 mt-2 space-y-2 border-l border-gray-200 dark:border-gray-700">
+                                    <!-- Basic Examples -->
+                                    <li class="relative">
+                                        <a href="#basic-marquee" data-smooth class="nav-sub-link">Basic Marquee</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#direction-right" data-smooth class="nav-sub-link">Right Direction</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#with-separator" data-smooth class="nav-sub-link">With Separator</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#direction-vertical" data-smooth class="nav-sub-link">Vertical
+                                            Direction</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#pause-hover" data-smooth class="nav-sub-link">Fast with Pause</a>
+                                    </li>
 
-                        <li>
-                            <a data-smooth href="#usage" class="nav-link">
-                                <i class="icon-[lucide--code] w-4 h-4 mr-1"></i>
-                                Usage
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                                    <!-- Advanced Examples -->
+                                    <li class="relative">
+                                        <a href="#dynamic-content" data-smooth class="nav-sub-link">Dynamic News
+                                            Ticker</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#social-media-feed" data-smooth class="nav-sub-link">Social Feed</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#auto-changing-speed" data-smooth class="nav-sub-link">Auto Speed</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#interactive-gap" data-smooth class="nav-sub-link">Gap Control</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#direction-switching" data-smooth class="nav-sub-link">Direction
+                                            Switch</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#clone-count" data-smooth class="nav-sub-link">Clone Control</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#complex-html" data-smooth class="nav-sub-link">Complex HTML</a>
+                                    </li>
+                                    <li class="relative">
+                                        <a href="#showcase" data-smooth class="nav-sub-link">Logo Showcase</a>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a data-smooth href="#usage" class="nav-link">
+                                    <i class="icon-[lucide--code] w-4 h-4 mr-1"></i>
+                                    Usage
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
             </aside>
-
             <!-- Main Content -->
             <main class="col-span-12 lg:col-span-10 px-4 py-8">
-
                 <!-- WHY MarqueeJS -->
-                <section id="why" class="py-4 sm:py-8 px-4 sm:px-6 lg:px-8">
+                <section id="why" class="py-4 sm:py-8">
                     <div class="max-w-3xl mb-8">
                         <h2 class="text-3xl sm:text-4xl mb-3 sm:mb-4">
                             <span class="swag-title">Why</span>
@@ -121,8 +150,7 @@
                         <p class="text-base sm:text-lg text-gray-600">Modern, lightweight and flexible marquee solution
                             for your web applications</p>
                     </div>
-
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full">
                         <!-- Performance Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
                             <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
@@ -132,7 +160,6 @@
                             <p class="text-sm sm:text-base text-gray-600"><b>Zero dependencies</b>, optimized
                                 animations, and minimal DOM operations for buttery-smooth performance.</p>
                         </div>
-
                         <!-- Flexibility Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
                             <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
@@ -142,7 +169,6 @@
                             <p class="text-sm sm:text-base text-gray-600">Multiple directions, dynamic content updates,
                                 custom speeds, and flexible styling options.</p>
                         </div>
-
                         <!-- Modern Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
                             <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
@@ -155,44 +181,88 @@
                     </div>
                 </section>
 
-
+                <!-- Installation -->
+                <section id="installation" class="py-8">
+                    <h2 class="swag-title">Installation</h2>
+                    <div class="max-w-3xl mb-8">
+                        <div class="flex gap-2 mb-4">
+                            <button data-package-manager="npm"
+                                class="package-manager-btn active inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all duration-200 hover:border-indigo-300 active:scale-95 [&.active]:bg-indigo-200 [&.active]:border-indigo-300 [&.active]:text-indigo-700">
+                                <i class="icon-[vscode-icons--file-type-npm] w-5 h-5"></i>
+                                <span>npm</span>
+                            </button>
+                            <button data-package-manager="yarn"
+                                class="package-manager-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all duration-200 hover:border-indigo-300 active:scale-95 [&.active]:bg-indigo-200 [&.active]:border-indigo-300 [&.active]:text-indigo-700">
+                                <i class="icon-[vscode-icons--file-type-yarn] w-5 h-5"></i>
+                                <span>yarn</span>
+                            </button>
+                            <button data-package-manager="pnpm"
+                                class="package-manager-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all duration-200 hover:border-indigo-300 active:scale-95 [&.active]:bg-indigo-200 [&.active]:border-indigo-300 [&.active]:text-indigo-700">
+                                <i class="icon-[vscode-icons--file-type-pnpm] w-5 h-5"></i>
+                                <span>pnpm</span>
+                            </button>
+                            <button data-package-manager="bun"
+                                class="package-manager-btn inline-flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-sm text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 transition-all duration-200 hover:border-indigo-300 active:scale-95 [&.active]:bg-indigo-200 [&.active]:border-indigo-300 [&.active]:text-indigo-700">
+                                <i class="icon-[vscode-icons--file-type-bun] w-5 h-5"></i>
+                                <span>bun</span>
+                            </button>
+                        </div>
+                        <div class="relative">
+                            <pre
+                                class="package-manager-cmd npm active"><code class="rounded-xl language-elm">npm install marqueejs</code></pre>
+                            <pre
+                                class="package-manager-cmd yarn"><code class="rounded-xl language-elm">yarn add marqueejs</code></pre>
+                            <pre
+                                class="package-manager-cmd pnpm"><code class="rounded-xl language-elm">pnpm add marqueejs</code></pre>
+                            <pre
+                                class="package-manager-cmd bun"><code class="rounded-xl language-elm">bun add marqueejs</code></pre>
+                            <button class="copy-button absolute top-2 right-2 p-2 text-gray-400 hover:text-gray-600">
+                                <i class="icon-[lucide--copy] w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </section>
 
                 <!-- Examples -->
                 <section id="examples" class="py-8">
                     <h2 class="swag-title">Examples</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Basic Example -->
-                        <section class="sections">
+                        <section class="sections" id="basic-marquee">
                             <h3 class="text-xl font-bold mb-4 dark:text-white">Basic Example</h3>
                             <div class="demo-box">
                                 <div class="marquee-basic">
                                     <span>Basic marquee example</span>
                                 </div>
                             </div>
-                            <pre
-                                class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-basic');</code></pre>
                         </section>
 
                         <!-- Reverse Direction -->
-                        <section class="sections">
-                            <h3 class="text-xl font-bold mb-4 dark:text-white" id="rtl">RTL mode</h3>
+                        <section class="sections" id="direction-right">
+                            <h3 class="text-xl font-bold mb-4 dark:text-white">RTL mode</h3>
                             <div class="demo-box">
                                 <div class="marquee-rtl">
                                     <div>
                                         <span
                                             class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-red-100 text-red-800 rounded">>>></span>
-                                        <span>&nbsp; This text moves from left to right</span>
+                                        <span>&nbsp; This text</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-blue-100 text-red-800 rounded">>>></span>
+                                        <span>&nbsp; moves from</span>
+                                    </div>
+                                    <div>
+                                        <span
+                                            class="inline-flex items-center px-2 py-0.5 text-xs font-medium bg-green-100 text-red-800 rounded">>>></span>
+                                        <span>&nbsp; left to right</span>
                                     </div>
                                 </div>
                             </div>
-                            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-rtl', {
-                            direction: 'right',
-                            speed: 150
-                        });</code></pre>
                         </section>
 
                         <!-- With Separator -->
-                        <section class="sections">
+                        <section class="sections" id="with-separator">
                             <h3 class="text-xl font-bold mb-4 dark:text-white">With Separator</h3>
                             <div class="demo-box">
                                 <div class="marquee-with-separator">
@@ -203,17 +273,10 @@
                                     </p>
                                 </div>
                             </div>
-                            <pre class="bg-gray-800 text-white p-4 rounded-lg">
-                            <code>
-marqueejs('.marquee-separator', {
-    separator: '•',
-    gap: 40
-});</code>
-                        </pre>
                         </section>
 
                         <!-- Vertical -->
-                        <section class="sections">
+                        <section class="sections" id="direction-vertical">
                             <h3 class="text-xl font-bold mb-4 dark:text-white">Vertical Animation</h3>
                             <div class="demo-box text-center">
                                 <div class="marquee-vertical">
@@ -312,24 +375,16 @@ marqueejs('.marquee-separator', {
                                     </span>
                                 </div>
                             </div>
-                            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-vertical', {
-            direction: 'up',
-            speed: 80
-            });</code></pre>
                         </section>
 
                         <!-- Fast with Pause -->
-                        <section class="sections lg:col-span-2 mb-4">
+                        <section class="sections lg:col-span-2 mb-4" id="pause-hover">
                             <h3 class="text-xl font-bold mb-4 dark:text-white">Fast with Pause on Hover</h3>
                             <div class="demo-box">
                                 <div class="marquee-fast">
                                     <span>This moves fast but pauses on hover</span>
                                 </div>
                             </div>
-                            <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>marqueejs('.marquee-fast', {
-    speed: 200,
-    pauseOnHover: true
-});</code></pre>
                         </section>
 
                     </div>
@@ -338,7 +393,7 @@ marqueejs('.marquee-separator', {
                     <h2 class="text-2xl font-bold my-8 dark:text-white">Advanced Examples</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <!-- Dynamic News Ticker -->
-                        <section class="sections">
+                        <section class="sections" id="dynamic-content">
                             <h4 class="text-lg font-semibold mb-2">Dynamic News Ticker</h4>
                             <div class="demo-box mb-8">
                                 <div id="news-ticker"></div>
@@ -346,7 +401,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Social Feed -->
-                        <section class="sections">
+                        <section class="sections" id="social-media-feed">
                             <h4 class="text-lg font-semibold mb-2">Social Media Feed</h4>
                             <div class="demo-box mb-8">
                                 <div id="social-feed"></div>
@@ -354,7 +409,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Speed Control Demo -->
-                        <section class="sections">
+                        <section class="sections" id="auto-changing-speed">
                             <h4 class="text-lg font-semibold mb-2">Auto-changing Speed</h4>
                             <div class="demo-box mb-8">
                                 <div id="speed-demo">
@@ -364,7 +419,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Interactive Gap Control -->
-                        <section class="sections">
+                        <section class="sections" id="interactive-gap">
                             <h4 class="text-lg font-semibold mb-2">Interactive Gap Control</h4>
                             <div class="demo-box mb-8">
                                 <div id="gap-demo"></div>
@@ -373,7 +428,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Direction Switching -->
-                        <section class="sections">
+                        <section class="sections" id="direction-switching">
                             <h4 class="text-lg font-semibold mb-2">Alternating Direction</h4>
                             <div class="demo-box mb-8">
                                 <div id="direction-demo">
@@ -383,7 +438,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Clone Count Demo -->
-                        <section class="sections">
+                        <section class="sections" id="clone-count">
                             <h4 class="text-lg font-semibold mb-2">Clone Count Control</h4>
                             <div class="demo-box mb-8">
                                 <p class="text-sm text-gray-600 mb-4">Adjust the number of clones to see how it affects
@@ -405,7 +460,7 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Complex HTML Structure Marquee -->
-                        <section class="sections lg:col-span-2">
+                        <section class="sections lg:col-span-2" id="complex-html">
                             <h4 class="text-lg font-semibold mb-2">Complex HTML Structure</h4>
                             <div class="demo-box mb-8">
                                 <div class="marquee-complex">
@@ -451,10 +506,10 @@ marqueejs('.marquee-separator', {
                         </section>
 
                         <!-- Complex HTML Structure Marquee -->
-                        <section class="sections lg:col-span-2">
+                        <section class="sections lg:col-span-2" id="showcase">
                             <h4 class="text-lg font-semibold mb-2">Brands Showcase</h4>
                             <div class="demo-box mb-8">
-                                <div class="marquee-showcase list-none">
+                                <div class="marquee-showcase">
                                     <div class="block">
                                         <img src="https://static.cdnlogo.com/logos/n/4/netflix.svg" alt="Netflix"
                                             class="h-20 w-48 object-contain opacity-50 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300">
@@ -482,6 +537,106 @@ marqueejs('.marquee-separator', {
                                 </div>
                             </div>
                         </section>
+
+                        <section class="sections lg:col-span-2" id="interactive-controls">
+                            <h4 class="text-lg font-semibold mb-2">Interactive Controls</h4>
+                            <div class="demo-box mb-8">
+                                <!-- Live Preview -->
+                                <div id="interactive-marquee" class="border-b border-gray-200">
+                                    <span>Interactive marquee content</span>
+                                </div>
+
+                                <!-- Control Panels -->
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Basic Controls -->
+                                    <div class="space-y-4">
+                                        <h5 class="font-medium text-gray-900">Basic Controls</h5>
+                                        <div class="flex gap-2">
+                                            <button id="pause-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                <i class="icon-[lucide--pause] w-4 h-4"></i>
+                                            </button>
+                                            <button id="resume-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                <i class="icon-[lucide--play] w-4 h-4"></i>
+                                            </button>
+                                            <button id="direction-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                <i class="icon-[lucide--refresh-cw] w-4 h-4"></i>
+                                            </button>
+                                        </div>
+
+                                        <!-- Speed Control -->
+                                        <div>
+                                            <label class="text-sm text-gray-600 mb-2 block">Speed (px/s)</label>
+                                            <input type="range" id="speed-control" min="10" max="200" value="100"
+                                                class="w-full">
+                                            <span id="speed-value" class="text-xs text-gray-500">100 px/s</span>
+                                        </div>
+
+                                        <div>
+                                            <label class="text-sm text-gray-600 mb-2 block">Separator Control</label>
+                                            <div class="flex items-center gap-2">
+                                                <input type="text" id="separator-input" placeholder="•" maxlength="1"
+                                                    class="w-14 px-3 py-2 rounded-lg border border-gray-200 text-sm text-center">
+
+                                                <div class="flex-1">
+                                                    <select id="separator-size"
+                                                        class="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm">
+                                                        <option value="0.8em">Small</option>
+                                                        <option value="1em" selected>Normal</option>
+                                                        <option value="1.2em">Large</option>
+                                                        <option value="1.5em">Extra Large</option>
+                                                    </select>
+                                                </div>
+
+                                                <button id="apply-separator-btn"
+                                                    class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                    Apply
+                                                </button>
+                                            </div>
+                                            <p class="text-xs text-gray-500 mt-1">Separator preview: <span
+                                                    id="separator-preview" class="font-medium">•</span></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Content Controls -->
+                                    <div class="space-y-4">
+                                        <h5 class="font-medium text-gray-900">Content Management</h5>
+
+                                        <div class="flex gap-2">
+                                            <input type="text" id="content-input" placeholder="Enter content..."
+                                                class="flex-1 px-3 py-2 rounded-lg border border-gray-200 text-sm">
+                                            <input type="number" id="patch-index" placeholder="Index" min="0"
+                                                class="w-20 px-3 py-2 rounded-lg border border-gray-200 text-sm">
+                                        </div>
+
+                                        <div class="flex flex-wrap gap-2">
+                                            <button id="add-start-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                Add to Start
+                                            </button>
+                                            <button id="add-end-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                Add to End
+                                            </button>
+                                            <button id="replace-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                Replace All
+                                            </button>
+                                            <button id="patch-btn"
+                                                class="px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 border border-indigo-200 text-indigo-600 text-sm font-medium">
+                                                Patch at Index
+                                            </button>
+                                        </div>
+
+                                        <div id="content-preview"
+                                            class="space-y-2 max-h-32 overflow-y-auto p-2 bg-white rounded-lg border border-gray-200">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
                     </div>
                 </section>
 
@@ -491,14 +646,56 @@ marqueejs('.marquee-separator', {
                 <section class="py-8">
                     <h2 id="usage" class="swag-title">Usage</h2>
                     <div class="space-y-4">
-                        <p class="dark:text-white">Import and initialize MarqueeJS:</p>
-                        <pre class="bg-gray-800 text-white p-4 rounded-lg"><code>import { marqueejs } from 'marqueejs';
+                        <p class="dark:text-white">
+                            Import and initialize
+                            <span class="font-extrabold text-black mb-6 tracking-tight">
+                                <span class="inline-block animate-fade-in-up">Marquee</span>
+                                <span
+                                    class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400 animate-fade-in-up animation-delay-100">JS</span>
+                            </span>
+                        </p>
+                        <pre><code class="rounded-lg">import { marqueejs } from 'marqueejs';
 
-        marqueejs('.selector', {
-            speed: 100,
-            direction: 'left',
-            pauseOnHover: true
-        });</code></pre>
+// or just marqueejs('selector', options); if you'll never use the methods
+let marqueeInstance = marqueejs('.selector', {
+    // Core animation options
+    speed: 100,
+    direction: 'left',
+    startAfter: 1000,
+    pauseOnHover: true,
+
+    // Layout options
+    gap: 20,
+    containerHeight: 400,
+    heightSecurityMargin: 10,
+
+    // Content management
+    contentList: [
+        '&lt;div class="item"&gt;Item 1&lt;/div&gt;',
+        '&lt;div class="item"&gt;Item 2&lt;/div&gt;',
+        '&lt;div class="item"&gt;Item 3&lt;/div&gt;',
+    ],
+    keepOriginalContent: true,
+    randomize: false,
+
+    // Clone management
+    cloneCount: 'auto', // or number between 1-15
+
+    // Separator configuration
+    separator: '•',
+    separatorStyles: {
+        fontSize: '1.2em',
+        color: '#666',
+        marginTop: '-2px'
+    },
+
+    // Content validation
+    contentValidation: {
+        maxLength: 1000,
+        forbiddenTags: ['script', 'iframe'],
+        forbiddenAttributes: ['onerror', 'onload']
+    }
+});</code></pre>
                     </div>
                 </section>
             </main>
