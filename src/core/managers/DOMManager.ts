@@ -14,13 +14,13 @@ export class DOMManager {
   private isHorizontal: boolean;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
+    this.isHorizontal = ["left", "right"].includes(options.direction!);
     this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
     this.element = element;
     this.options = options;
     this.container = this.createContainer();
     this.wrapper = this.createWrapper();
     this.cloneCalculator = new CloneCalculator(options.direction!);
-    this.isHorizontal = ["left", "right"].includes(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
 
