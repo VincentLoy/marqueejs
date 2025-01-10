@@ -1,6 +1,7 @@
 import type { MarqueeOptions, ElementMetrics } from "../../types";
 import { CloneCalculator } from "./CloneCalculator";
 import { ElementFactory } from "../factories/ElementFactory";
+import { SeparatorManager } from "./SeparatorManager";
 
 export class DOMManager {
   private container: HTMLElement;
@@ -13,6 +14,7 @@ export class DOMManager {
   private cloneCalculator: CloneCalculator;
   private isHorizontal: boolean;
   private elementFactory: ElementFactory;
+  private separatorManager: SeparatorManager;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
     this.isHorizontal = ["left", "right"].includes(options.direction!);
@@ -22,6 +24,7 @@ export class DOMManager {
     this.elementFactory = new ElementFactory(this.element, this.options);
     this.container = this.elementFactory.createContainer();
     this.wrapper = this.elementFactory.createWrapper();
+    this.separatorManager = new SeparatorManager(this.element, this.options, this.wrapper);
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
@@ -63,7 +66,7 @@ export class DOMManager {
     await this.createClones();
 
     // Add separator styles after creating elements
-    this.updateSeparators();
+    this.separatorManager.updateSeparators();
   }
 
   private clearElements(): void {
@@ -154,27 +157,6 @@ export class DOMManager {
     }
 
     this.wrapper.appendChild(fragment);
-  }
-
-  private updateSeparators(): void {
-    if (!this.options.separator || !this.isHorizontal) return;
-
-    const elements = this.wrapper.querySelectorAll(".marquee-content-item");
-
-    // Create new separators between items
-    elements.forEach((el) => {
-      const separator = this.elementFactory.createSeparatorElement();
-      el.appendChild(separator);
-      const elRect = el.getBoundingClientRect();
-      const separatorRect = separator.getBoundingClientRect();
-
-      // Position separator in the middle of the gap
-      const left = elRect.width - separatorRect.width / 2 + this.options.gap! / 2;
-      separator.style.left = `${left}px`;
-      separator.style.top = "50%";
-      separator.style.lineHeight = "0.70";
-      separator.style.transform = "translateY(-50%)";
-    });
   }
 
   // Utility method to force recalculation of clones
