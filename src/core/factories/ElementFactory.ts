@@ -1,5 +1,15 @@
 import { MarqueeOptions } from "../../types";
 
+/**
+ * Factory class responsible for creating and configuring DOM elements for the marquee component.
+ *
+ * @class ElementFactory
+ *
+ * @property {string} instanceId - Unique identifier for the marquee instance
+ * @property {Partial<MarqueeOptions>} options - Configuration options for the marquee
+ * @property {HTMLElement} element - The base HTML element to transform into a marquee
+ * @property {boolean} isHorizontal - Indicates if the marquee scrolls horizontally
+ */
 export class ElementFactory {
   private instanceId: string;
   private options: Partial<MarqueeOptions>;
