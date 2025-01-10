@@ -353,7 +353,6 @@ export class Marquee {
     if (!this.options.contentList?.length) {
       this.options.contentList = newContent;
     } else {
-      // If new content length is greater or equal to current content
       // replace everything
       if (newContent.length >= this.options.contentList.length) {
         this.options.contentList = newContent;
@@ -373,13 +372,9 @@ export class Marquee {
     }
 
     if (reset) {
-      // Wait for reset to complete
       await this.reset();
     } else {
-      // Recreate content elements
       this.domManager?.createContentElements();
-
-      // Recalculate positions and restart animation
       this.animationManager?.recalculatePositions();
     }
 

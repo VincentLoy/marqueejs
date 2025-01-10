@@ -24,7 +24,7 @@ export class CloneCalculator {
     }
 
     // Calculate minimum number of clones needed
-    // +1 to ensure continuous scrolling
+    // (+1 to ensure continuous scrolling)
     const minClones = Math.ceil(metrics.containerSize / metrics.contentSize) + 1;
 
     // Cache the new metrics
