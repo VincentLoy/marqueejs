@@ -119,7 +119,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Right to left
   marqueejs(".marquee-rtl", {
     direction: "right",
-    speed: 150,
+    speed: 50,
+    gap: 10,
+    cloneCount: 1,
   });
 
   // With separator
@@ -141,7 +143,8 @@ document.addEventListener("DOMContentLoaded", () => {
     direction: "up",
     speed: 25,
     gap: 15,
-    containerHeight: 350,
+    cloneCount: 1,
+    containerHeight: 250,
     keepOriginalContent: true,
     pauseOnHover: true,
     randomize: true,
@@ -158,6 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
       '<b>Stunt Coordinator:</b> <a class="text-blue-600" href="https://harrypotter.fandom.com/wiki/Alastor_Moody" rel="nofollow noopener" target="_blank">Mad-Eye Moody</a>',
     ],
   });
+
+  setTimeout(() => {
+    // test.pause();
+  }, 500);
 
   // Fast with pause
   marqueejs(".marquee-fast", {
