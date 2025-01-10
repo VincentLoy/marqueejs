@@ -930,7 +930,7 @@ instance.addContent("New item", false, () => {
                         <p class="text-gray-600 mb-2">
                             Replaces the entire content list at once, discarding the old list entirely.
                         </p>
-                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.replaceContent(['<span class="badge">FLASH NEWS</span> Completely new content', "Another new item"]);
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.replaceContent(['&lt;span class="badge"&gt;FLASH NEWS&lt;/span&gt; Completely new content', "Another new item"]);
                 </code></pre>
                     </div>
 
@@ -1082,25 +1082,25 @@ console.log(currentItems);
 
     // example
     console.log(instance.getContentList());
-    // > output: ['a', 'b', 'c', 'd']
+    // &gt; output: ['a', 'b', 'c', 'd']
 
     // Add content at the start
     instance.patchContent("New content", "start");
-    // > result: ['New Content', 'b', 'c', 'd']
+    // &gt; result: ['New Content', 'b', 'c', 'd']
 
     // Add content at the end
     instance.patchContent(["Item 1", "Item 2"], "end");
-    // > result: ['a', 'b', 'Item 1', 'Item 2']
+    // &gt; result: ['a', 'b', 'Item 1', 'Item 2']
 
     // Replace existing content at start
     instance.patchContent("New content", "start", true);
-    // > result: ['New Content', 'b', 'c', 'd'] + reset the marquee
+    // &gt; result: ['New Content', 'b', 'c', 'd'] + reset the marquee
 
     // Add with callback
     instance.patchContent("New content", "end", false, () => {
         console.log("Content patched");
     });
-    // > result: ['a', 'b', 'c', 'New content'] + callback called after processing new items
+    // &gt; result: ['a', 'b', 'c', 'New content'] + callback called after processing new items
                 </code></pre>
                     </div>
                 </section>
@@ -1110,6 +1110,11 @@ console.log(currentItems);
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="ma</footer>x-w-4xl mx-auto px-4 text-center">
+            <p class="text-xl md:text-4xl font-extrabold text-white mb-8 tracking-tight">
+                <span class="inline-block animate-fade-in-up">Marquee</span>
+                <span
+                    class="inline-block text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-pink-400 animate-fade-in-up animation-delay-100">JS</span>
+            </p>
             <div class="flex flex-col space-y-4">
                 <div class="flex justify-center space-x-4">
                     <a href="https://github.com/VincentLoy/marqueejs" target="_blank"
