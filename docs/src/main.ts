@@ -261,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     heightSecurityMargin: 30,
     separator: "⚡",
     gap: 80,
-    speed: 33,
+    speed: 66,
     cloneCount: 1,
   });
 
@@ -270,7 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     direction: "left",
     heightSecurityMargin: 30,
     gap: 100,
-    speed: 66,
+    speed: 33,
     cloneCount: 10,
   });
 
