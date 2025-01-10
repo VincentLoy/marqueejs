@@ -134,6 +134,24 @@
                                     Usage
                                 </a>
                             </li>
+                            <li>
+                                <a data-smooth href="#options" class="nav-link">
+                                    <i class="icon-[lucide--settings-2] w-4 h-4 mr-1"></i>
+                                    Options
+                                </a>
+                            </li>
+                            <li>
+                                <a data-smooth href="#content-validation" class="nav-link">
+                                    <i class="icon-[lucide--shield-check] w-4 h-4 mr-1"></i>
+                                    Content Validation
+                                </a>
+                            </li>
+                            <li>
+                                <a data-smooth href="#methods" class="nav-link">
+                                    <i class="icon-[lucide--wrench] w-4 h-4 mr-1"></i>
+                                    Methods
+                                </a>
+                            </li>
                         </ul>
                     </nav>
                 </div>
@@ -662,6 +680,428 @@ let marqueeInstance = marqueejs('.selector', {
         forbiddenAttributes: ['onerror', 'onload']
     }
 });</code></pre>
+                    </div>
+                </section>
+
+                <section class="py-8">
+                    <h2 id="options" class="swag-title">Options Reference</h2>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="text-xs uppercase bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 font-medium">Option</th>
+                                    <th class="px-6 py-3 font-medium">Type</th>
+                                    <th class="px-6 py-3 font-medium">Default</th>
+                                    <th class="px-6 py-3 font-medium">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">speed</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number</code></td>
+                                    <td class="px-6 py-4">100</td>
+                                    <td class="px-6 py-4">Scrolling speed in pixels per second. Must be positive.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">direction</td>
+                                    <td class="px-6 py-4"><code
+                                            class="text-pink-600">'left' | 'right' | 'up' | 'down'</code></td>
+                                    <td class="px-6 py-4">'left'</td>
+                                    <td class="px-6 py-4">The direction in which the marquee scrolls.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">pauseOnHover</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">boolean</code></td>
+                                    <td class="px-6 py-4">false</td>
+                                    <td class="px-6 py-4">Pauses the animation when the mouse hovers over the marquee.
+                                    </td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">gap</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number</code></td>
+                                    <td class="px-6 py-4">20</td>
+                                    <td class="px-6 py-4">The gap in pixels between items/clones.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">cloneCount</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number | 'auto'</code></td>
+                                    <td class="px-6 py-4">'auto'</td>
+                                    <td class="px-6 py-4">Number of times each item is cloned for continuous flow.
+                                        Maximum is 15.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">separator</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">string</code></td>
+                                    <td class="px-6 py-4">''</td>
+                                    <td class="px-6 py-4">Character or string to display between items for horizontal
+                                        scrolling. Ignored for vertical scrolling.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">separatorStyles</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">string</code></td>
+                                    <td class="px-6 py-4">''</td>
+                                    <td class="px-6 py-4">Inline CSS to apply to the separators, useful for addressing
+                                        line height issues with certain fonts.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">contentList</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">string[]</code></td>
+                                    <td class="px-6 py-4">[]</td>
+                                    <td class="px-6 py-4">Array of HTML strings to be displayed by the marquee.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">keepOriginalContent</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">boolean</code></td>
+                                    <td class="px-6 py-4">false</td>
+                                    <td class="px-6 py-4">Whether to preserve the original HTML content inside the
+                                        marquee element when using contentList.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">containerHeight</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number</code></td>
+                                    <td class="px-6 py-4">(auto)</td>
+                                    <td class="px-6 py-4">Fixed height for container (required for vertical directions
+                                        to ensure a consistent layout).</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">heightSecurityMargin</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number</code></td>
+                                    <td class="px-6 py-4">0</td>
+                                    <td class="px-6 py-4">Additional height in pixels to ensure content visibility.
+                                        Useful when content contains shadows, etc.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">contentValidation</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">object</code></td>
+                                    <td class="px-6 py-4">Varies</td>
+                                    <td class="px-6 py-4">Additional content validation options (like forbidden tags,
+                                        maxLength, etc.).</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">randomize</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">boolean</code></td>
+                                    <td class="px-6 py-4">false</td>
+                                    <td class="px-6 py-4">Whether to randomize the order of content items.</td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">startAfter</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">number</code></td>
+                                    <td class="px-6 py-4">0</td>
+                                    <td class="px-6 py-4">Marquee animation will start after the specified time in
+                                        milliseconds.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="py-8">
+                    <h2 id="content-validation" class="swag-title">Content Validation</h2>
+
+                    <p class="text-gray-600 mb-6">
+                        By default, MarqueeJS applies validation to protect your content from unsafe HTML tags and
+                        attributes.
+                        These rules can be adjusted using the "contentValidation" field in your MarqueeOptions.
+                        <br>
+                        This object <strong>merges your custom values</strong> with the built-in defaults, so you never
+                        lose important
+                        checks.
+                    </p>
+
+                    <div class="overflow-x-auto mb-8">
+                        <table class="w-full text-sm text-left text-gray-600">
+                            <thead class="text-xs uppercase bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 font-medium">Validation Type</th>
+                                    <th class="px-6 py-3 font-medium">Default Value</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y">
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">Forbidden Tags</td>
+                                    <td class="px-6 py-4"><code
+                                            class="text-pink-600">script, style, iframe, object, embed, form, svg, input, button, meta, link, head, html, body</code>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">Forbidden Attributes</td>
+                                    <td class="px-6 py-4"><code
+                                            class="text-pink-600">onclick, onmouseover, onmouseout, onload, onerror, onsubmit, formaction, xlink:href, action, javascript</code>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white hover:bg-gray-50">
+                                    <td class="px-6 py-4 font-medium text-gray-900">Maximum Length</td>
+                                    <td class="px-6 py-4"><code class="text-pink-600">8500 characters per item</code>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold mb-4">Example Usage</h3>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="rounded-lg language-javascript">marqueejs(".selector", {
+    contentValidation: {
+        maxLength: 2000,
+        forbiddenTags: ["img", "video"],
+        forbiddenAttributes: ["style", "href"],
+    },
+    contentList: [
+        "&lt;div&gt;Some item&lt;/div&gt;", // ok element
+        '&lt;img src="..." /&gt;', // forbidden
+        '&lt;a href="..." &gt;...&lt;/a&gt;', // forbidden
+    ],
+});</code></pre>
+                    </div>
+
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 text-yellow-700">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <i class="icon-[lucide--alert-triangle] w-5 h-5"></i>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm">
+                                    Use caution when allowing user-submitted HTML to avoid XSS risks. Content validation
+                                    helps protect against common vulnerabilities.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="py-8 prose-lg">
+                    <h2 id="methods" class="swag-title">Methods</h2>
+                    <p class="text-gray-600 mb-6">
+                        Once you initialize MarqueeJS, you get back an instance with the following public methods:
+                    </p>
+
+                    <!-- Method: pause -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">pause</h3>
+                        <p class="text-gray-600 mb-2">
+                            Pauses the scrolling in place. Calling <code>resume</code> will continue from where it left
+                            off.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.pause();
+                </code></pre>
+                    </div>
+
+                    <!-- Method: resume -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">resume</h3>
+                        <p class="text-gray-600 mb-2">
+                            Resumes scrolling from the current position if paused, or starts if it was never started.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.resume();
+                </code></pre>
+                    </div>
+
+                    <!-- Method: destroy -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">destroy</h3>
+                        <p class="text-gray-600 mb-2">
+                            Removes event listeners, stops animations, and cleans up inserted DOM elements and styles.
+                            After calling <code>destroy</code>, the instance becomes unusable.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.destroy();
+                </code></pre>
+                    </div>
+
+                    <!-- Method: addContent -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">addContent</h3>
+                        <p class="text-gray-600 mb-2">
+                            Adds new content (HTML string or array of strings) to the marquee. An optional
+                            <code>addToStart</code> parameter determines whether to add to the beginning or end of the
+                            list. An optional <code>callback</code> parameter allows executing a function after the
+                            content is added.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.addContent("New item"); // added at the end
+instance.addContent(["Item 1", "Item 2"], true); // added at the start
+instance.addContent("New item", false, () => {
+    console.log("Content added");
+}); // added at the end with callback
+    </code></pre>
+                    </div>
+
+                    <!-- Method: replaceContent -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">replaceContent</h3>
+                        <p class="text-gray-600 mb-2">
+                            Replaces the entire content list at once, discarding the old list entirely.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.replaceContent(['<span class="badge">FLASH NEWS</span> Completely new content', "Another new item"]);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: getContentList -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">getContentList</h3>
+                        <p class="text-gray-600 mb-2">
+                            Retrieves the current content list being used by the marquee.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">const currentItems = instance.getContentList();
+console.log(currentItems);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateSpeed -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateSpeed</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the scrolling speed.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateSpeed(150);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateGap -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateGap</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the gap between elements.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateGap(30);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateSeparator -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateSeparator</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the separator between elements.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateSeparator(" • ");
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateSeparatorStyles -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateSeparatorStyles</h3>
+                        <p class="text-gray-600 mb-2">
+                            Update separators' CSS styles.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateSeparatorStyles("font-size: 1.8rem;");
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateCloneCount -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateCloneCount</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the number of clones.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateCloneCount(5);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updateContainerHeight -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updateContainerHeight</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the container height.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updateContainerHeight(300);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: updatePauseOnHover -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">updatePauseOnHover</h3>
+                        <p class="text-gray-600 mb-2">
+                            Updates the pause on hover option.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.updatePauseOnHover(true);
+                </code></pre>
+                    </div>
+
+                    <!-- Method: recalculatePositions -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">recalculatePositions</h3>
+                        <p class="text-gray-600 mb-2">
+                            Recalculates the positions of the elements. Useful if you encounter any issues with element
+                            positioning.
+                        </p>
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">instance.recalculatePositions();
+                </code></pre>
+                    </div>
+
+                    <!-- Method: patchContent -->
+                    <div class="mb-6">
+                        <h3 class="text-xl font-semibold mb-2">patchContent</h3>
+                        <p class="text-gray-600 mb-2">
+                            Modifies the content list by adding or replacing items at specified positions (start or
+                            end). This method provides flexible content management with various options for updating the
+                            marquee content.
+                        </p>
+
+                        <h4 class="text-md font-semibold mb-2">Parameters</h4>
+                        <ul class="list-disc list-inside text-gray-600 mb-4">
+                            <li><code>content</code> (<code class="text-red-400">string | string[]</code>): Single
+                                string or array of strings
+                                to add/replace</li>
+                            <li><code>position</code> (<code class="text-red-400">'start' | 'end'</code>): Where to
+                                patch the content</li>
+                            <li><code>reset</code> (<code class="text-red-400">boolean</code>, optional): If true,
+                                pauses and resets the
+                                marquee before patching (default: false)</li>
+                            <li><code>callback</code> (<code class="text-red-400">() => void</code>, optional): Function
+                                called after
+                                patching completes</li>
+                        </ul>
+
+                        <h4 class="text-md font-semibold mb-2">Behavior</h4>
+                        <ul class="list-disc list-inside text-gray-600 mb-4">
+                            <li>If the current content list is empty, the new content becomes the entire list</li>
+                            <li>If new content length ≥ current content length, replaces all existing content</li>
+                            <li>If new content length &lt; current content length: <ul
+                                    class="list-disc list-inside ml-4">
+                                    <li>For <code class="text-red-400">'start'</code> position: Replaces elements at the
+                                        beginning</li>
+                                    <li>For <code class="text-red-400">'end'</code> position: Replaces elements at the
+                                        end</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-md font-semibold mb-2">Note</h4>
+                        <ul class="list-disc list-inside text-gray-600 mb-12">
+                            <li>Content is automatically validated before patching</li>
+                            <li>Invalid content triggers a warning and aborts the operation</li>
+                            <li>When <code class="text-red-400">reset</code> is <strong>false</strong>, content elements
+                                are recreated
+                                and positions
+                                recalculated</li>
+                            <li>When <code class="text-red-400">reset</code> is <strong>true</strong>, the marquee
+                                completely resets
+                                after patching</li>
+                            <li>Callback executes on the next animation frame after patching completes</li>
+                        </ul>
+
+                        <pre class="overflow-x-auto mt-4 not-prose"><code class="language-javascript rounded">let instance = marqueejs(".marquee-element", options);
+
+    // example
+    console.log(instance.getContentList());
+    // > output: ['a', 'b', 'c', 'd']
+
+    // Add content at the start
+    instance.patchContent("New content", "start");
+    // > result: ['New Content', 'b', 'c', 'd']
+
+    // Add content at the end
+    instance.patchContent(["Item 1", "Item 2"], "end");
+    // > result: ['a', 'b', 'Item 1', 'Item 2']
+
+    // Replace existing content at start
+    instance.patchContent("New content", "start", true);
+    // > result: ['New Content', 'b', 'c', 'd'] + reset the marquee
+
+    // Add with callback
+    instance.patchContent("New content", "end", false, () => {
+        console.log("Content patched");
+    });
+    // > result: ['a', 'b', 'c', 'New content'] + callback called after processing new items
+                </code></pre>
                     </div>
                 </section>
             </main>
