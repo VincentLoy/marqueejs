@@ -11,6 +11,7 @@ export class DOMManager {
   private instanceId: string;
   private separatorElements: HTMLElement[] = [];
   private cloneCalculator: CloneCalculator;
+  private isHorizontal: boolean;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
     this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
@@ -19,7 +20,7 @@ export class DOMManager {
     this.container = this.createContainer();
     this.wrapper = this.createWrapper();
     this.cloneCalculator = new CloneCalculator(options.direction!);
-
+    this.isHorizontal = ["left", "right"].includes(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
 
@@ -40,13 +41,17 @@ export class DOMManager {
 
   private createWrapper(): HTMLElement {
     const wrapper = document.createElement("div");
+    wrapper.classList.add("marquee-wrapper");
     wrapper.style.position = "relative";
     wrapper.style.width = "100%";
     wrapper.style.height = "100%";
     wrapper.style.overflow = "visible";
-    wrapper.style.display = "flex";
-    wrapper.style.alignItems = "center";
-    wrapper.classList.add("marquee-wrapper");
+    wrapper.style.display = this.isHorizontal ? "flex" : "block";
+
+    if (this.isHorizontal) {
+      wrapper.style.alignItems = "center";
+    }
+
     return wrapper;
   }
 
@@ -54,7 +59,7 @@ export class DOMManager {
     const originalHeight = this.getMaxContentHeight();
 
     // Configure container height
-    if (["up", "down"].includes(this.options.direction!) && this.options.containerHeight) {
+    if (!this.isHorizontal && this.options.containerHeight) {
       this.container.style.height = `${this.options.containerHeight}px`;
     } else {
       this.container.style.height = `${originalHeight}px`;
@@ -112,7 +117,7 @@ export class DOMManager {
   }
 
   private calculateMetrics(): ElementMetrics[] {
-    const isHorizontal = ["left", "right"].includes(this.options.direction!);
+    const isHorizontal = this.isHorizontal;
     const metrics: ElementMetrics[] = [];
     let currentPosition = 0;
 
@@ -136,10 +141,8 @@ export class DOMManager {
     const element = document.createElement("div");
     element.className = "marquee-content-item";
     element.style.position = "absolute";
-    element.style.whiteSpace = ["up", "down"].includes(this.options.direction!)
-      ? "normal"
-      : "nowrap";
-    element.style.width = ["up", "down"].includes(this.options.direction!) ? "100%" : "auto";
+    element.style.whiteSpace = !this.isHorizontal ? "normal" : "nowrap";
+    element.style.width = !this.isHorizontal ? "100%" : "auto";
     element.innerHTML = content;
     return element;
   }
@@ -148,7 +151,7 @@ export class DOMManager {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-      el.style.transform = ["left", "right"].includes(this.options.direction!)
+      el.style.transform = this.isHorizontal
         ? `translate3d(${position}px, 0, 0)`
         : `translate3d(0, ${position}px, 0)`;
     });
@@ -177,7 +180,7 @@ export class DOMManager {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute("aria-hidden", "true");
         clone.classList.add("marquee-cloned-item");
-        clone.style.transform = ["left", "right"].includes(this.options.direction!)
+        clone.style.transform = this.isHorizontal
           ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
           : `translate3d(0, ${metrics[index].position + offset}px, 0)`;
 
@@ -205,7 +208,7 @@ export class DOMManager {
     this.separatorElements = [];
     const elements = this.wrapper.querySelectorAll(".marquee-content-item");
 
-    if (!this.options.separator || ["up", "down"].includes(this.options.direction!)) {
+    if (!this.options.separator || !this.isHorizontal) {
       return;
     }
 
