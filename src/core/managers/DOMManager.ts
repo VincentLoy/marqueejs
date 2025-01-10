@@ -1,5 +1,6 @@
 import type { MarqueeOptions, ElementMetrics } from "../../types";
 import { CloneCalculator } from "./CloneCalculator";
+import { ElementFactory } from "../factories/ElementFactory";
 
 export class DOMManager {
   private container: HTMLElement;
@@ -9,50 +10,23 @@ export class DOMManager {
   private contentElements: HTMLElement[] = [];
   private clones: HTMLElement[] = [];
   private instanceId: string;
-  private separatorElements: HTMLElement[] = [];
   private cloneCalculator: CloneCalculator;
   private isHorizontal: boolean;
+  private elementFactory: ElementFactory;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
     this.isHorizontal = ["left", "right"].includes(options.direction!);
     this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
     this.element = element;
     this.options = options;
-    this.container = this.createContainer();
-    this.wrapper = this.createWrapper();
+    this.elementFactory = new ElementFactory(this.element, this.options);
+    this.container = this.elementFactory.createContainer();
+    this.wrapper = this.elementFactory.createWrapper();
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
 
     this.setupDOM();
-  }
-
-  private createContainer(): HTMLElement {
-    const container = document.createElement("div");
-    container.classList.add(this.instanceId, "marquee-container");
-    const elementClasses = Array.from(this.element.classList);
-    const elementId = this.element.id;
-    container.classList.add(...elementClasses);
-    if (elementId) container.id = elementId;
-    container.style.width = "100%";
-    container.style.overflow = "hidden";
-    return container;
-  }
-
-  private createWrapper(): HTMLElement {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("marquee-wrapper");
-    wrapper.style.position = "relative";
-    wrapper.style.width = "100%";
-    wrapper.style.height = "100%";
-    wrapper.style.overflow = "visible";
-    wrapper.style.display = this.isHorizontal ? "flex" : "block";
-
-    if (this.isHorizontal) {
-      wrapper.style.alignItems = "center";
-    }
-
-    return wrapper;
   }
 
   public setupDOM(): void {
@@ -79,7 +53,7 @@ export class DOMManager {
 
     const fragment = document.createDocumentFragment();
     this.options.contentList!.forEach((content) => {
-      const element = this.createContentElement(content);
+      const element = this.elementFactory.createContentElement(content);
       this.contentElements.push(element);
       fragment.appendChild(element);
     });
@@ -137,16 +111,6 @@ export class DOMManager {
     return metrics;
   }
 
-  private createContentElement(content: string): HTMLElement {
-    const element = document.createElement("div");
-    element.className = "marquee-content-item";
-    element.style.position = "absolute";
-    element.style.whiteSpace = !this.isHorizontal ? "normal" : "nowrap";
-    element.style.width = !this.isHorizontal ? "100%" : "auto";
-    element.innerHTML = content;
-    return element;
-  }
-
   private positionElements(): void {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
@@ -192,29 +156,14 @@ export class DOMManager {
     this.wrapper.appendChild(fragment);
   }
 
-  private createSeparatorElement(): HTMLElement {
-    const separator = document.createElement("span");
-    separator.className = "marquee-separator";
-    separator.innerHTML = `<span style="display: inline-block; ${this.options.separatorStyles}">${this.options.separator}</span>`;
-    separator.style.position = "absolute";
-    separator.style.whiteSpace = "pre";
-    this.separatorElements.push(separator);
-    return separator;
-  }
-
   private updateSeparators(): void {
-    // Cleanup existing separators
-    this.separatorElements.forEach((el) => el.remove());
-    this.separatorElements = [];
-    const elements = this.wrapper.querySelectorAll(".marquee-content-item");
+    if (!this.options.separator || !this.isHorizontal) return;
 
-    if (!this.options.separator || !this.isHorizontal) {
-      return;
-    }
+    const elements = this.wrapper.querySelectorAll(".marquee-content-item");
 
     // Create new separators between items
     elements.forEach((el) => {
-      const separator = this.createSeparatorElement();
+      const separator = this.elementFactory.createSeparatorElement();
       el.appendChild(separator);
       const elRect = el.getBoundingClientRect();
       const separatorRect = separator.getBoundingClientRect();
@@ -226,11 +175,6 @@ export class DOMManager {
       separator.style.lineHeight = "0.70";
       separator.style.transform = "translateY(-50%)";
     });
-  }
-
-  private clearSeparatorElements(): void {
-    this.separatorElements.forEach((el) => el.remove());
-    this.separatorElements = [];
   }
 
   // Utility method to force recalculation of clones
@@ -263,7 +207,7 @@ export class DOMManager {
       this.wrapper.parentNode.insertBefore(this.element, this.wrapper);
       this.container.remove();
     }
-    this.clearSeparatorElements();
+
     document.querySelector(`.${this.instanceId}`)?.remove();
   }
 }
