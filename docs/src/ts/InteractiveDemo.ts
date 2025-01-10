@@ -11,6 +11,7 @@ export class InteractiveDemo {
   private contentInput: HTMLInputElement;
   private contentPreview: HTMLElement;
   private patchIndex: HTMLInputElement;
+  private isPlaying: boolean = true;
 
   constructor() {
     this.init();
@@ -67,11 +68,36 @@ export class InteractiveDemo {
 
   private bindEvents(): void {
     // Basic Controls
-    document.getElementById("pause-btn")?.addEventListener("click", () => this.instance.pause());
-    document.getElementById("resume-btn")?.addEventListener("click", () => this.instance.resume());
-    document
-      .getElementById("direction-btn")
-      ?.addEventListener("click", () => this.instance.switchDirection());
+    document.getElementById("play-pause-btn")?.addEventListener("click", () => {
+      this.isPlaying = !this.isPlaying;
+
+      const button = document.getElementById("play-pause-btn");
+      const icon = button?.querySelector("i");
+
+      if (this.isPlaying) {
+        this.instance.resume();
+        icon?.classList.remove("icon-[lucide--play]");
+        icon?.classList.add("icon-[lucide--pause]");
+      } else {
+        this.instance.pause();
+        icon?.classList.remove("icon-[lucide--pause]");
+        icon?.classList.add("icon-[lucide--play]");
+      }
+    });
+
+    document.getElementById("direction-btn")?.addEventListener("click", (e) => {
+      this.instance.switchDirection();
+      const currentTarget = e.currentTarget as HTMLElement;
+      currentTarget.querySelector("i")?.classList.add("rotate-[360deg]");
+      currentTarget.querySelector("i")?.classList.add("transition-transform");
+      currentTarget.querySelector("i")?.classList.add("duration-1000");
+
+      setTimeout(() => {
+        currentTarget.querySelector("i")?.classList.remove("rotate-[360deg]");
+        currentTarget.querySelector("i")?.classList.remove("transition-transform");
+        currentTarget.querySelector("i")?.classList.remove("duration-1000");
+      }, 1000);
+    });
 
     // Speed Control
     this.speedControl.addEventListener("input", (e) => {
