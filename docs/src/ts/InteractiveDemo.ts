@@ -66,22 +66,29 @@ export class InteractiveDemo {
     this.patchIndex.max = (currentContent.length - 1).toString();
   }
 
+  private switchPlayPauseIcons(): void {
+    const button = document.getElementById("play-pause-btn");
+    const icon = button?.querySelector("i");
+
+    if (this.isPlaying) {
+      icon?.classList.remove("icon-[lucide--play]");
+      icon?.classList.add("icon-[lucide--pause]");
+    } else {
+      icon?.classList.remove("icon-[lucide--pause]");
+      icon?.classList.add("icon-[lucide--play]");
+    }
+  }
+
   private bindEvents(): void {
     // Basic Controls
     document.getElementById("play-pause-btn")?.addEventListener("click", () => {
       this.isPlaying = !this.isPlaying;
 
-      const button = document.getElementById("play-pause-btn");
-      const icon = button?.querySelector("i");
-
+      this.switchPlayPauseIcons();
       if (this.isPlaying) {
         this.instance.resume();
-        icon?.classList.remove("icon-[lucide--play]");
-        icon?.classList.add("icon-[lucide--pause]");
       } else {
         this.instance.pause();
-        icon?.classList.remove("icon-[lucide--pause]");
-        icon?.classList.add("icon-[lucide--play]");
       }
     });
 
@@ -164,6 +171,8 @@ export class InteractiveDemo {
       const size = this.separatorSize.value;
       this.instance.updateSeparator(separator);
       this.instance.updateSeparatorStyles(`font-size: ${size};`);
+      this.isPlaying = true;
+      this.switchPlayPauseIcons();
     });
   }
 }
