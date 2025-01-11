@@ -66,7 +66,7 @@ export class DOMManager {
     await this.createClones();
 
     // Add separator styles after creating elements
-    this.separatorManager.updateSeparators();
+    this.updateSeparators();
   }
 
   private clearElements(): void {
@@ -181,6 +181,10 @@ export class DOMManager {
 
   public getContentElements(): HTMLElement[] {
     return this.contentElements;
+  }
+
+  public updateSeparators(): void {
+    this.separatorManager.updateSeparators();
   }
 
   public destroy(): void {
