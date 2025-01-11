@@ -8,10 +8,12 @@ export class AnimationManager {
   private elements: Array<{ el: HTMLElement; position: number }> = [];
   private isHorizontal: boolean;
   private maxSize: number = 0;
+  public playing: boolean;
 
   constructor(wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
     this.wrapper = wrapper;
     this.options = options;
+    this.playing = false;
     this.isHorizontal = ["left", "right"].includes(this.options.direction!);
     this.setupElements();
   }
@@ -46,6 +48,7 @@ export class AnimationManager {
 
   public startAnimation(): void {
     this.lastTime = performance.now();
+    this.playing = true;
 
     const animate = (currentTime: number) => {
       const deltaTime = currentTime - this.lastTime;
@@ -69,41 +72,34 @@ export class AnimationManager {
 
   private isPositionAvailable(newPosition: number, currentElement: HTMLElement): boolean {
     const threshold = this.options.gap || 0;
-
     return !this.elements.some(({ el, position }) => {
       if (el === currentElement) return false;
+      const currentElSizeWatcher = this.isHorizontal
+        ? currentElement.offsetWidth
+        : currentElement.offsetHeight;
+      const elSizeWatcher = this.isHorizontal ? el.offsetWidth : el.offsetHeight;
 
-      if (this.isHorizontal) {
-        const elementWidth = el.offsetWidth;
-        const currentWidth = currentElement.offsetWidth;
-
-        return (
-          newPosition < position + elementWidth + threshold &&
-          newPosition + currentWidth > position - threshold
-        );
-      } else {
-        const elementHeight = el.offsetHeight;
-        const currentHeight = currentElement.offsetHeight;
-
-        return (
-          newPosition < position + elementHeight + threshold &&
-          newPosition + currentHeight > position - threshold
-        );
-      }
+      return (
+        newPosition < position + elSizeWatcher + threshold &&
+        newPosition + currentElSizeWatcher > position - threshold
+      );
     });
   }
 
   private isFurthestElement(item: { el: HTMLElement; position: number }): boolean {
-    return this.elements.every((other) => {
-      if (other === item) return true;
-      if (this.isHorizontal) {
-        return this.options.direction === "left"
-          ? item.position < other.position
-          : item.position > other.position;
+    const isHorizontal = this.isHorizontal;
+    const direction = this.options.direction;
+
+    return !this.elements.some((other) => {
+      if (other === item) return false;
+      if (isHorizontal) {
+        return direction === "left"
+          ? item.position >= other.position
+          : item.position <= other.position;
       } else {
-        return this.options.direction === "up"
-          ? item.position < other.position
-          : item.position > other.position;
+        return direction === "up"
+          ? item.position >= other.position
+          : item.position <= other.position;
       }
     });
   }
@@ -114,8 +110,9 @@ export class AnimationManager {
   ): void {
     const containerWidth = this.wrapper.parentElement?.offsetWidth || 0;
     const elementWidth = item.el.offsetWidth;
+    const isLeftDirection = this.options.direction === "left";
 
-    if (this.options.direction === "left") {
+    if (isLeftDirection) {
       item.position -= movement;
 
       if (item.position + elementWidth < 0) {
@@ -148,8 +145,9 @@ export class AnimationManager {
   ): void {
     const containerHeight = this.wrapper.parentElement?.offsetHeight || 0;
     const elementHeight = item.el.offsetHeight;
+    const isUpDirection = this.options.direction === "up";
 
-    if (this.options.direction === "up") {
+    if (isUpDirection) {
       item.position -= movement;
       if (item.position + elementHeight < 0) {
         const newPosition = containerHeight;
@@ -171,6 +169,7 @@ export class AnimationManager {
   }
 
   public stopAnimation(): void {
+    this.playing = false;
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
@@ -187,5 +186,9 @@ export class AnimationManager {
 
     // Restart animation if it was running
     this.startAnimation();
+  }
+
+  public isPlaying(): boolean {
+    return this.playing;
   }
 }

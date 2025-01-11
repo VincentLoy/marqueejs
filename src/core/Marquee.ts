@@ -8,7 +8,6 @@ export class Marquee {
   private element!: HTMLElement;
   private originalElement: HTMLElement;
   private options!: Partial<MarqueeOptions>;
-  private isPlaying: boolean = false;
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
   private domManager: DOMManager | null = null;
@@ -122,7 +121,7 @@ export class Marquee {
   public destroy(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.pause();
-      this.animationManager?.stopAnimation();
+      this.stopAnimation();
       this.eventManager?.destroy();
       this.domManager?.destroy();
 
@@ -133,15 +132,17 @@ export class Marquee {
     });
   }
 
+  public isPlaying(): boolean {
+    return this.animationManager?.isPlaying()!;
+  }
+
   public play(): void {
-    if (this.isPlaying) return;
-    this.isPlaying = true;
+    if (this.isPlaying()) return;
     this.startAnimation();
   }
 
   public pause(): void {
-    if (!this.isPlaying) return;
-    this.isPlaying = false;
+    if (!this.isPlaying()) return;
     this.stopAnimation();
   }
 
@@ -250,12 +251,12 @@ export class Marquee {
 
   public updateSeparator(separator: string): void {
     this.options.separator = separator;
-    this.domManager?.createContentElements();
-    this.animationManager?.recalculatePositions();
+    this.domManager?.updateSeparators();
   }
 
   public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
     this.options.separatorStyles = styles;
+    this.domManager?.updateSeparators();
   }
 
   public updateCloneCount(cloneCount: number): void {
@@ -319,6 +320,7 @@ export class Marquee {
     };
 
     this.options.direction = oppositeDirection[this.options.direction!];
+    this.domManager?.updateSeparators();
   }
 
   public async patchContent(
