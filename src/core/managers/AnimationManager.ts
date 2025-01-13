@@ -8,7 +8,6 @@ export class AnimationManager {
   private lastTime: number = 0;
   private elements: Array<PositionedElement> = [];
   private isHorizontal: boolean;
-  private maxSize: number = 0;
   public playing: boolean;
 
   constructor(wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
@@ -19,34 +18,43 @@ export class AnimationManager {
     this.setupElements();
   }
 
+  /**
+   * Sets up the initial positions of the wrapper's child elements.
+   * This method processes all direct children of the wrapper element,
+   * positions them using the PositionManager, and stores them for animation.
+   *
+   * The positioning is done according to:
+   * - The horizontal/vertical orientation specified
+   * - The gap between elements defined in options
+   *
+   * @private
+   */
   private setupElements(): void {
-    const groups = Array.from(this.wrapper.children) as HTMLElement[];
-    let currentPosition = 0;
+    const groups = [...this.wrapper.children] as HTMLElement[];
 
-    this.elements = groups.map((group) => {
-      const size = this.isHorizontal
-        ? group.offsetWidth + this.options.gap!
-        : group.offsetHeight + this.options.gap!;
+    const positionedElements = PositionManager.setupElementsInitialPosition(
+      groups,
+      this.isHorizontal,
+      this.options.gap!
+    );
 
-      const position = currentPosition;
-
-      group.style.position = "absolute";
-      group.style.left = "0";
-      group.style.transform = this.isHorizontal
-        ? `translate3d(${position}px, 0, 0)`
-        : `translate3d(0, ${position}px, 0)`;
-
-      currentPosition += size;
-
-      this.maxSize = Math.max(this.maxSize, size);
-
-      return {
-        el: group,
-        position,
-      };
-    });
+    this.elements = positionedElements;
   }
 
+  /**
+   * Initiates the animation loop for the marquee.
+   * This method sets up a recursive animation frame request that:
+   * 1. Calculates the time delta between frames
+   * 2. Computes the movement distance based on speed and delta time
+   * 3. Updates the position of each element in the marquee
+   *
+   * The animation continues until {@link stopAnimation} is called.
+   *
+   * @remarks
+   * The animation uses requestAnimationFrame for smooth performance
+   * and calculates movement based on elapsed time to ensure
+   * consistent speed across different frame rates.
+   */
   public startAnimation(): void {
     this.lastTime = performance.now();
     this.playing = true;
@@ -74,6 +82,13 @@ export class AnimationManager {
     this.animationFrame = requestAnimationFrame(animate);
   }
 
+  /**
+   * Stops the current animation by canceling the animation frame and resetting animation states.
+   * This method will:
+   * - Set the playing state to false
+   * - Cancel any existing animation frame
+   * - Reset the last recorded time
+   */
   public stopAnimation(): void {
     this.playing = false;
     if (this.animationFrame) {
@@ -83,17 +98,23 @@ export class AnimationManager {
     this.lastTime = 0;
   }
 
+  /**
+   * Recalculates positions of elements in the animation sequence.
+   * This method performs a complete reset of the animation by:
+   * 1. Stopping the current animation
+   * 2. Reinitializing element positions
+   * 3. Restarting the animation
+   */
   public recalculatePositions(): void {
-    // Stop current animation
     this.stopAnimation();
-
-    // Reset and reinitialize positions
     this.setupElements();
-
-    // Restart animation if it was running
     this.startAnimation();
   }
 
+  /**
+   * Checks whether animations are currently being played.
+   * @returns {boolean} True if animations are playing, false otherwise.
+   */
   public isPlaying(): boolean {
     return this.playing;
   }
