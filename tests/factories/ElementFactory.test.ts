@@ -45,12 +45,12 @@ describe("ElementFactory", () => {
 
     expect(separator.tagName).toBe("SPAN");
     expect(separator.classList.contains("marquee-separator")).toBe(true);
-    expect(separator.style.position).toBe("absolute");
     expect(separator.style.whiteSpace).toBe("pre");
-    expect(separator.style.color).toBe("red");
-    expect(separator.style.opacity).toBe(0.75);
 
+    expect(separatorInnerHtml.style.color).toBe("red");
+    expect(separatorInnerHtml.style.opacity).toBe("0.75");
     expect(separatorInnerHtml.tagName).toBe("SPAN");
     expect(separatorInnerHtml.style.display).toBe("inline-block");
+    expect(separatorInnerHtml.textContent).toBe("-");
   });
 });

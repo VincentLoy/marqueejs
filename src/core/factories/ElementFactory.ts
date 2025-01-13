@@ -1,5 +1,3 @@
-import { MarqueeOptions } from "../../types";
-
 /**
  * Factory class responsible for creating and configuring DOM elements for the marquee component.
  *

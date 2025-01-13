@@ -23,7 +23,7 @@ export class DOMManager {
     this.options = options;
     this.container = ElementFactory.createContainer(this.element, this.instanceId);
     this.wrapper = ElementFactory.createWrapper(this.isHorizontal);
-    this.separatorManager = new SeparatorManager(this.element, this.options, this.wrapper);
+    this.separatorManager = new SeparatorManager(this.options, this.wrapper);
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";

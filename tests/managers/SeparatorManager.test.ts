@@ -34,14 +34,13 @@ describe("SeparatorManager", () => {
       gap: 20,
     };
 
-    separatorManager = new SeparatorManager(element, options, wrapper);
+    separatorManager = new SeparatorManager(options, wrapper);
   });
 
   it("Initialize with correct properties", () => {
     expect(separatorManager).toBeDefined();
     expect((separatorManager as any).isHorizontal).toBe(true);
     expect((separatorManager as any).options).toEqual(options);
-    expect((separatorManager as any).elementFactory).toBeInstanceOf(ElementFactory);
   });
 
   it("Add separators between content items", () => {
@@ -70,7 +69,7 @@ describe("SeparatorManager", () => {
     let opt: Partial<MarqueeOptions> = {
       direction: "up",
     };
-    let sep = new SeparatorManager(element, opt, wrapper);
+    let sep = new SeparatorManager(opt, wrapper);
     sep.updateSeparators();
 
     const separators = wrapper.querySelectorAll(".marquee-separator");
