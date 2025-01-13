@@ -1,16 +1,16 @@
-import type { CloneMetrics } from "../../types";
+import type { CloneMetrics, MarqueeOptions } from "../../types";
 
 export class CloneCalculator {
   private cachedMetrics: CloneMetrics | null = null;
 
-  constructor(private direction: "left" | "right" | "up" | "down") {}
+  constructor(private direction: Partial<MarqueeOptions["direction"]>) {}
 
   public calculateOptimalCloneCount(
     containerElement: HTMLElement,
     contentElements: HTMLElement[],
     gap: number
   ): number {
-    const isHorizontal = ["left", "right"].includes(this.direction);
+    const isHorizontal = ["left", "right"].includes(this.direction!);
 
     const metrics = this.calculateMetrics(containerElement, contentElements, gap, isHorizontal);
 

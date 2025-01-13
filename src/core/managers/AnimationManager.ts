@@ -1,11 +1,12 @@
-import type { MarqueeOptions } from "../../types";
+import type { MarqueeOptions, PositionedElement } from "../../types";
+import { PositionManager } from "./PositionManager";
 
 export class AnimationManager {
   private wrapper: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private animationFrame: number | null = null;
   private lastTime: number = 0;
-  private elements: Array<{ el: HTMLElement; position: number }> = [];
+  private elements: Array<PositionedElement> = [];
   private isHorizontal: boolean;
   private maxSize: number = 0;
   public playing: boolean;
@@ -57,115 +58,20 @@ export class AnimationManager {
 
       // Update each element's position independently
       this.elements.forEach((item) => {
-        if (["left", "right"].includes(this.options.direction!)) {
-          this.updateHorizontalPosition(item, movement);
-        } else {
-          this.updateVerticalPosition(item, movement);
-        }
+        PositionManager.updatePosition(
+          item,
+          this.elements,
+          this.wrapper,
+          movement,
+          this.options.direction!,
+          this.options.gap!
+        );
       });
 
       this.animationFrame = requestAnimationFrame(animate);
     };
 
     this.animationFrame = requestAnimationFrame(animate);
-  }
-
-  private isPositionAvailable(newPosition: number, currentElement: HTMLElement): boolean {
-    const threshold = this.options.gap || 0;
-    return !this.elements.some(({ el, position }) => {
-      if (el === currentElement) return false;
-      const currentElSizeWatcher = this.isHorizontal
-        ? currentElement.offsetWidth
-        : currentElement.offsetHeight;
-      const elSizeWatcher = this.isHorizontal ? el.offsetWidth : el.offsetHeight;
-
-      return (
-        newPosition < position + elSizeWatcher + threshold &&
-        newPosition + currentElSizeWatcher > position - threshold
-      );
-    });
-  }
-
-  private isFurthestElement(item: { el: HTMLElement; position: number }): boolean {
-    const isHorizontal = this.isHorizontal;
-    const direction = this.options.direction;
-
-    return !this.elements.some((other) => {
-      if (other === item) return false;
-      if (isHorizontal) {
-        return direction === "left"
-          ? item.position >= other.position
-          : item.position <= other.position;
-      } else {
-        return direction === "up"
-          ? item.position >= other.position
-          : item.position <= other.position;
-      }
-    });
-  }
-
-  private updateHorizontalPosition(
-    item: { el: HTMLElement; position: number },
-    movement: number
-  ): void {
-    const containerWidth = this.wrapper.parentElement?.offsetWidth || 0;
-    const elementWidth = item.el.offsetWidth;
-    const isLeftDirection = this.options.direction === "left";
-
-    if (isLeftDirection) {
-      item.position -= movement;
-
-      if (item.position + elementWidth < 0) {
-        const newPosition = containerWidth;
-        // Only reset if there's space available
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    } else {
-      // here this.options.direction === "right"
-      item.position += movement;
-
-      if (item.position > containerWidth) {
-        const newPosition = -elementWidth;
-        // item.el.style.width = `${this.maxSize}px`;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          // item.el.style.width = `auto`;
-          item.position = newPosition;
-        }
-      }
-    }
-
-    item.el.style.transform = `translate3d(${item.position}px, 0, 0)`;
-  }
-
-  private updateVerticalPosition(
-    item: { el: HTMLElement; position: number },
-    movement: number
-  ): void {
-    const containerHeight = this.wrapper.parentElement?.offsetHeight || 0;
-    const elementHeight = item.el.offsetHeight;
-    const isUpDirection = this.options.direction === "up";
-
-    if (isUpDirection) {
-      item.position -= movement;
-      if (item.position + elementHeight < 0) {
-        const newPosition = containerHeight;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    } else {
-      item.position += movement;
-      if (item.position > containerHeight) {
-        const newPosition = -elementHeight;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    }
-
-    item.el.style.transform = `translate3d(0, ${item.position}px, 0)`;
   }
 
   public stopAnimation(): void {

@@ -1,5 +1,6 @@
 import { MarqueeOptions } from "../../types";
 import { ElementFactory } from "../factories/ElementFactory";
+import { PositionManager } from "./PositionManager";
 
 export class SeparatorManager {
   private elementFactory: ElementFactory;
@@ -27,22 +28,7 @@ export class SeparatorManager {
     elements.forEach((el) => {
       const separator = this.elementFactory.createSeparatorElement();
       el.appendChild(separator);
-      const elRect = el.getBoundingClientRect();
-      const separatorRect = separator.getBoundingClientRect();
-
-      // Position separator in the middle of the gap
-      let position = elRect.width - separatorRect.width / 2 + this.options.gap! / 2;
-
-      if (isLeftDirection) {
-        separator.style.left = `${position}px`;
-      } else {
-        separator.style.right = `${position}px`;
-      }
-
-      separator.style.top = "50%";
-      separator.style.lineHeight = "0.70";
-      separator.style.willChange = "transform";
-      separator.style.transform = "translate3d(0, -50%, 0)";
+      PositionManager.positionSeparator(el, separator, this.options.gap!, isLeftDirection);
     });
   }
 

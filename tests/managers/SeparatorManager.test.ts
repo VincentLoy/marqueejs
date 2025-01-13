@@ -76,4 +76,12 @@ describe("SeparatorManager", () => {
     const separators = wrapper.querySelectorAll(".marquee-separator");
     expect(separators.length).toBe(0);
   });
+
+  it("Should cleanup separators", () => {
+    // Call cleanup when no separators exist
+    separatorManager.cleanupSeparatorElements();
+
+    const separators = wrapper.querySelectorAll(".marquee-separator");
+    expect(separators.length).toBe(0);
+  });
 });

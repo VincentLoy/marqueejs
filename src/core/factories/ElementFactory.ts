@@ -75,12 +75,14 @@ export class ElementFactory {
    */
   public createContentElement(content: string): HTMLElement {
     const element = document.createElement("div");
+    const contentEl = document.createElement("div");
     element.className = "marquee-content-item";
+    contentEl.classList.add("marquee-content");
     element.style.position = "absolute";
     element.style.whiteSpace = !this.isHorizontal ? "normal" : "nowrap";
     element.style.width = !this.isHorizontal ? "100%" : "auto";
-    element.style.willChange = "transform";
-    element.innerHTML = content;
+    element.appendChild(contentEl);
+    contentEl.innerHTML = content;
     return element;
   }
 
@@ -95,7 +97,6 @@ export class ElementFactory {
     const separator = document.createElement("span");
     separator.className = "marquee-separator";
     separator.innerHTML = `<span style="display: inline-block; ${this.options.separatorStyles}">${this.options.separator}</span>`;
-    separator.style.position = "absolute";
     separator.style.whiteSpace = "pre";
     return separator;
   }

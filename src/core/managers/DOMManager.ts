@@ -2,6 +2,7 @@ import type { MarqueeOptions, ElementMetrics } from "../../types";
 import { CloneCalculator } from "./CloneCalculator";
 import { ElementFactory } from "../factories/ElementFactory";
 import { SeparatorManager } from "./SeparatorManager";
+import { PositionManager } from "./PositionManager";
 
 export class DOMManager {
   private container: HTMLElement;
@@ -118,9 +119,7 @@ export class DOMManager {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-      el.style.transform = this.isHorizontal
-        ? `translate3d(${position}px, 0, 0)`
-        : `translate3d(0, ${position}px, 0)`;
+      PositionManager.positionElement(el, position, this.isHorizontal);
     });
   }
 
@@ -147,9 +146,8 @@ export class DOMManager {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute("aria-hidden", "true");
         clone.classList.add("marquee-cloned-item");
-        clone.style.transform = this.isHorizontal
-          ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
-          : `translate3d(0, ${metrics[index].position + offset}px, 0)`;
+
+        PositionManager.positionElement(clone, metrics[index].position + offset, this.isHorizontal);
 
         this.clones.push(clone);
         fragment.appendChild(clone);

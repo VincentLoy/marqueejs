@@ -8,6 +8,7 @@ export class Marquee {
   private element!: HTMLElement;
   private originalElement: HTMLElement;
   private options!: Partial<MarqueeOptions>;
+  private isPlaying: boolean = false;
   private animationManager: AnimationManager | null = null;
   private eventManager: EventManager | null = null;
   private domManager: DOMManager | null = null;
@@ -121,7 +122,7 @@ export class Marquee {
   public destroy(): Promise<void> {
     return new Promise<void>((resolve) => {
       this.pause();
-      this.stopAnimation();
+      this.animationManager?.stopAnimation();
       this.eventManager?.destroy();
       this.domManager?.destroy();
 
@@ -132,17 +133,15 @@ export class Marquee {
     });
   }
 
-  public isPlaying(): boolean {
-    return this.animationManager?.isPlaying()!;
-  }
-
   public play(): void {
-    if (this.isPlaying()) return;
+    if (this.isPlaying) return;
+    this.isPlaying = true;
     this.startAnimation();
   }
 
   public pause(): void {
-    if (!this.isPlaying()) return;
+    if (!this.isPlaying) return;
+    this.isPlaying = false;
     this.stopAnimation();
   }
 
@@ -251,7 +250,8 @@ export class Marquee {
 
   public updateSeparator(separator: string): void {
     this.options.separator = separator;
-    this.domManager?.updateSeparators();
+    this.domManager?.createContentElements();
+    this.animationManager?.recalculatePositions();
   }
 
   public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
@@ -320,7 +320,6 @@ export class Marquee {
     };
 
     this.options.direction = oppositeDirection[this.options.direction!];
-    this.domManager?.updateSeparators();
   }
 
   public async patchContent(
@@ -355,6 +354,7 @@ export class Marquee {
     if (!this.options.contentList?.length) {
       this.options.contentList = newContent;
     } else {
+      // If new content length is greater or equal to current content
       // replace everything
       if (newContent.length >= this.options.contentList.length) {
         this.options.contentList = newContent;
@@ -374,9 +374,13 @@ export class Marquee {
     }
 
     if (reset) {
+      // Wait for reset to complete
       await this.reset();
     } else {
+      // Recreate content elements
       this.domManager?.createContentElements();
+
+      // Recalculate positions and restart animation
       this.animationManager?.recalculatePositions();
     }
 
