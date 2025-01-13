@@ -245,6 +245,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .forEach((item, index) => {
         item.innerHTML = `${item.innerHTML} - <b> clone: ${index + 1} </b>`;
       });
+    cloneDemo.recalculatePositions();
   };
   updtEltsIdx();
 
@@ -253,7 +254,6 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelector("#clone-count-display")!.textContent = `${value} clones`;
     cloneDemo.updateCloneCount(value);
     updtEltsIdx();
-    cloneDemo.recalculatePositions();
   });
 
   // 7. Complexe HTML Structure
