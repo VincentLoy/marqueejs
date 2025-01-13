@@ -17,6 +17,20 @@ export class SeparatorManager {
     this.elementFactory = new ElementFactory(this.element, this.options);
   }
 
+  /**
+   * Updates the separator elements between marquee content items.
+   * If no separator is defined in options or if the marquee is not horizontal direction, the method returns early.
+   * This method first removes all existing separators and then creates new ones between each content item.
+   * The separators are positioned based on the direction (left/right) and gap settings from the options.
+   *
+   * @remarks
+   * This method is responsible for:
+   * - Cleaning up existing separator elements
+   * - Creating new separator elements between items
+   * - Positioning separators according to direction and gap settings
+   *
+   * @throws {Error} Implicitly may throw if DOM operations fail
+   */
   public updateSeparators(): void {
     if (!this.options.separator || !this.isHorizontal) return;
 
@@ -26,7 +40,10 @@ export class SeparatorManager {
 
     // Create new separators between items
     elements.forEach((el) => {
-      const separator = this.elementFactory.createSeparatorElement();
+      const separator = ElementFactory.createSeparatorElement(
+        this.options.separator!,
+        this.options.separatorStyles
+      );
       el.appendChild(separator);
       PositionManager.positionSeparator(el, separator, this.options.gap!, isLeftDirection);
     });

@@ -254,7 +254,7 @@ export class Marquee {
     this.animationManager?.recalculatePositions();
   }
 
-  public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
+  public updateSeparatorStyles(styles: string): void {
     this.options.separatorStyles = styles;
     this.domManager?.updateSeparators();
   }

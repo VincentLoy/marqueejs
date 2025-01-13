@@ -14,7 +14,6 @@ export class DOMManager {
   private instanceId: string;
   private cloneCalculator: CloneCalculator;
   private isHorizontal: boolean;
-  private elementFactory: ElementFactory;
   private separatorManager: SeparatorManager;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
@@ -22,9 +21,8 @@ export class DOMManager {
     this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
     this.element = element;
     this.options = options;
-    this.elementFactory = new ElementFactory(this.element, this.options);
-    this.container = this.elementFactory.createContainer();
-    this.wrapper = this.elementFactory.createWrapper();
+    this.container = ElementFactory.createContainer(this.element, this.instanceId);
+    this.wrapper = ElementFactory.createWrapper(this.isHorizontal);
     this.separatorManager = new SeparatorManager(this.element, this.options, this.wrapper);
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
@@ -57,7 +55,7 @@ export class DOMManager {
 
     const fragment = document.createDocumentFragment();
     this.options.contentList!.forEach((content) => {
-      const element = this.elementFactory.createContentElement(content);
+      const element = ElementFactory.createContentElement(content, this.isHorizontal);
       this.contentElements.push(element);
       fragment.appendChild(element);
     });

@@ -11,29 +11,17 @@ import { MarqueeOptions } from "../../types";
  * @property {boolean} isHorizontal - Indicates if the marquee scrolls horizontally
  */
 export class ElementFactory {
-  private instanceId: string;
-  private options: Partial<MarqueeOptions>;
-  private element: HTMLElement;
-  private isHorizontal: boolean;
-
-  constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
-    this.isHorizontal = ["left", "right"].includes(options.direction!);
-    this.options = options;
-    this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
-    this.element = element;
-  }
-
   /**
    * Creates a container element for the marquee
    *
    * @returns {HTMLElement} - The container element
    */
-  public createContainer(): HTMLElement {
+  public static createContainer(element: HTMLElement, instanceId: string): HTMLElement {
     const container = document.createElement("div");
-    const elementClasses = Array.from(this.element.classList);
-    const elementId = this.element.id;
+    const elementClasses = Array.from(element.classList);
+    const elementId = element.id?.length ? element.id : undefined;
 
-    container.classList.add(this.instanceId, "marquee-container");
+    container.classList.add(instanceId, "marquee-container");
     container.classList.add(...elementClasses);
 
     if (elementId) {
@@ -51,16 +39,16 @@ export class ElementFactory {
    *
    * @returns {HTMLElement} A configured div element serving as the marquee wrapper
    */
-  public createWrapper(): HTMLElement {
+  public static createWrapper(isHorizontal: boolean): HTMLElement {
     const wrapper = document.createElement("div");
     wrapper.classList.add("marquee-wrapper");
     wrapper.style.position = "relative";
     wrapper.style.width = "100%";
     wrapper.style.height = "100%";
     wrapper.style.overflow = "visible";
-    wrapper.style.display = this.isHorizontal ? "flex" : "block";
+    wrapper.style.display = isHorizontal ? "flex" : "block";
 
-    if (this.isHorizontal) {
+    if (isHorizontal) {
       wrapper.style.alignItems = "center";
     }
 
@@ -73,14 +61,14 @@ export class ElementFactory {
    * @param content - The string content to be displayed inside the marquee element
    * @returns An HTMLElement configured with the appropriate styling and content
    */
-  public createContentElement(content: string): HTMLElement {
+  public static createContentElement(content: string, isHorizontal: boolean): HTMLElement {
     const element = document.createElement("div");
     const contentEl = document.createElement("div");
     element.className = "marquee-content-item";
     contentEl.classList.add("marquee-content");
     element.style.position = "absolute";
-    element.style.whiteSpace = !this.isHorizontal ? "normal" : "nowrap";
-    element.style.width = !this.isHorizontal ? "100%" : "auto";
+    element.style.whiteSpace = !isHorizontal ? "normal" : "nowrap";
+    element.style.width = !isHorizontal ? "100%" : "auto";
     element.appendChild(contentEl);
     contentEl.innerHTML = content;
     return element;
@@ -93,10 +81,10 @@ export class ElementFactory {
    *
    * @returns {HTMLElement} A new span element configured as a marquee separator
    */
-  public createSeparatorElement(): HTMLElement {
+  public static createSeparatorElement(theSeparator: string, separatorStyles: string): HTMLElement {
     const separator = document.createElement("span");
     separator.className = "marquee-separator";
-    separator.innerHTML = `<span style="display: inline-block; ${this.options.separatorStyles}">${this.options.separator}</span>`;
+    separator.innerHTML = `<span style="display: inline-block; ${separatorStyles}">${theSeparator}</span>`;
     separator.style.whiteSpace = "pre";
     return separator;
   }
