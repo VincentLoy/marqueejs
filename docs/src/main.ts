@@ -143,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
     direction: "up",
     speed: 25,
     gap: 15,
-    cloneCount: 1,
     containerHeight: 250,
     keepOriginalContent: true,
     pauseOnHover: true,
@@ -169,7 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fast with pause
   marqueejs(".marquee-fast", {
     speed: 350,
+    direction: "left",
     pauseOnHover: true,
+    separator: "🔥",
+    gap: 60,
   });
 
   // Advanced Examples Section
