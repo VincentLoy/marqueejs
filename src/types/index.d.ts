@@ -1,4 +1,10 @@
 /**
+ * Represents the possible directions for a marquee animation.
+ * @typedef {("left"|"right"|"up"|"down")} MarqueeDirectionValue
+ */
+export type MarqueeDirectionValue = "left" | "right" | "up" | "down";
+
+/**
  * Configuration options for MarqueeJS instance
  */
 export interface MarqueeOptions {
@@ -6,7 +12,7 @@ export interface MarqueeOptions {
   speed?: number;
 
   /** Direction of the marquee animation. */
-  direction?: "left" | "right" | "up" | "down";
+  direction?: MarqueeDirectionValue;
 
   /** Whether to pause animation on mouse hover. */
   pauseOnHover?: boolean;
@@ -23,7 +29,7 @@ export interface MarqueeOptions {
   /**
    * Custom additional CSS rules for the separator element. Separator element is ::before pseudo-element.
    */
-  separatorStyles?: Partial<CSSStyleDeclaration>;
+  separatorStyles?: string;
 
   /**
    * Array of HTML strings to use as marquee items.
@@ -115,7 +121,7 @@ export interface MarqueeInstance {
    * Update the separator styles
    * @param styles - New separator styles
    */
-  updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void;
+  updateSeparatorStyles(styles: string): void;
 
   /**
    * Update the number of clones
@@ -214,4 +220,15 @@ export interface CloneMetrics {
   containerSize: number;
   contentSize: number;
   calculatedCount: number;
+}
+
+/**
+ * Represents an HTML element with its corresponding position.
+ * @interface
+ * @property {HTMLElement} el - The HTML element being positioned
+ * @property {number} position - The numerical position value of the element
+ */
+export interface PositionedElement {
+  el: HTMLElement;
+  position: number;
 }

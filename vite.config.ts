@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import tailwindcss from "tailwindcss";
@@ -49,6 +50,12 @@ export default defineConfig(({ command, mode }) => {
           },
         ],
       },
+    },
+    test: {
+      globals: true,
+      environment: "jsdom",
+      include: ["tests/**/*.test.ts"],
+      reporters: ["default", "html"],
     },
   };
 

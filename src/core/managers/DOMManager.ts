@@ -1,5 +1,8 @@
 import type { MarqueeOptions, ElementMetrics } from "../../types";
 import { CloneCalculator } from "./CloneCalculator";
+import { ElementFactory } from "../factories/ElementFactory";
+import { SeparatorManager } from "./SeparatorManager";
+import { PositionManager } from "./PositionManager";
 
 export class DOMManager {
   private container: HTMLElement;
@@ -9,50 +12,23 @@ export class DOMManager {
   private contentElements: HTMLElement[] = [];
   private clones: HTMLElement[] = [];
   private instanceId: string;
-  private separatorElements: HTMLElement[] = [];
   private cloneCalculator: CloneCalculator;
   private isHorizontal: boolean;
+  private separatorManager: SeparatorManager;
 
   constructor(element: HTMLElement, options: Partial<MarqueeOptions>) {
     this.isHorizontal = ["left", "right"].includes(options.direction!);
     this.instanceId = `marquee-${Math.random().toString(36).substring(2, 9)}`;
     this.element = element;
     this.options = options;
-    this.container = this.createContainer();
-    this.wrapper = this.createWrapper();
+    this.container = ElementFactory.createContainer(this.element, this.instanceId);
+    this.wrapper = ElementFactory.createWrapper(this.isHorizontal);
+    this.separatorManager = new SeparatorManager(this.options, this.wrapper);
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
 
     this.setupDOM();
-  }
-
-  private createContainer(): HTMLElement {
-    const container = document.createElement("div");
-    container.classList.add(this.instanceId, "marquee-container");
-    const elementClasses = Array.from(this.element.classList);
-    const elementId = this.element.id;
-    container.classList.add(...elementClasses);
-    if (elementId) container.id = elementId;
-    container.style.width = "100%";
-    container.style.overflow = "hidden";
-    return container;
-  }
-
-  private createWrapper(): HTMLElement {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("marquee-wrapper");
-    wrapper.style.position = "relative";
-    wrapper.style.width = "100%";
-    wrapper.style.height = "100%";
-    wrapper.style.overflow = "visible";
-    wrapper.style.display = this.isHorizontal ? "flex" : "block";
-
-    if (this.isHorizontal) {
-      wrapper.style.alignItems = "center";
-    }
-
-    return wrapper;
   }
 
   public setupDOM(): void {
@@ -79,7 +55,7 @@ export class DOMManager {
 
     const fragment = document.createDocumentFragment();
     this.options.contentList!.forEach((content) => {
-      const element = this.createContentElement(content);
+      const element = ElementFactory.createContentElement(content, this.isHorizontal);
       this.contentElements.push(element);
       fragment.appendChild(element);
     });
@@ -137,23 +113,11 @@ export class DOMManager {
     return metrics;
   }
 
-  private createContentElement(content: string): HTMLElement {
-    const element = document.createElement("div");
-    element.className = "marquee-content-item";
-    element.style.position = "absolute";
-    element.style.whiteSpace = !this.isHorizontal ? "normal" : "nowrap";
-    element.style.width = !this.isHorizontal ? "100%" : "auto";
-    element.innerHTML = content;
-    return element;
-  }
-
   private positionElements(): void {
     const metrics = this.calculateMetrics();
     this.contentElements.forEach((el, i) => {
       const { position } = metrics[i];
-      el.style.transform = this.isHorizontal
-        ? `translate3d(${position}px, 0, 0)`
-        : `translate3d(0, ${position}px, 0)`;
+      PositionManager.positionElement(el, position, this.isHorizontal);
     });
   }
 
@@ -180,9 +144,8 @@ export class DOMManager {
         const clone = original.cloneNode(true) as HTMLElement;
         clone.setAttribute("aria-hidden", "true");
         clone.classList.add("marquee-cloned-item");
-        clone.style.transform = this.isHorizontal
-          ? `translate3d(${metrics[index].position + offset}px, 0, 0)`
-          : `translate3d(0, ${metrics[index].position + offset}px, 0)`;
+
+        PositionManager.positionElement(clone, metrics[index].position + offset, this.isHorizontal);
 
         this.clones.push(clone);
         fragment.appendChild(clone);
@@ -190,47 +153,6 @@ export class DOMManager {
     }
 
     this.wrapper.appendChild(fragment);
-  }
-
-  private createSeparatorElement(): HTMLElement {
-    const separator = document.createElement("span");
-    separator.className = "marquee-separator";
-    separator.innerHTML = `<span style="display: inline-block; ${this.options.separatorStyles}">${this.options.separator}</span>`;
-    separator.style.position = "absolute";
-    separator.style.whiteSpace = "pre";
-    this.separatorElements.push(separator);
-    return separator;
-  }
-
-  private updateSeparators(): void {
-    // Cleanup existing separators
-    this.separatorElements.forEach((el) => el.remove());
-    this.separatorElements = [];
-    const elements = this.wrapper.querySelectorAll(".marquee-content-item");
-
-    if (!this.options.separator || !this.isHorizontal) {
-      return;
-    }
-
-    // Create new separators between items
-    elements.forEach((el) => {
-      const separator = this.createSeparatorElement();
-      el.appendChild(separator);
-      const elRect = el.getBoundingClientRect();
-      const separatorRect = separator.getBoundingClientRect();
-
-      // Position separator in the middle of the gap
-      const left = elRect.width - separatorRect.width / 2 + this.options.gap! / 2;
-      separator.style.left = `${left}px`;
-      separator.style.top = "50%";
-      separator.style.lineHeight = "0.70";
-      separator.style.transform = "translateY(-50%)";
-    });
-  }
-
-  private clearSeparatorElements(): void {
-    this.separatorElements.forEach((el) => el.remove());
-    this.separatorElements = [];
   }
 
   // Utility method to force recalculation of clones
@@ -257,13 +179,17 @@ export class DOMManager {
     return this.contentElements;
   }
 
+  public updateSeparators(): void {
+    this.separatorManager.updateSeparators();
+  }
+
   public destroy(): void {
     this.clearElements();
     if (this.wrapper.parentNode) {
       this.wrapper.parentNode.insertBefore(this.element, this.wrapper);
       this.container.remove();
     }
-    this.clearSeparatorElements();
+
     document.querySelector(`.${this.instanceId}`)?.remove();
   }
 }

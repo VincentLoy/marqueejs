@@ -1,51 +1,63 @@
-import type { MarqueeOptions } from "../../types";
+import type { MarqueeOptions, PositionedElement } from "../../types";
+import { PositionManager } from "./PositionManager";
 
 export class AnimationManager {
   private wrapper: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private animationFrame: number | null = null;
   private lastTime: number = 0;
-  private elements: Array<{ el: HTMLElement; position: number }> = [];
+  private elements: Array<PositionedElement> = [];
   private isHorizontal: boolean;
-  private maxSize: number = 0;
+  public playing: boolean;
 
   constructor(wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
     this.wrapper = wrapper;
     this.options = options;
+    this.playing = false;
     this.isHorizontal = ["left", "right"].includes(this.options.direction!);
     this.setupElements();
   }
 
+  /**
+   * Sets up the initial positions of the wrapper's child elements.
+   * This method processes all direct children of the wrapper element,
+   * positions them using the PositionManager, and stores them for animation.
+   *
+   * The positioning is done according to:
+   * - The horizontal/vertical orientation specified
+   * - The gap between elements defined in options
+   *
+   * @private
+   */
   private setupElements(): void {
-    const groups = Array.from(this.wrapper.children) as HTMLElement[];
-    let currentPosition = 0;
+    const groups = [...this.wrapper.children] as HTMLElement[];
 
-    this.elements = groups.map((group) => {
-      const size = this.isHorizontal
-        ? group.offsetWidth + this.options.gap!
-        : group.offsetHeight + this.options.gap!;
+    const positionedElements = PositionManager.setupElementsInitialPosition(
+      groups,
+      this.isHorizontal,
+      this.options.gap!
+    );
 
-      const position = currentPosition;
-
-      group.style.position = "absolute";
-      group.style.left = "0";
-      group.style.transform = this.isHorizontal
-        ? `translate3d(${position}px, 0, 0)`
-        : `translate3d(0, ${position}px, 0)`;
-
-      currentPosition += size;
-
-      this.maxSize = Math.max(this.maxSize, size);
-
-      return {
-        el: group,
-        position,
-      };
-    });
+    this.elements = positionedElements;
   }
 
+  /**
+   * Initiates the animation loop for the marquee.
+   * This method sets up a recursive animation frame request that:
+   * 1. Calculates the time delta between frames
+   * 2. Computes the movement distance based on speed and delta time
+   * 3. Updates the position of each element in the marquee
+   *
+   * The animation continues until {@link stopAnimation} is called.
+   *
+   * @remarks
+   * The animation uses requestAnimationFrame for smooth performance
+   * and calculates movement based on elapsed time to ensure
+   * consistent speed across different frame rates.
+   */
   public startAnimation(): void {
     this.lastTime = performance.now();
+    this.playing = true;
 
     const animate = (currentTime: number) => {
       const deltaTime = currentTime - this.lastTime;
@@ -54,11 +66,14 @@ export class AnimationManager {
 
       // Update each element's position independently
       this.elements.forEach((item) => {
-        if (["left", "right"].includes(this.options.direction!)) {
-          this.updateHorizontalPosition(item, movement);
-        } else {
-          this.updateVerticalPosition(item, movement);
-        }
+        PositionManager.updatePosition(
+          item,
+          this.elements,
+          this.wrapper,
+          movement,
+          this.options.direction!,
+          this.options.gap!
+        );
       });
 
       this.animationFrame = requestAnimationFrame(animate);
@@ -67,110 +82,15 @@ export class AnimationManager {
     this.animationFrame = requestAnimationFrame(animate);
   }
 
-  private isPositionAvailable(newPosition: number, currentElement: HTMLElement): boolean {
-    const threshold = this.options.gap || 0;
-
-    return !this.elements.some(({ el, position }) => {
-      if (el === currentElement) return false;
-
-      if (this.isHorizontal) {
-        const elementWidth = el.offsetWidth;
-        const currentWidth = currentElement.offsetWidth;
-
-        return (
-          newPosition < position + elementWidth + threshold &&
-          newPosition + currentWidth > position - threshold
-        );
-      } else {
-        const elementHeight = el.offsetHeight;
-        const currentHeight = currentElement.offsetHeight;
-
-        return (
-          newPosition < position + elementHeight + threshold &&
-          newPosition + currentHeight > position - threshold
-        );
-      }
-    });
-  }
-
-  private isFurthestElement(item: { el: HTMLElement; position: number }): boolean {
-    return this.elements.every((other) => {
-      if (other === item) return true;
-      if (this.isHorizontal) {
-        return this.options.direction === "left"
-          ? item.position < other.position
-          : item.position > other.position;
-      } else {
-        return this.options.direction === "up"
-          ? item.position < other.position
-          : item.position > other.position;
-      }
-    });
-  }
-
-  private updateHorizontalPosition(
-    item: { el: HTMLElement; position: number },
-    movement: number
-  ): void {
-    const containerWidth = this.wrapper.parentElement?.offsetWidth || 0;
-    const elementWidth = item.el.offsetWidth;
-
-    if (this.options.direction === "left") {
-      item.position -= movement;
-
-      if (item.position + elementWidth < 0) {
-        const newPosition = containerWidth;
-        // Only reset if there's space available
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    } else {
-      // here this.options.direction === "right"
-      item.position += movement;
-
-      if (item.position > containerWidth) {
-        const newPosition = -elementWidth;
-        // item.el.style.width = `${this.maxSize}px`;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          // item.el.style.width = `auto`;
-          item.position = newPosition;
-        }
-      }
-    }
-
-    item.el.style.transform = `translate3d(${item.position}px, 0, 0)`;
-  }
-
-  private updateVerticalPosition(
-    item: { el: HTMLElement; position: number },
-    movement: number
-  ): void {
-    const containerHeight = this.wrapper.parentElement?.offsetHeight || 0;
-    const elementHeight = item.el.offsetHeight;
-
-    if (this.options.direction === "up") {
-      item.position -= movement;
-      if (item.position + elementHeight < 0) {
-        const newPosition = containerHeight;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    } else {
-      item.position += movement;
-      if (item.position > containerHeight) {
-        const newPosition = -elementHeight;
-        if (this.isPositionAvailable(newPosition, item.el) && this.isFurthestElement(item)) {
-          item.position = newPosition;
-        }
-      }
-    }
-
-    item.el.style.transform = `translate3d(0, ${item.position}px, 0)`;
-  }
-
+  /**
+   * Stops the current animation by canceling the animation frame and resetting animation states.
+   * This method will:
+   * - Set the playing state to false
+   * - Cancel any existing animation frame
+   * - Reset the last recorded time
+   */
   public stopAnimation(): void {
+    this.playing = false;
     if (this.animationFrame) {
       cancelAnimationFrame(this.animationFrame);
       this.animationFrame = null;
@@ -178,14 +98,24 @@ export class AnimationManager {
     this.lastTime = 0;
   }
 
+  /**
+   * Recalculates positions of elements in the animation sequence.
+   * This method performs a complete reset of the animation by:
+   * 1. Stopping the current animation
+   * 2. Reinitializing element positions
+   * 3. Restarting the animation
+   */
   public recalculatePositions(): void {
-    // Stop current animation
     this.stopAnimation();
-
-    // Reset and reinitialize positions
     this.setupElements();
-
-    // Restart animation if it was running
     this.startAnimation();
+  }
+
+  /**
+   * Checks whether animations are currently being played.
+   * @returns {boolean} True if animations are playing, false otherwise.
+   */
+  public isPlaying(): boolean {
+    return this.playing;
   }
 }
