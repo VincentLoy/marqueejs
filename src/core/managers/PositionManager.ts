@@ -29,7 +29,8 @@ export class PositionManager {
     let maxSize = 0;
 
     const positionedElements = elements.map((el): PositionedElement => {
-      const size = isHorizontal ? el.offsetWidth + gap : el.offsetHeight + gap;
+      const boudingRect = el.getBoundingClientRect();
+      const size = isHorizontal ? boudingRect.width + gap : boudingRect.height + gap;
       const position = currentPosition;
 
       PositionManager.positionElement(el, position, isHorizontal);
