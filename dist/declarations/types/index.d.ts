@@ -1,4 +1,10 @@
 /**
+ * Represents the possible directions for a marquee animation.
+ * @typedef {("left"|"right"|"up"|"down")} MarqueeDirectionValue
+ */
+export type MarqueeDirectionValue = "left" | "right" | "up" | "down";
+
+/**
  * Configuration options for MarqueeJS instance
  */
 export interface MarqueeOptions {
@@ -6,7 +12,7 @@ export interface MarqueeOptions {
   speed?: number;
 
   /** Direction of the marquee animation. */
-  direction?: "left" | "right" | "up" | "down";
+  direction?: MarqueeDirectionValue;
 
   /** Whether to pause animation on mouse hover. */
   pauseOnHover?: boolean;
@@ -19,6 +25,11 @@ export interface MarqueeOptions {
 
   /** Character or string to separate items. Not supported for vertical directions. */
   separator?: string;
+
+  /**
+   * Custom additional CSS rules for the separator element. Separator element is ::before pseudo-element.
+   */
+  separatorStyles?: string;
 
   /**
    * Array of HTML strings to use as marquee items.
@@ -43,14 +54,22 @@ export interface MarqueeOptions {
 
   /** Randomize order in contentList */
   randomize?: boolean;
+
+  /**
+   * Marquee animation will start after the specified time in ms
+   */
+  startAfter?: number;
+
+  /**
+   * Security margin for height calculation in pixels. Only applicable for 'up' and 'down' directions.
+   */
+  heightSecurityMargin?: number;
 }
 
 /**
  * Public API for controlling a MarqueeJS instance
  */
 export interface MarqueeInstance {
-  start(): void;
-  stop(): void;
   pause(): void;
   resume(): void;
   destroy(): void;
@@ -97,6 +116,12 @@ export interface MarqueeInstance {
    * @param separator - New separator string
    */
   updateSeparator(separator: string): void;
+
+  /**
+   * Update the separator styles
+   * @param styles - New separator styles
+   */
+  updateSeparatorStyles(styles: string): void;
 
   /**
    * Update the number of clones
@@ -188,7 +213,6 @@ export interface ElementMetrics {
   size: number;
   spacing: number;
   position: number;
-  separatorOffset?: number;
 }
 
 // Add new interface for clone calculator
@@ -196,4 +220,15 @@ export interface CloneMetrics {
   containerSize: number;
   contentSize: number;
   calculatedCount: number;
+}
+
+/**
+ * Represents an HTML element with its corresponding position.
+ * @interface
+ * @property {HTMLElement} el - The HTML element being positioned
+ * @property {number} position - The numerical position value of the element
+ */
+export interface PositionedElement {
+  el: HTMLElement;
+  position: number;
 }

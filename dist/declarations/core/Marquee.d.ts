@@ -25,6 +25,7 @@ export declare class Marquee {
     updateSpeed(speed: number): void;
     updateGap(gap: number): void;
     updateSeparator(separator: string): void;
+    updateSeparatorStyles(styles: string): void;
     updateCloneCount(cloneCount: number): void;
     updateContainerHeight(containerHeight: number): void;
     updatePauseOnHover(pauseOnHover: boolean): void;
