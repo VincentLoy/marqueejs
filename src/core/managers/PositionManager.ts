@@ -201,7 +201,7 @@ export class PositionManager {
     const wrapperRefSize = isHorizontal
       ? wrapper.parentElement?.offsetWidth || 0
       : wrapper.parentElement?.offsetHeight || 0;
-    const elementRefSize = item.el.offsetWidth;
+    const elementRefSize = isHorizontal ? item.el.offsetWidth + gap! : item.el.offsetHeight;
     const isUpOrLeftDirection = ["left", "up"].includes(direction!);
     let isFurthestElement = false;
     let positionAvailable = false;
@@ -217,7 +217,9 @@ export class PositionManager {
       // here direction is right or down
       item.position += movement;
 
-      if (item.position > wrapperRefSize) {
+      const positionRef = isHorizontal ? item.position - gap! : item.position;
+
+      if (positionRef > wrapperRefSize) {
         newPosition = -elementRefSize;
       }
     }
@@ -231,7 +233,7 @@ export class PositionManager {
       isHorizontal
     );
 
-    if (positionAvailable && isFurthestElement) {
+    if (positionAvailable && isFurthestElement && newPosition !== 0) {
       item.position = newPosition;
     }
 
