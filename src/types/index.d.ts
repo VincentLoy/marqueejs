@@ -1,4 +1,10 @@
 /**
+ * Represents the possible directions for a marquee animation.
+ * @typedef {("left"|"right"|"up"|"down")} MarqueeDirectionValue
+ */
+export type MarqueeDirectionValue = "left" | "right" | "up" | "down";
+
+/**
  * Configuration options for MarqueeJS instance
  */
 export interface MarqueeOptions {
@@ -6,7 +12,7 @@ export interface MarqueeOptions {
   speed?: number;
 
   /** Direction of the marquee animation. */
-  direction?: "left" | "right" | "up" | "down";
+  direction?: MarqueeDirectionValue;
 
   /** Whether to pause animation on mouse hover. */
   pauseOnHover?: boolean;

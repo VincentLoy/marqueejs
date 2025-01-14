@@ -178,7 +178,7 @@ export class PositionManager {
    * @param elements - Array of all positioned elements in the marquee
    * @param wrapper - The HTML element wrapping all marquee elements
    * @param movement - The amount of pixels to move the element by
-   * @param direction - The direction of movement ("left" | "right" | "up" | "down")
+   * @param direction - The direction of movement ("left" | "right" | "up" | "down") type: <MarqueeDirectionValue>
    * @param gap - The spacing between elements
    *
    * @remarks
