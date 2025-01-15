@@ -1,18 +1,15 @@
-import type { MarqueeOptions } from "../../types";
+import type { MarqueeOptions, EventHandlers } from "../../types";
 
 export class EventManager {
   private wrapper: HTMLElement;
   private options: Partial<MarqueeOptions>;
-  private handlers: {
-    pause: () => void;
-    resume: () => void;
-  };
+  private handlers: EventHandlers;
 
   constructor(
     _element: HTMLElement,
     wrapper: HTMLElement,
     options: Partial<MarqueeOptions>,
-    handlers: { pause: () => void; resume: () => void }
+    handlers: EventHandlers
   ) {
     this.wrapper = wrapper;
     this.options = options;
@@ -24,6 +21,7 @@ export class EventManager {
     this.setupHoverEvents();
     this.setupTouchEvents();
     this.setupVisibilityEvents();
+    this.setupResizeEvent();
   }
 
   private setupHoverEvents(): void {
@@ -95,6 +93,19 @@ export class EventManager {
         this.handlers.resume();
       }
     });
+  }
+
+  private setupResizeEvent(): void {
+    window.addEventListener("resize", this.debounce(this.handlers.resize, 200));
+  }
+
+  private debounce(fn: Function, delay: number): () => void {
+    let timer: number | null = null;
+    return (...args: any[]) => {
+      if (timer) clearTimeout(timer);
+
+      timer = window.setTimeout(() => fn(...args), delay);
+    };
   }
 
   public destroy(): void {

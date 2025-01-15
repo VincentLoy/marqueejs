@@ -232,3 +232,9 @@ export interface PositionedElement {
   el: HTMLElement;
   position: number;
 }
+
+export interface EventHandlers {
+  pause: () => void;
+  resume: () => void;
+  resize: () => void;
+}
