@@ -46,3 +46,7 @@
     @apply hidden;
   }
 }
+
+.hljs-comment {
+  @apply text-gray-400 !important;
+}
