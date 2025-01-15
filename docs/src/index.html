@@ -40,11 +40,11 @@
     </header>
 
     <div class="container mx-auto">
-        <div class="grid grid-cols-12 gap-8">
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <!-- Sidebar -->
-            <div id="mobile-menu-overlay" class="fixed inset-0 bg-black/50 z-40 lg:hidden hidden"></div>
             <aside
-                class="fixed inset-y-0 left-0 w-64 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:bg-transparent lg:block lg:transform-none lg:z-0 lg:col-span-2">
+                class="fixed inset-y-0 left-0 lg:col-span-3 bg-white dark:bg-gray-800 p-4 bg-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:relative lg:bg-transparent lg:block lg:transform-none lg:z-0">
                 <div class="sticky top-8 max-h-[calc(100vh-4rem)] overflow-y-auto p-6 lg:p-0">
                     <nav class="h-full">
                         <ul class="space-y-4">
@@ -157,7 +157,7 @@
                 </div>
             </aside>
             <!-- Main Content -->
-            <main class="col-span-12 lg:col-span-10 px-4 py-8">
+            <main class="lg:col-span-9 px-4 py-8">
                 <!-- WHY MarqueeJS -->
                 <section id="why" class="py-4 sm:py-8">
                     <div class="max-w-3xl mb-8">
@@ -175,28 +175,28 @@
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 w-full">
                         <!-- Performance Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
-                            <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
-                                <i class="icon-[lucide--zap] w-8 sm:w-10 h-8 sm:h-10"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Lightning Fast</h3>
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+                                <i class="icon-[lucide--zap] w-5 h-5 sm:w-6 sm:h-6 text-indigo-600"></i>
+                                <span>Lightning Fast</span>
+                            </h3>
                             <p class="text-sm sm:text-base text-gray-600"><b>Zero dependencies</b>, optimized
                                 animations, and minimal DOM operations for buttery-smooth performance.</p>
                         </div>
                         <!-- Flexibility Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
-                            <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
-                                <i class="icon-[lucide--settings] w-8 sm:w-10 h-8 sm:h-10"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Fully Customizable</h3>
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+                                <i class="icon-[lucide--settings] w-5 h-5 sm:w-6 sm:h-6 text-indigo-600"></i>
+                                <span>Fully Customizable</span>
+                            </h3>
                             <p class="text-sm sm:text-base text-gray-600">Multiple directions, dynamic content updates,
                                 custom speeds, and flexible styling options.</p>
                         </div>
                         <!-- Modern Card -->
                         <div class="p-6 sm:p-8 rounded-xl bg-white shadow-md hover:shadow-xl transition-shadow">
-                            <div class="w-10 sm:w-12 h-10 sm:h-12 mb-4 sm:mb-6 text-indigo-600">
-                                <i class="icon-[lucide--check-circle] w-8 sm:w-10 h-8 sm:h-10"></i>
-                            </div>
-                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">Modern API</h3>
+                            <h3 class="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 flex items-center gap-2">
+                                <i class="icon-[lucide--check-circle] w-5 h-5 sm:w-6 sm:h-6 text-indigo-600"></i>
+                                <span>Modern API</span>
+                            </h3>
                             <p class="text-sm sm:text-base text-gray-600"><b>TypeScript</b> support, promise-based API,
                                 and modern browser features for better developer experience.</p>
                         </div>
