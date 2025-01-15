@@ -267,6 +267,12 @@ document.addEventListener("DOMContentLoaded", () => {
     cloneCount: 1,
   });
 
+  marqueejs(".marquee-complex-2", {
+    heightSecurityMargin: 30,
+    gap: 30,
+    speed: 80,
+  });
+
   // 7. Complexe Showcase
   let t = marqueejs(".marquee-showcase", {
     direction: "left",
