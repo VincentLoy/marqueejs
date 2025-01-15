@@ -69,13 +69,14 @@ export class CloneCalculator {
     const containerSize = isHorizontal ? container.offsetWidth : container.offsetHeight;
 
     const contentSize = elements.reduce((total, el) => {
-      const size = isHorizontal ? el.offsetWidth : el.offsetHeight;
+      const elBounds = el.getBoundingClientRect();
+      const size = isHorizontal ? elBounds.width : elBounds.height;
       return total + size + gap;
     }, 0);
 
     return {
-      containerSize,
-      contentSize,
+      containerSize: Math.round(containerSize),
+      contentSize: Math.round(contentSize),
     };
   }
 
