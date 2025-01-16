@@ -76,7 +76,6 @@ export class Marquee {
       this.eventManager = new EventManager(this.element, wrapper, this.options, {
         pause: () => this.pause(),
         resume: () => this.play(),
-        resize: () => this.recalculatePositions(),
       });
 
       setTimeout(() => {
@@ -255,7 +254,7 @@ export class Marquee {
     this.animationManager?.recalculatePositions();
   }
 
-  public updateSeparatorStyles(styles: string): void {
+  public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
     this.options.separatorStyles = styles;
     this.domManager?.updateSeparators();
   }
@@ -298,18 +297,12 @@ export class Marquee {
       {
         pause: () => this.pause(),
         resume: () => this.play(),
-        resize: () => this.recalculatePositions(),
       }
     );
   }
 
   public recalculatePositions(): void {
-    if (this.options.cloneCount === "auto") {
-      this.domManager?.createContentElements();
-    }
-
     this.animationManager?.recalculatePositions();
-
     this.play();
   }
 

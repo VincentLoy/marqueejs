@@ -236,5 +236,4 @@ export interface PositionedElement {
 export interface EventHandlers {
   pause: () => void;
   resume: () => void;
-  resize: () => void;
 }
