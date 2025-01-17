@@ -2,7 +2,7 @@
 
 ## Status: Alpha Work In Progress
 
-> ⚠️ This library is currently in alpha. While core features are quite stable (maybe), APIs might change before the 1.0 release.
+> ⚠️ THIS BRANCH IS ONLY USED TO TEST FLEXBOX ITEMS FOR THE MARQUEE OVER ABSOLUTE POSITIONNED ELEMENTS
 >
 > I encourage testing and feedbacks but don't recommend in production environments.
 
