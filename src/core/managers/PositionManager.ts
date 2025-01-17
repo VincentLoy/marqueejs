@@ -57,11 +57,16 @@ export class PositionManager {
   ): void {
     if (!element) return;
 
-    element.style.position = "absolute";
-    element.style.willChange = "transform";
-    element.style.transform = isHorizontal
-      ? `translate3d(${position}px, 0, 0)`
-      : `translate3d(0, ${position}px, 0)`;
+    element.style.position = "relative";
+    element.style.flexShrink = "0";
+    // element.style.transform = isHorizontal
+    //   ? `translate3d(${position}px, 0, 0)`
+    //   : `translate3d(0, ${position}px, 0)`;
+    // element.style.position = "absolute";
+    // element.style.willChange = "transform";
+    // element.style.transform = isHorizontal
+    //   ? `translate3d(${position}px, 0, 0)`
+    //   : `translate3d(0, ${position}px, 0)`;
   }
 
   /**
@@ -104,72 +109,35 @@ export class PositionManager {
     separator.style.transform = "translate3d(0, -50%, 0)";
   }
 
-  /**
-   * Determines if an element is the furthest positioned element in a given array based on direction
-   * @param item - Object containing the HTML element and its position
-   * @param elements - Array of positioned elements to compare against
-   * @param isHorizontal - Boolean indicating if the movement is horizontal
-   * @param direction - Direction of movement ("left", "right", "up", or "down")
-   * @returns Boolean indicating if the item is the furthest element in the specified direction
-   */
-  public static isFurthestElement(
-    item: {
-      el: HTMLElement;
-      position: number;
-    },
-    elements: Array<PositionedElement>,
-    isHorizontal: boolean,
-    direction: MarqueeOptions["direction"]
-  ): boolean {
-    return !elements.some((other) => {
-      if (other === item) return false;
-      if (isHorizontal) {
-        return direction === "left"
-          ? item.position >= other.position
-          : item.position <= other.position;
-      } else {
-        return direction === "up"
-          ? item.position >= other.position
-          : item.position <= other.position;
-      }
-    });
+  public static moveElementToOppositeEdge(
+    el: Element,
+    direction: MarqueeOptions["direction"],
+    parent: HTMLElement
+  ) {
+    const isUpOrLeftDirection = ["left", "up"].includes(direction!);
+    if (isUpOrLeftDirection) {
+      parent.appendChild(el);
+    } else {
+      parent.insertBefore(el, parent.firstChild);
+    }
   }
 
-  /**
-   * Determines if a new position is available for an element without overlapping other elements.
-   *
-   * @param newPosition - The proposed position to check
-   * @param currentElement - The HTML element being positioned
-   * @param elements - Array of existing positioned elements with their positions
-   * @param gap - Minimum space required between elements
-   * @param isHorizontal - Direction of the marquee (true for horizontal, false for vertical)
-   * @returns True if the position is available, false if it would overlap with existing elements
-   *
-   * @remarks
-   * The function checks if placing an element at the new position would cause overlap with any existing
-   * elements, taking into account the specified gap between elements. It ignores collision checks with
-   * the current element itself.
-   */
-  public static isPositionAvailable(
-    newPosition: number,
-    currentElement: HTMLElement,
-    elements: Array<PositionedElement>,
-    gap: MarqueeOptions["gap"],
-    isHorizontal: boolean
-  ): boolean {
-    const threshold = gap || 0;
-    return !elements.some(({ el, position }) => {
-      if (el === currentElement) return false;
-      const currentElSizeWatcher = isHorizontal
-        ? currentElement.offsetWidth
-        : currentElement.offsetHeight;
-      const elSizeWatcher = isHorizontal ? el.offsetWidth : el.offsetHeight;
-
-      return (
-        newPosition < position + elSizeWatcher + threshold &&
-        newPosition + currentElSizeWatcher > position - threshold
-      );
-    });
+  private static shouldMoveElement(
+    el: Element,
+    isHorizontal: boolean,
+    isUpOrLeftDirection: boolean,
+    gap: number,
+    parentPosition: number
+  ) {
+    const securityMargin = 0;
+    const elRect = el.getBoundingClientRect();
+    const elSize = isHorizontal ? elRect.width : elRect.height;
+    if (isUpOrLeftDirection) {
+      const elPosition = parentPosition + securityMargin;
+      return elPosition + elSize + gap! < 0;
+    } else {
+      return parentPosition + elSize + gap! > 0;
+    }
   }
 
   /**
@@ -177,7 +145,7 @@ export class PositionManager {
    *
    * @param item - The element to be positioned with its current position data
    * @param elements - Array of all positioned elements in the marquee
-   * @param wrapper - The HTML element wrapping all marquee elements
+   * @param container - The HTML element wrapping animated element
    * @param movement - The amount of pixels to move the element by
    * @param direction - The direction of movement ("left" | "right" | "up" | "down") type: <MarqueeDirectionValue>
    * @param gap - The spacing between elements
@@ -191,57 +159,82 @@ export class PositionManager {
    * The position is applied using CSS transform translate3d for better performance.
    */
   public static updatePosition(
-    item: PositionedElement,
-    elements: Array<PositionedElement>,
-    wrapper: HTMLElement,
+    animatedElt: HTMLElement,
+    elements: Element[],
+    container: HTMLElement,
     movement: number,
     direction: MarqueeOptions["direction"],
-    gap: MarqueeOptions["gap"]
+    gap: MarqueeOptions["gap"],
+    updateLastTime: () => void
   ): void {
     const isHorizontal = ["left", "right"].includes(direction!);
-    const wrapperRefSize = isHorizontal
-      ? wrapper.parentElement?.offsetWidth || 0
-      : wrapper.parentElement?.offsetHeight || 0;
-    const elementRefSize = isHorizontal ? item.el.offsetWidth + gap! : item.el.offsetHeight;
+    const containerBoundingRect = container.getBoundingClientRect();
+    const containerRefSize = isHorizontal
+      ? containerBoundingRect.width || 0
+      : containerBoundingRect.height || 0;
+    const animatedEltBoundingRect = animatedElt.getBoundingClientRect();
+    const elementRefSize = isHorizontal
+      ? animatedEltBoundingRect.width + gap!
+      : animatedEltBoundingRect.height;
     const isUpOrLeftDirection = ["left", "up"].includes(direction!);
-    let isFurthestElement = false;
-    let positionAvailable = false;
-    let newPosition = 0;
+    let currentPosition = 0;
+    let position = animatedEltBoundingRect.x;
+    let shouldMove = false;
 
-    if (isUpOrLeftDirection) {
-      item.position -= movement;
-
-      if (item.position + elementRefSize < 0) {
-        newPosition = wrapperRefSize;
-      }
-    } else {
-      // here direction is right or down
-      item.position += movement;
-
-      const positionRef = isHorizontal ? item.position - gap! : item.position;
-
-      if (positionRef > wrapperRefSize) {
-        newPosition = -elementRefSize;
-      }
-    }
-
-    isFurthestElement = PositionManager.isFurthestElement(item, elements, isHorizontal, direction);
-    positionAvailable = PositionManager.isPositionAvailable(
-      newPosition,
-      item.el,
-      elements,
-      gap,
-      isHorizontal
-    );
-
-    if (positionAvailable && isFurthestElement && newPosition !== 0) {
-      item.position = newPosition;
-    }
+    const transformValues = animatedElt.style.transform
+      .match(/\((.*?)\)/)?.[1]
+      ?.split(",")
+      .map((n) => parseFloat(n)) || [0, 0, 0];
+    const speed = movement; // Convert speed to px/frame assuming 60fps
 
     if (isHorizontal) {
-      item.el.style.transform = `translate3d(${item.position}px, 0, 0)`;
+      currentPosition = transformValues[0];
     } else {
-      item.el.style.transform = `translate3d(0, ${item.position}px, 0)`;
+      currentPosition = transformValues[1];
+    }
+
+    if (isUpOrLeftDirection) {
+      position = currentPosition - speed;
+      shouldMove = this.shouldMoveElement(
+        animatedElt.firstChild as Element,
+        isHorizontal,
+        isUpOrLeftDirection,
+        gap!,
+        position
+      );
+
+      if (shouldMove) {
+        this.moveElementToOppositeEdge(animatedElt.firstChild as Element, direction, animatedElt);
+        position = 0;
+        // updateLastTime();
+      }
+    } else {
+      position = currentPosition + speed;
+      shouldMove = this.shouldMoveElement(
+        animatedElt.lastChild as Element,
+        isHorizontal,
+        isUpOrLeftDirection,
+        gap!,
+        position
+      );
+
+      if (shouldMove) {
+        // console.log(shouldMove);
+
+        const elementWidth = animatedElt.lastChild!.getBoundingClientRect().width;
+        this.moveElementToOppositeEdge(animatedElt.lastChild as Element, direction, animatedElt);
+        // position = position - (animatedElt.lastChild!.getBoundingClientRect().width + gap);
+        position -= elementWidth + gap;
+        // updateLastTime();
+      }
+    }
+
+    position = parseInt(parseFloat(position).toFixed(2));
+
+    if (isHorizontal) {
+      animatedElt.style.transform = `translate3d(${position}px, 0, 0)`;
+    } else {
+      animatedElt.style.transform = `translate3d(0, ${position}px, 0)`;
     }
   }
 }

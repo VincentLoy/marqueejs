@@ -1,44 +1,19 @@
-import type { MarqueeOptions, PositionedElement } from "../../types";
+import type { MarqueeOptions } from "../../types";
 import { PositionManager } from "./PositionManager";
 
 export class AnimationManager {
-  private wrapper: HTMLElement;
+  private animatedElement: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private animationFrame: number | null = null;
   private lastTime: number = 0;
-  private elements: Array<PositionedElement> = [];
-  private isHorizontal: boolean;
+  private elements: Element[];
   public playing: boolean;
 
-  constructor(wrapper: HTMLElement, options: Partial<MarqueeOptions>) {
-    this.wrapper = wrapper;
+  constructor(animatedElement: HTMLElement, options: Partial<MarqueeOptions>) {
+    this.animatedElement = animatedElement;
     this.options = options;
     this.playing = false;
-    this.isHorizontal = ["left", "right"].includes(this.options.direction!);
-    this.setupElements();
-  }
-
-  /**
-   * Sets up the initial positions of the wrapper's child elements.
-   * This method processes all direct children of the wrapper element,
-   * positions them using the PositionManager, and stores them for animation.
-   *
-   * The positioning is done according to:
-   * - The horizontal/vertical orientation specified
-   * - The gap between elements defined in options
-   *
-   * @private
-   */
-  private setupElements(): void {
-    const groups = [...this.wrapper.children] as HTMLElement[];
-
-    const positionedElements = PositionManager.setupElementsInitialPosition(
-      groups,
-      this.isHorizontal,
-      this.options.gap!
-    );
-
-    this.elements = positionedElements;
+    this.elements = [...animatedElement.querySelectorAll(".marquee-content-item")];
   }
 
   /**
@@ -56,30 +31,36 @@ export class AnimationManager {
    * consistent speed across different frame rates.
    */
   public startAnimation(): void {
+    if (this.playing) return;
+
     this.lastTime = performance.now();
     this.playing = true;
 
     const animate = (currentTime: number) => {
-      const deltaTime = currentTime - this.lastTime;
+      const deltaTime = Math.max(0, currentTime - this.lastTime);
       this.lastTime = currentTime;
       const movement = (this.options.speed! * deltaTime) / 1000;
 
       // Update each element's position independently
-      this.elements.forEach((item) => {
-        PositionManager.updatePosition(
-          item,
-          this.elements,
-          this.wrapper,
-          movement,
-          this.options.direction!,
-          this.options.gap!
-        );
-      });
+      PositionManager.updatePosition(
+        this.animatedElement,
+        this.elements,
+        this.animatedElement,
+        movement,
+        this.options.direction!,
+        this.options.gap!,
+        this.updateLastTime.bind(this)
+      );
 
       this.animationFrame = requestAnimationFrame(animate);
     };
 
     this.animationFrame = requestAnimationFrame(animate);
+  }
+
+  protected updateLastTime() {
+    this.lastTime = performance.now();
+    console.log("lastTime updated", this.lastTime);
   }
 
   /**
@@ -107,7 +88,6 @@ export class AnimationManager {
    */
   public recalculatePositions(): void {
     this.stopAnimation();
-    this.setupElements();
     this.startAnimation();
   }
 

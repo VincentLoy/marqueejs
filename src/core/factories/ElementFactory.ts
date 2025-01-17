@@ -28,29 +28,23 @@ export class ElementFactory {
 
     container.style.width = "100%";
     container.style.overflow = "hidden";
+    container.style.display = "flex";
+    container.style.alignItems = "center";
 
     return container;
   }
 
-  /**
-   * Creates and configures an HTMLElement to serve as a wrapper for the marquee content.
-   *
-   * @returns {HTMLElement} A configured div element serving as the marquee wrapper
-   */
-  public static createWrapper(isHorizontal: boolean): HTMLElement {
-    const wrapper = document.createElement("div");
-    wrapper.classList.add("marquee-wrapper");
-    wrapper.style.position = "relative";
-    wrapper.style.width = "100%";
-    wrapper.style.height = "100%";
-    wrapper.style.overflow = "visible";
-    wrapper.style.display = isHorizontal ? "flex" : "block";
+  public static createAnimatedElement(isHorizontal: boolean, gap: number): HTMLElement {
+    const animatedElement = document.createElement("div");
+    animatedElement.classList.add("marquee-animated-element");
+    animatedElement.style.display = "flex";
+    animatedElement.style.flexWrap = "nowrap";
+    animatedElement.style.gap = `${gap}px`;
+    animatedElement.style.width = "max-content";
+    animatedElement.style.flexDirection = isHorizontal ? "row" : "column";
+    animatedElement.style.border = "1px solid red";
 
-    if (isHorizontal) {
-      wrapper.style.alignItems = "center";
-    }
-
-    return wrapper;
+    return animatedElement;
   }
 
   /**
@@ -64,9 +58,7 @@ export class ElementFactory {
     const contentEl = document.createElement("div");
     element.className = "marquee-content-item";
     contentEl.classList.add("marquee-content");
-    element.style.position = "absolute";
-    element.style.whiteSpace = !isHorizontal ? "normal" : "nowrap";
-    element.style.width = !isHorizontal ? "100%" : "auto";
+    contentEl.style.border = "1px solid green";
     element.appendChild(contentEl);
     contentEl.innerHTML = content;
     return element;

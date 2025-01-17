@@ -68,12 +68,12 @@ export class Marquee {
     this.domManager = new DOMManager(this.element, this.options);
     this.domManager.createContentElements();
 
-    const wrapper = this.domManager.getWrapper();
+    const animatedElement = this.domManager.getAnimatedElement();
     const contentElements = this.domManager.getContentElements();
 
-    if (wrapper && contentElements.length > 0) {
-      this.animationManager = new AnimationManager(wrapper, this.options);
-      this.eventManager = new EventManager(this.element, wrapper, this.options, {
+    if (animatedElement && contentElements.length > 0) {
+      this.animationManager = new AnimationManager(animatedElement, this.options);
+      this.eventManager = new EventManager(this.element, animatedElement, this.options, {
         pause: () => this.pause(),
         resume: () => this.play(),
       });
@@ -292,7 +292,7 @@ export class Marquee {
     this.eventManager?.destroy();
     this.eventManager = new EventManager(
       this.element,
-      this.domManager?.getWrapper()!,
+      this.domManager?.getAnimatedElement()!,
       this.options,
       {
         pause: () => this.pause(),

@@ -1,17 +1,17 @@
 import type { MarqueeOptions, EventHandlers } from "../../types";
 
 export class EventManager {
-  private wrapper: HTMLElement;
+  private animatedElement: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private handlers: EventHandlers;
 
   constructor(
     _element: HTMLElement,
-    wrapper: HTMLElement,
+    animatedElement: HTMLElement,
     options: Partial<MarqueeOptions>,
     handlers: EventHandlers
   ) {
-    this.wrapper = wrapper;
+    this.animatedElement = animatedElement;
     this.options = options;
     this.handlers = handlers;
     this.init();
@@ -26,8 +26,8 @@ export class EventManager {
 
   private setupHoverEvents(): void {
     if (this.options.pauseOnHover) {
-      this.wrapper.addEventListener("mouseenter", this.handlers.pause);
-      this.wrapper.addEventListener("mouseleave", this.handlers.resume);
+      this.animatedElement.addEventListener("mouseenter", this.handlers.pause);
+      this.animatedElement.addEventListener("mouseleave", this.handlers.resume);
     }
   }
 
@@ -36,7 +36,7 @@ export class EventManager {
     let touchStartY: number;
 
     // Add passive touch start listener
-    this.wrapper.addEventListener(
+    this.animatedElement.addEventListener(
       "touchstart",
       (e: TouchEvent) => {
         touchStartX = e.touches[0].clientX;
@@ -47,7 +47,7 @@ export class EventManager {
     );
 
     // Add passive touch end listener
-    this.wrapper.addEventListener(
+    this.animatedElement.addEventListener(
       "touchend",
       () => {
         this.handlers.resume();
@@ -75,11 +75,11 @@ export class EventManager {
 
     // Add non-passive touch move listener only when needed
     if (["left", "right", "up", "down"].includes(this.options.direction!)) {
-      this.wrapper.addEventListener("touchmove", handleTouchMove, {
+      this.animatedElement.addEventListener("touchmove", handleTouchMove, {
         passive: false,
       });
     } else {
-      this.wrapper.addEventListener("touchmove", handleTouchMove, {
+      this.animatedElement.addEventListener("touchmove", handleTouchMove, {
         passive: true,
       });
     }
@@ -110,12 +110,12 @@ export class EventManager {
 
   public destroy(): void {
     if (this.options.pauseOnHover) {
-      this.wrapper.removeEventListener("mouseenter", this.handlers.pause);
-      this.wrapper.removeEventListener("mouseleave", this.handlers.resume);
+      this.animatedElement.removeEventListener("mouseenter", this.handlers.pause);
+      this.animatedElement.removeEventListener("mouseleave", this.handlers.resume);
     }
 
-    this.wrapper.removeEventListener("touchstart", this.handlers.pause);
-    this.wrapper.removeEventListener("touchend", this.handlers.resume);
+    this.animatedElement.removeEventListener("touchstart", this.handlers.pause);
+    this.animatedElement.removeEventListener("touchend", this.handlers.resume);
     document.removeEventListener("visibilitychange", this.handlers.pause);
   }
 }

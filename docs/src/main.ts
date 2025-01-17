@@ -114,22 +114,25 @@ document.addEventListener("DOMContentLoaded", () => {
   let basic = marqueejs(".marquee-basic", {
     speed: 100,
     cloneCount: "auto",
+    direction: "left",
+    separator: "🚀",
+    gap: 100,
   });
 
   // Right to left
   marqueejs(".marquee-rtl", {
     direction: "right",
-    speed: 50,
+    speed: 100,
     gap: 10,
-    cloneCount: 1,
+    cloneCount: 2,
   });
 
-  // With separator
+  // // With separator
   let sep = marqueejs(".marquee-with-separator", {
     direction: "left",
     separator: "/",
     separatorStyles: "color: #58e; font-size: 1.8rem;",
-    heightSecurityMargin: 100,
+    heightSecurityMargin: 10,
     gap: 40,
   });
 
@@ -138,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sep.updateSeparatorStyles("color: #f00; font-size: 1rem;");
   }, 2000);
 
-  // Vertical
+  // // Vertical
   let test = marqueejs(".marquee-vertical", {
     direction: "up",
     speed: 25,
@@ -161,11 +164,11 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   });
 
-  setTimeout(() => {
-    // test.pause();
-  }, 500);
+  // setTimeout(() => {
+  //   // test.pause();
+  // }, 500);
 
-  // Fast with pause
+  // // Fast with pause
   marqueejs(".marquee-fast", {
     speed: 350,
     direction: "left",
@@ -174,9 +177,9 @@ document.addEventListener("DOMContentLoaded", () => {
     gap: 60,
   });
 
-  // Advanced Examples Section
+  // // Advanced Examples Section
 
-  // 1. News Ticker with Dynamic Updates
+  // // 1. News Ticker with Dynamic Updates
   const newsMarquee = marqueejs("#news-ticker", {
     speed: 80,
     pauseOnHover: true,
@@ -186,7 +189,7 @@ document.addEventListener("DOMContentLoaded", () => {
     contentList: FAKED_DATA.map((item) => `${getBadge(item.color, item.badge_text)} ${item.title}`),
   });
 
-  // 2. Social Media Feed
+  // // 2. Social Media Feed
   const socialFeed = marqueejs("#social-feed", {
     direction: "up",
     speed: 40,
@@ -200,9 +203,9 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   });
 
-  // 3. Multi-Speed Demo
+  // // 3. Multi-Speed Demo
   const speedDemo = marqueejs("#speed-demo", {
-    speed: 50,
+    speed: 100,
     cloneCount: "auto",
   });
 
@@ -211,7 +214,7 @@ document.addEventListener("DOMContentLoaded", () => {
     speedDemo.updateSpeed(randomSpeed);
   }, 3000);
 
-  // 4. Interactive Gap Demo
+  // // 4. Interactive Gap Demo
   const gapDemo = marqueejs("#gap-demo", {
     gap: parseInt((document.querySelector("#gap-control") as HTMLInputElement)?.value) || 20,
     separator: "↔️",
@@ -222,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
     gapDemo.updateGap(Number((e.target as HTMLInputElement).value));
   });
 
-  // 5. Alternating Direction
+  // // 5. Alternating Direction
   const directionDemo = marqueejs("#direction-demo", {
     direction: "left",
     speed: 200,
@@ -232,7 +235,7 @@ document.addEventListener("DOMContentLoaded", () => {
     directionDemo.switchDirection();
   }, 5000);
 
-  // 6. Clone Count Showcase - Improved
+  // // 6. Clone Count Showcase - Improved
   const cloneDemo = marqueejs("#clone-demo", {
     speed: 80,
     gap: 50,
@@ -258,7 +261,7 @@ document.addEventListener("DOMContentLoaded", () => {
     updtEltsIdx();
   });
 
-  // 7. Complexe HTML Structure
+  // // 7. Complexe HTML Structure
   marqueejs(".marquee-complex", {
     heightSecurityMargin: 30,
     separator: "⚡",
@@ -278,11 +281,11 @@ document.addEventListener("DOMContentLoaded", () => {
     direction: "left",
     heightSecurityMargin: 30,
     gap: 100,
-    speed: 33,
+    speed: 120,
     cloneCount: 10,
   });
 
-  // 8. Interactive Demo
+  // // 8. Interactive Demo
   new InteractiveDemo();
 
   // Smooth scroll for anchor links

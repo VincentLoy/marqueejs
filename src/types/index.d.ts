@@ -222,17 +222,6 @@ export interface CloneMetrics {
   calculatedCount: number;
 }
 
-/**
- * Represents an HTML element with its corresponding position.
- * @interface
- * @property {HTMLElement} el - The HTML element being positioned
- * @property {number} position - The numerical position value of the element
- */
-export interface PositionedElement {
-  el: HTMLElement;
-  position: number;
-}
-
 export interface EventHandlers {
   pause: () => void;
   resume: () => void;

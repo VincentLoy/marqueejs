@@ -6,7 +6,7 @@ import { PositionManager } from "./PositionManager";
 
 export class DOMManager {
   private container: HTMLElement;
-  private wrapper: HTMLElement;
+  private animatedElement: HTMLElement;
   private element: HTMLElement;
   private options: Partial<MarqueeOptions>;
   private contentElements: HTMLElement[] = [];
@@ -22,8 +22,11 @@ export class DOMManager {
     this.element = element;
     this.options = options;
     this.container = ElementFactory.createContainer(this.element, this.instanceId);
-    this.wrapper = ElementFactory.createWrapper(this.isHorizontal);
-    this.separatorManager = new SeparatorManager(this.options, this.wrapper);
+    this.animatedElement = ElementFactory.createAnimatedElement(
+      this.isHorizontal,
+      this.options.gap!
+    );
+    this.separatorManager = new SeparatorManager(this.options, this.animatedElement);
     this.cloneCalculator = new CloneCalculator(options.direction!);
     // Clear original element since everything goes through contentList
     this.element.innerHTML = "";
@@ -43,7 +46,7 @@ export class DOMManager {
 
     // Insert into DOM
     this.element.parentNode?.insertBefore(this.container, this.element);
-    this.container.appendChild(this.wrapper);
+    this.container.appendChild(this.animatedElement);
 
     // Create content elements from contentList
     this.createContentElements();
@@ -60,7 +63,7 @@ export class DOMManager {
       fragment.appendChild(element);
     });
 
-    this.wrapper.appendChild(fragment);
+    this.animatedElement.appendChild(fragment);
     this.positionElements();
     await this.createClones();
 
@@ -152,7 +155,7 @@ export class DOMManager {
       });
     }
 
-    this.wrapper.appendChild(fragment);
+    this.animatedElement.appendChild(fragment);
   }
 
   // Utility method to force recalculation of clones
@@ -167,8 +170,8 @@ export class DOMManager {
     }
   }
 
-  public getWrapper(): HTMLElement {
-    return this.wrapper;
+  public getAnimatedElement(): HTMLElement {
+    return this.animatedElement;
   }
 
   public getContainer(): HTMLElement {
@@ -185,8 +188,8 @@ export class DOMManager {
 
   public destroy(): void {
     this.clearElements();
-    if (this.wrapper.parentNode) {
-      this.wrapper.parentNode.insertBefore(this.element, this.wrapper);
+    if (this.animatedElement.parentNode) {
+      this.animatedElement.parentNode.insertBefore(this.element, this.animatedElement);
       this.container.remove();
     }
 
