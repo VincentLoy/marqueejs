@@ -76,6 +76,7 @@ export class Marquee {
       this.eventManager = new EventManager(this.element, wrapper, this.options, {
         pause: () => this.pause(),
         resume: () => this.play(),
+        resize: () => this.resize(),
       });
 
       setTimeout(() => {
@@ -143,6 +144,12 @@ export class Marquee {
     if (!this.isPlaying) return;
     this.isPlaying = false;
     this.stopAnimation();
+  }
+
+  public resize(): void {
+    console.log("resize");
+    this.domManager?.recalculateClones();
+    this.recalculatePositions();
   }
 
   private startAnimation(): void {
@@ -254,7 +261,7 @@ export class Marquee {
     this.animationManager?.recalculatePositions();
   }
 
-  public updateSeparatorStyles(styles: Partial<CSSStyleDeclaration>): void {
+  public updateSeparatorStyles(styles: string): void {
     this.options.separatorStyles = styles;
     this.domManager?.updateSeparators();
   }
@@ -297,6 +304,7 @@ export class Marquee {
       {
         pause: () => this.pause(),
         resume: () => this.play(),
+        resize: () => this.resize(),
       }
     );
   }

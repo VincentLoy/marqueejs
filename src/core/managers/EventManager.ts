@@ -109,11 +109,9 @@ export class EventManager {
   }
 
   public destroy(): void {
-    if (this.options.pauseOnHover) {
-      this.wrapper.removeEventListener("mouseenter", this.handlers.pause);
-      this.wrapper.removeEventListener("mouseleave", this.handlers.resume);
-    }
-
+    this.wrapper.removeEventListener("mouseenter", this.handlers.pause);
+    this.wrapper.removeEventListener("mouseleave", this.handlers.resume);
+    this.wrapper.removeEventListener("resize", this.handlers.resize);
     this.wrapper.removeEventListener("touchstart", this.handlers.pause);
     this.wrapper.removeEventListener("touchend", this.handlers.resume);
     document.removeEventListener("visibilitychange", this.handlers.pause);
